@@ -1,0 +1,296 @@
+/* Дополнительные стили для приложения */
+
+.App {
+  min-height: 100vh;
+}
+
+/* Стили для графиков */
+.chart-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+  .chart-container {
+    height: 250px;
+  }
+  
+  .card {
+    padding: 1rem;
+  }
+}
+
+/* Стили для уведомлений */
+.notification {
+  @apply fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg;
+}
+
+.notification.success {
+  @apply bg-green-500 text-white;
+}
+
+.notification.warning {
+  @apply bg-yellow-500 text-white;
+}
+
+.notification.error {
+  @apply bg-red-500 text-white;
+}
+
+/* Стили для загрузки */
+.loading-spinner {
+  @apply animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500;
+}
+
+/* Кастомный скролл */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Темная тема */
+.dark .card {
+  @apply bg-gray-800 border-gray-700;
+}
+
+.dark .card h1, .dark .card h2, .dark .card h3, .dark .card h4 {
+  @apply text-white;
+}
+
+.dark .card p, .dark .card span {
+  @apply text-gray-300;
+}
+
+/* Исправление контрастности иконок в темной теме */
+.dark .bg-gray-500 {
+  @apply bg-gray-600;
+}
+
+.dark .bg-primary-500 {
+  @apply bg-blue-600;
+}
+
+.dark .bg-green-500 {
+  @apply bg-green-600;
+}
+
+.dark .bg-danger-500, .dark .bg-red-500 {
+  @apply bg-red-600;
+}
+
+.dark .bg-yellow-500 {
+  @apply bg-yellow-600;
+}
+
+.dark .bg-purple-500 {
+  @apply bg-purple-600;
+}
+
+.dark .bg-pink-500 {
+  @apply bg-pink-600;
+}
+
+.dark .bg-indigo-500 {
+  @apply bg-indigo-600;
+}
+
+.dark .bg-orange-500 {
+  @apply bg-orange-600;
+}
+
+/* Специфические градиенты для темной темы */
+.dark .bg-gradient-to-r.from-primary-50.to-blue-50 {
+  @apply from-blue-900 to-blue-800 border-blue-700;
+}
+
+.dark .bg-gradient-to-r.from-green-50.to-emerald-50 {
+  @apply from-green-900 to-emerald-800 border-green-700;
+}
+
+.dark .bg-gradient-to-r.from-blue-50.to-indigo-50 {
+  @apply from-blue-900 to-indigo-800 border-blue-700;
+}
+
+.dark .bg-gradient-to-r.from-orange-50.to-red-50 {
+  @apply from-orange-900 to-red-800 border-orange-700;
+}
+
+.dark .input-field {
+  @apply bg-gray-700 border-gray-600 text-white placeholder-gray-400;
+}
+
+.dark .input-field:focus {
+  @apply border-blue-500 bg-gray-600;
+}
+
+.dark .label {
+  @apply text-gray-300;
+}
+
+.dark .btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700;
+}
+
+.dark .btn-secondary {
+  @apply bg-gray-600 hover:bg-gray-700 text-white;
+}
+
+.dark h1, .dark h2, .dark h3, .dark h4 {
+  @apply text-white;
+}
+
+.dark p {
+  @apply text-gray-300;
+}
+
+/* Темный скролл */
+.dark ::-webkit-scrollbar-track {
+  background: #374151;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #6b7280;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Анимации для бургер-меню */
+.burger-line {
+  transition: all 0.3s ease-in-out;
+  transform-origin: center;
+}
+
+.burger-line.open:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.burger-line.open:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-line.open:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Плавные анимации для пунктов меню */
+.nav-item {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-item:hover {
+  transform: translateX(4px);
+}
+
+.nav-item:hover .nav-icon {
+  transform: scale(1.1);
+}
+
+/* Анимация для иконок */
+.nav-icon {
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Анимация появления меню */
+.menu-overlay {
+  backdrop-filter: blur(4px);
+}
+
+/* Кастомный скролл для бургер-меню */
+.nav-menu-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.nav-menu-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+}
+
+.nav-menu-scroll::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.5);
+  border-radius: 2px;
+}
+
+.nav-menu-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.8);
+}
+
+.dark .nav-menu-scroll::-webkit-scrollbar-thumb {
+  background: rgba(75, 85, 99, 0.7);
+}
+
+.dark .nav-menu-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(75, 85, 99, 1);
+}
+
+/* Эффект пульсации для активного элемента */
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background: currentColor;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateY(-50%) scale(1.2);
+  }
+}
+
+/* Стили для карточки пользователя в меню */
+.user-card {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.dark .user-card {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(147, 51, 234, 0.15) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* Анимация загрузки для статистики */
+.stat-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.6s ease-in-out;
+}
+
+.stat-card:hover::before {
+  left: 100%;
+} 
