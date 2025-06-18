@@ -9,7 +9,7 @@ export default function CBRPage() {
   const [calculatorFrom, setCalculatorFrom] = useState('USD');
   const [calculatorTo, setCalculatorTo] = useState('RUB');
   const [calculatorAmount, setCalculatorAmount] = useState(100);
-  const [inflationData, setInflationData] = useState({
+  const [inflationData] = useState({
     currentRate: 5.9,
     yearRate: 7.4,
     targetRate: 4.0

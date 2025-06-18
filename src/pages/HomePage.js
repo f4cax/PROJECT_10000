@@ -153,6 +153,7 @@ export default function HomePage() {
         saveMonthlyIncome(monthlyIncome, budget);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monthlyIncome, selectedStrategy, savingsGoal, isAuthenticated, saveMonthlyIncome]);
 
   // Автосохранение стратегии

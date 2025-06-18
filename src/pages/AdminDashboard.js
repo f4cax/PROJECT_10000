@@ -48,6 +48,7 @@ const AdminDashboard = () => {
     } else if (activeTab === 'settings') {
       loadSettings();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, activeTab]);
 
   const loadSettings = async () => {
