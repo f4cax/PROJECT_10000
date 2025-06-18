@@ -69,7 +69,6 @@ export default function HomePage() {
     // Уведомления в зависимости от стратегии
     if (strategy) {
       const expectedReturn = getExpectedReturn(strategy.id);
-      const monthlyReturn = budget.investments * (expectedReturn / 100 / 12);
       const yearlyProjection = budget.investments * 12 * (1 + expectedReturn / 100);
       
       notifications.push({
@@ -154,14 +153,14 @@ export default function HomePage() {
         saveMonthlyIncome(monthlyIncome, budget);
       }
     }
-  }, [monthlyIncome, selectedStrategy, savingsGoal, isAuthenticated]);
+  }, [monthlyIncome, selectedStrategy, savingsGoal, isAuthenticated, saveMonthlyIncome]);
 
   // Автосохранение стратегии
   useEffect(() => {
     if (selectedStrategy && isAuthenticated) {
       saveStrategy(selectedStrategy);
     }
-  }, [selectedStrategy, isAuthenticated]);
+  }, [selectedStrategy, isAuthenticated, saveStrategy]);
 
   return (
     <div className="space-y-8 fade-in">
