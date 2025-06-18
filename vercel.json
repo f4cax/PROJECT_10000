@@ -33,14 +33,5 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ],
-  "env": {
-    "REACT_APP_API_URL": "@api_url",
-    "REACT_APP_CBR_API_URL": "@cbr_api_url"
-  },
-  "functions": {
-    "src/api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  }
+  ]
 } 
