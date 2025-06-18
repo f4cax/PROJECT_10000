@@ -11,7 +11,7 @@ import TipsPage from './pages/TipsPage';
 import AboutPage from './pages/AboutPage';
 import AdminDashboard from './pages/AdminDashboard';
 import FinancialTestPage from './pages/FinancialTestPage';
-import { trackPageView } from './utils/analytics';
+// import { trackPageView } from './utils/analytics';
 import './styles/App.css';
 
 function App() {
