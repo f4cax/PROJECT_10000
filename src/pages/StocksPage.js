@@ -34,7 +34,7 @@ const generateRandomStockData = () => {
   return result;
 };
 
-// Функция удалена - теперь используем прямые запросы для всех акций сразу
+
 
 export default function StocksPage() {
   const { t } = useTranslation();
@@ -70,31 +70,7 @@ export default function StocksPage() {
     { symbol: 'VTI', name: 'Total Stock Market ETF', description: 'Весь рынок США' }
   ];
 
-  // Тестирование соединения с API
-  const testAPIConnection = async () => {
-    console.log('🔧 Тестируем соединение с EODHD API...');
-    try {
-      // Используем demo ключ для тестирования с AAPL
-      const testUrl = 'https://eodhd.com/api/real-time/AAPL.US?api_token=demo&fmt=json';
-      console.log(`📡 Тест запрос: ${testUrl}`);
-      
-      const response = await fetch(testUrl);
-      const data = await response.json();
-      
-      console.log('📊 Тест ответ:', data);
-      
-      if (data.code && data.close) {
-        alert('✅ EODHD API работает! Ваш ключ должен работать.');
-      } else if (data.error) {
-        alert('❌ Ошибка EODHD API: ' + data.error);
-      } else {
-        alert('❓ Неожиданный ответ от EODHD API. Проверьте консоль.');
-      }
-    } catch (error) {
-      console.error('❌ Ошибка тестирования:', error);
-      alert('❌ Ошибка подключения: ' + error.message);
-    }
-  };
+
 
   // Загрузка данных акций
   const fetchStockData = useCallback(async (showLoading = true) => {
@@ -107,7 +83,7 @@ export default function StocksPage() {
       if (API_KEY && API_KEY !== 'demo') {
         // Пытаемся получить реальные данные для всех акций
         try {
-          console.log('Загружаем реальные данные от EODHD для всех акций...');
+
           const realData = {};
           
           // EODHD поддерживает множественные запросы одним вызовом API
@@ -117,11 +93,10 @@ export default function StocksPage() {
           const mainSymbol = symbols[0]; // Первая акция как основная
           
           try {
-            console.log(`Загружаем данные для всех акций: ${symbols.join(', ')}...`);
+
             
             // Запрос всех акций одним вызовом
             const url = `https://eodhd.com/api/real-time/${mainSymbol}?s=${symbolsString}&api_token=${API_KEY}&fmt=json`;
-            console.log(`📡 Запрос всех акций к EODHD: ${url}`);
             
             const response = await fetch(url);
             if (!response.ok) {
@@ -129,7 +104,6 @@ export default function StocksPage() {
             }
             
             const data = await response.json();
-            console.log(`📊 Ответ от EODHD для всех акций:`, data);
             
             // EODHD возвращает массив данных для множественных запросов
             const stocksData = Array.isArray(data) ? data : [data];
@@ -159,18 +133,17 @@ export default function StocksPage() {
                   low52w: parseFloat(stockInfo.low || price) * 0.8
                 };
                 
-                console.log(`✅ Обработана акция ${symbol}:`, realData[symbol]);
+
               }
             });
             
             // Если получили данные не для всех акций, дополняем демо-данными
             const demoData = generateRandomStockData();
-            popularStocks.forEach(stock => {
-              if (!realData[stock.symbol]) {
-                realData[stock.symbol] = demoData[stock.symbol];
-                console.log(`⚠️ Используем демо-данные для ${stock.symbol}`);
-              }
-            });
+                          popularStocks.forEach(stock => {
+                if (!realData[stock.symbol]) {
+                  realData[stock.symbol] = demoData[stock.symbol];
+                }
+              });
             
           } catch (err) {
             console.error(`Failed to fetch all stocks:`, err);
@@ -191,7 +164,7 @@ export default function StocksPage() {
               setError(`Смешанный режим: ${realCount} акций с реальными данными EODHD, остальные - демо`);
             }
             
-            console.log('Загружены данные для всех акций:', realData);
+
           } else {
             throw new Error('No real data available');
           }
@@ -302,7 +275,7 @@ export default function StocksPage() {
           <div className="animate-spin text-4xl mb-4">⏳</div>
           <p className="text-gray-600 dark:text-gray-400 mb-2">{t('gettingFreshQuotes')}</p>
           <p className="text-sm text-gray-500 dark:text-gray-500">
-            Загружаем реальные котировки для всех 6 акций от EODHD API...
+            {t('gettingFreshQuotes')}...
           </p>
         </div>
       </div>
@@ -331,13 +304,6 @@ export default function StocksPage() {
           >
             {loading ? '⏳' : '🔄'} {t('updateData')}
           </button>
-          <button
-            onClick={() => testAPIConnection()}
-            disabled={loading}
-            className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-md"
-          >
-            🔧 Тест API
-          </button>
           {isUsingRealAPI && (
             <span className="text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded">
               📡 Реальные данные
@@ -349,9 +315,6 @@ export default function StocksPage() {
             {error}
           </div>
         )}
-        <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-          EODHD API Key: {(process.env.REACT_APP_EODHD_API_KEY || '68545cf3e0b555.23627356').substring(0, 8)}...
-        </div>
       </div>
 
       {/* Популярные акции */}
