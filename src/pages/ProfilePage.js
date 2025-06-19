@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
 const ProfilePage = () => {
@@ -146,7 +146,7 @@ const ProfilePage = () => {
   };
 
   // Загрузка свежих данных пользователя с сервера
-  const loadUserData = async () => {
+  const loadUserData = useCallback(async () => {
     try {
       setInitialLoading(true);
       const userData = await apiCall('/api/user/profile');
@@ -185,7 +185,7 @@ const ProfilePage = () => {
     } finally {
       setInitialLoading(false);
     }
-  };
+  }, [updateUser, token]);
 
   // Загрузка данных при инициализации
   useEffect(() => {
@@ -216,7 +216,7 @@ const ProfilePage = () => {
       }
       setInitialLoading(false);
     }
-  }, [user, token]);
+  }, [user, token, loadUserData]);
 
   const handleBasicInfoSave = async () => {
     try {
