@@ -191,6 +191,7 @@ export default function FinancialTestPage() {
   // Инициализация перемешанных вопросов при загрузке компонента
   useEffect(() => {
     setShuffledQuestions(shuffleQuestions(FINANCIAL_TEST_QUESTIONS));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Загружаем сохраненные результаты теста
