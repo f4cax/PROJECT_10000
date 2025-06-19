@@ -466,9 +466,9 @@ export const translations = {
     assetManagementDesc: 'Система портфеля из 7 типов активов с автоматическим обновлением цен через EODHD и CoinGecko API',
     realTimeDataTitle: 'Данные в реальном времени',
     realTimeDataDesc: 'Интеграция с API ЦБ РФ для актуальных курсов валют, инфляции и калькулятора валют',
-    financialTestTitle: 'Тест финансовой грамотности',
+    financialTestDescLong: 'Тест финансовой грамотности',
     financialTestDesc: '10 проработанных вопросов с алгоритмом определения финансового профиля и стратегии',
-    adminPanelTitle: 'Административная панель',
+    adminPanelDescLong: 'Административная панель',
     adminPanelDesc: 'Полный CRUD функционал управления пользователями, статистика платформы и управление БД',
     userSystemTitle: 'Система пользователей',
     userSystemDesc: 'JWT авторизация, bcrypt хэширование, детальные профили с прогнозами инвестиций',
@@ -611,7 +611,7 @@ export const translations = {
     bestDay: 'The best day to start investing was 20 years ago. The second best day is today.',
 
     // Test page
-    financialTestTitle: 'Financial Literacy Test',
+    financialTestDescLong: 'Financial Literacy Test',
     testSubtitle: 'Determine your knowledge level and get a personalized strategy',
     testResults: 'Test Results',
     yourResult: 'Your Result',
@@ -1142,9 +1142,9 @@ export const translations = {
       assetManagementDesc: 'Portfolio system with 7 asset types and automatic price updates via EODHD and CoinGecko APIs',
       realTimeDataTitle: 'Real-time Data',
       realTimeDataDesc: 'Integration with Central Bank of Russia API for current exchange rates, inflation data and currency calculator',
-      financialTestTitle: 'Financial Literacy Test',
+      financialTestDescLongEn: 'Financial Literacy Test',
       financialTestDesc: '10 carefully crafted questions with algorithm for determining financial profile and strategy',
-      adminPanelTitle: 'Administrative Panel',
+      adminPanelDescLongEn: 'Administrative Panel',
       adminPanelDesc: 'Full CRUD functionality for user management, platform statistics and database management',
       userSystemTitle: 'User System',
       userSystemDesc: 'JWT authorization, bcrypt hashing, detailed profiles with investment projections',
@@ -1195,7 +1195,7 @@ export const translations = {
       responseTime: 'We respond within 24 hours',
       globalCoverage: 'Open source project',
   }
-};
+  };
 
 // Провайдер контекста для переводов
 export const TranslationProvider = ({ children }) => {
