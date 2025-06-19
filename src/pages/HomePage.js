@@ -188,8 +188,10 @@ export default function HomePage() {
       }
       
       if (data.savingsGoals && data.savingsGoals.length > 0) {
-        console.log('Загружаем цели накопления');
+        console.log('Загружаем цели накопления из БД:', data.savingsGoals);
         setSavingsGoals(data.savingsGoals);
+      } else {
+        console.log('Нет сохраненных целей в БД');
       }
       
       // Отмечаем что данные загружены
@@ -318,6 +320,7 @@ export default function HomePage() {
                   if (updatedGoal === null) {
                     // Удаление цели
                     const newGoals = savingsGoals.filter((_, i) => i !== index);
+                    console.log('Удаляем цель, новый массив:', newGoals);
                     setSavingsGoals(newGoals);
                     if (isAuthenticated) {
                       saveSavingsGoals(newGoals);
@@ -326,6 +329,7 @@ export default function HomePage() {
                     // Обновление цели
                     const newGoals = [...savingsGoals];
                     newGoals[index] = updatedGoal;
+                    console.log('Обновляем цель, новый массив:', newGoals);
                     setSavingsGoals(newGoals);
                     if (isAuthenticated) {
                       saveSavingsGoals(newGoals);
@@ -356,7 +360,9 @@ export default function HomePage() {
                     category: 'other',
                     priority: 'medium'
                   };
-                  setSavingsGoals([...savingsGoals, newGoal]);
+                  const updatedGoals = [...savingsGoals, newGoal];
+                  console.log('Добавляем новую цель, новый массив:', updatedGoals);
+                  setSavingsGoals(updatedGoals);
                 }}
                 className="btn-primary"
               >

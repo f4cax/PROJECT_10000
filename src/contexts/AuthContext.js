@@ -94,9 +94,12 @@ export const AuthProvider = ({ children }) => {
 
   // Сохранение целей накопления
   const saveSavingsGoals = async (savingsGoals) => {
-    return await saveFinancialData({
+    console.log('AuthContext: Сохраняем цели в БД:', savingsGoals);
+    const result = await saveFinancialData({
       savingsGoals
     });
+    console.log('AuthContext: Результат сохранения:', result);
+    return result;
   };
 
   // Сохранение результатов теста

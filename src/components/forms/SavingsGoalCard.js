@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from '../../utils/translations';
-import { useAuth } from '../../contexts/AuthContext';
 
 export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
   const { t } = useTranslation();
-  const { saveSavingsGoals, isAuthenticated } = useAuth();
   const [isEditing, setIsEditing] = useState(!goal || !goal.title);
   const [tempGoal, setTempGoal] = useState(goal || {
     title: '',
@@ -30,12 +28,6 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
   const handleSave = async () => {
     if (tempGoal.title && tempGoal.targetAmount) {
       onGoalChange(tempGoal);
-      
-      // Автосохранение в БД если пользователь авторизован
-      if (isAuthenticated) {
-        await saveSavingsGoals([tempGoal]);
-      }
-      
       setIsEditing(false);
     }
   };
