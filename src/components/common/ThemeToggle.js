@@ -29,6 +29,7 @@ export default function ThemeToggle() {
     const newIsDark = !isDark;
     setIsDark(newIsDark);
     
+    // Мгновенное переключение для синхронизации с CSS
     if (newIsDark) {
       document.documentElement.classList.add('dark');
       localStorage.setItem('theme', 'dark');

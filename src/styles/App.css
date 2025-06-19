@@ -1,10 +1,27 @@
 /* Дополнительные стили для приложения */
 
+/* Оптимизация производительности для переходов */
+html {
+  will-change: background-color, color;
+}
+
+body {
+  will-change: background-color, color;
+}
+
+/* Глобальный плавный переход для смены темы */
+*,
+*::before,
+*::after {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease !important;
+}
+
 /* Принудительная инициализация темы */
 html {
   --tw-bg-opacity: 1;
   --tw-text-opacity: 1;
   --tw-border-opacity: 1;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 /* Скрытие скроллбара для табов */
@@ -20,17 +37,20 @@ html {
 html:not(.dark) {
   background-color: rgb(249 250 251 / var(--tw-bg-opacity)) !important;
   color: rgb(17 24 39 / var(--tw-text-opacity)) !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 /* Принудительные стили для светлой темы */
 html:not(.dark) body {
   background-color: rgb(249 250 251) !important;
   color: rgb(17 24 39) !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 html:not(.dark) main {
   background-color: rgb(249 250 251) !important;
   color: rgb(17 24 39) !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 /* Светлая тема - карточки */
@@ -38,6 +58,7 @@ html:not(.dark) .card {
   background-color: rgb(255 255 255) !important;
   border-color: rgb(229 231 235) !important;
   color: rgb(17 24 39) !important;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
 }
 
 /* Светлая тема - заголовки */
@@ -46,11 +67,13 @@ html:not(.dark) h2,
 html:not(.dark) h3,
 html:not(.dark) h4 {
   color: rgb(17 24 39) !important;
+  transition: color 0.3s ease !important;
 }
 
 /* Светлая тема - параграфы */
 html:not(.dark) p {
   color: rgb(75 85 99) !important;
+  transition: color 0.3s ease !important;
 }
 
 /* Светлая тема - поля ввода */
@@ -58,17 +81,20 @@ html:not(.dark) .input-field {
   background-color: rgb(255 255 255) !important;
   border-color: rgb(209 213 219) !important;
   color: rgb(17 24 39) !important;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
 }
 
 html:not(.dark) .input-field:focus {
   border-color: rgb(59 130 246) !important;
   background-color: rgb(255 255 255) !important;
+  transition: background-color 0.3s ease, border-color 0.3s ease !important;
 }
 
 /* Светлая тема - кнопки */
 html:not(.dark) .btn-primary {
   background-color: rgb(59 130 246) !important;
   color: rgb(255 255 255) !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 html:not(.dark) .btn-primary:hover {
@@ -78,6 +104,7 @@ html:not(.dark) .btn-primary:hover {
 html:not(.dark) .btn-secondary {
   background-color: rgb(243 244 246) !important;
   color: rgb(17 24 39) !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 html:not(.dark) .btn-secondary:hover {
@@ -88,20 +115,24 @@ html:not(.dark) .btn-secondary:hover {
 html.dark {
   background-color: rgb(17 24 39 / var(--tw-bg-opacity)) !important;
   color: rgb(249 250 251 / var(--tw-text-opacity)) !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 .App {
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 /* Дополнительные стили для темной темы */
 .dark body {
   background-color: rgb(17 24 39) !important;
   color: rgb(249 250 251) !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 .dark main {
   background-color: rgb(17 24 39) !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 /* Мобильная оптимизация */
@@ -390,109 +421,135 @@ html.dark {
 /* Темная тема */
 .dark .card {
   @apply bg-gray-800 border-gray-700;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
 }
 
 .dark .card h1, .dark .card h2, .dark .card h3, .dark .card h4 {
   @apply text-white;
+  transition: color 0.3s ease !important;
 }
 
 .dark .card p, .dark .card span {
   @apply text-gray-300;
+  transition: color 0.3s ease !important;
 }
 
 /* Исправление контрастности иконок в темной теме */
 .dark .bg-gray-500 {
   @apply bg-gray-600;
+  transition: background-color 0.3s ease !important;
 }
 
 .dark .bg-primary-500 {
   @apply bg-blue-600;
+  transition: background-color 0.3s ease !important;
 }
 
 .dark .bg-green-500 {
   @apply bg-green-600;
+  transition: background-color 0.3s ease !important;
 }
 
 .dark .bg-danger-500, .dark .bg-red-500 {
   @apply bg-red-600;
+  transition: background-color 0.3s ease !important;
 }
 
 .dark .bg-yellow-500 {
   @apply bg-yellow-600;
+  transition: background-color 0.3s ease !important;
 }
 
 .dark .bg-purple-500 {
   @apply bg-purple-600;
+  transition: background-color 0.3s ease !important;
 }
 
 .dark .bg-pink-500 {
   @apply bg-pink-600;
+  transition: background-color 0.3s ease !important;
 }
 
 .dark .bg-indigo-500 {
   @apply bg-indigo-600;
+  transition: background-color 0.3s ease !important;
 }
 
 .dark .bg-orange-500 {
   @apply bg-orange-600;
+  transition: background-color 0.3s ease !important;
 }
 
 /* Специфические градиенты для темной темы */
 .dark .bg-gradient-to-r.from-primary-50.to-blue-50 {
   @apply from-blue-900 to-blue-800 border-blue-700;
+  transition: background-color 0.3s ease, border-color 0.3s ease !important;
 }
 
 .dark .bg-gradient-to-r.from-green-50.to-emerald-50 {
   @apply from-green-900 to-emerald-800 border-green-700;
+  transition: background-color 0.3s ease, border-color 0.3s ease !important;
 }
 
 .dark .bg-gradient-to-r.from-blue-50.to-indigo-50 {
   @apply from-blue-900 to-indigo-800 border-blue-700;
+  transition: background-color 0.3s ease, border-color 0.3s ease !important;
 }
 
 .dark .bg-gradient-to-r.from-orange-50.to-red-50 {
   @apply from-orange-900 to-red-800 border-orange-700;
+  transition: background-color 0.3s ease, border-color 0.3s ease !important;
 }
 
 .dark .input-field {
   @apply bg-gray-700 border-gray-600 text-white placeholder-gray-400;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
 }
 
 .dark .input-field:focus {
   @apply border-blue-500 bg-gray-600;
+  transition: background-color 0.3s ease, border-color 0.3s ease !important;
 }
 
 .dark .label {
   @apply text-gray-300;
+  transition: color 0.3s ease !important;
 }
 
 .dark .btn-primary {
   @apply bg-blue-600 hover:bg-blue-700;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 .dark .btn-secondary {
   @apply bg-gray-600 hover:bg-gray-700 text-white;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 .dark h1, .dark h2, .dark h3, .dark h4 {
   @apply text-white;
+  transition: color 0.3s ease !important;
 }
 
 .dark p {
   @apply text-gray-300;
+  transition: color 0.3s ease !important;
 }
 
 /* Темный скролл */
 .dark ::-webkit-scrollbar-track {
   background: #374151;
+  transition: background-color 0.3s ease !important;
 }
 
 .dark ::-webkit-scrollbar-thumb {
   background: #6b7280;
+  transition: background-color 0.3s ease !important;
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
+  transition: background-color 0.3s ease !important;
 }
 
 /* Анимации для бургер-меню */
@@ -557,10 +614,12 @@ html.dark {
 
 .dark .nav-menu-scroll::-webkit-scrollbar-thumb {
   background: rgba(75, 85, 99, 0.7);
+  transition: background-color 0.3s ease !important;
 }
 
 .dark .nav-menu-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(75, 85, 99, 1);
+  transition: background-color 0.3s ease !important;
 }
 
 /* Эффект пульсации для активного элемента */
@@ -575,6 +634,7 @@ html.dark {
   background: currentColor;
   border-radius: 50%;
   animation: pulse 2s ease-in-out infinite;
+  transition: background-color 0.3s ease !important;
 }
 
 @keyframes pulse {
@@ -592,11 +652,13 @@ html.dark {
 .user-card {
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
   border: 1px solid rgba(59, 130, 246, 0.2);
+  transition: background 0.3s ease, border-color 0.3s ease !important;
 }
 
 .dark .user-card {
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(147, 51, 234, 0.15) 100%);
   border: 1px solid rgba(59, 130, 246, 0.3);
+  transition: background 0.3s ease, border-color 0.3s ease !important;
 }
 
 /* Анимация загрузки для статистики */
