@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from '../utils/translations';
 
-// Генерация случайных данных для демонстрации "обновления"
+// Генерация случайных данных для демонстрации "обновления" (fallback)
 const generateRandomStockData = () => {
   const baseData = {
     'AAPL': { basePrice: 175, basePE: 28.5, marketCap: '2.7T' },
@@ -34,6 +34,56 @@ const generateRandomStockData = () => {
   return result;
 };
 
+// Функция для получения реальных данных от Alpha Vantage API
+const fetchRealStockData = async (symbol) => {
+  const API_KEY = process.env.REACT_APP_ALPHA_VANTAGE_API_KEY || 'J753PYAH9OD50RBP';
+  
+  try {
+    const response = await fetch(
+      `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${API_KEY}`
+    );
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    // Проверяем есть ли данные
+    if (data['Error Message']) {
+      throw new Error(data['Error Message']);
+    }
+    
+    if (data['Note']) {
+      throw new Error('API limit exceeded');
+    }
+    
+    const quote = data['Global Quote'];
+    if (!quote) {
+      throw new Error('No data received');
+    }
+    
+    // Преобразуем данные Alpha Vantage в наш формат
+    const price = parseFloat(quote['05. price']);
+    const previousClose = parseFloat(quote['08. previous close']);
+    const change = price - previousClose;
+    const changePercent = (change / previousClose) * 100;
+    
+    return {
+      price: Number(price.toFixed(2)),
+      change: Number(change.toFixed(2)),
+      changePercent: Number(changePercent.toFixed(2)),
+      volume: parseInt(quote['06. volume']).toLocaleString(),
+      high: parseFloat(quote['03. high']),
+      low: parseFloat(quote['04. low']),
+      previousClose: previousClose
+    };
+  } catch (error) {
+    console.error(`Error fetching data for ${symbol}:`, error);
+    throw error;
+  }
+};
+
 export default function StocksPage() {
   const { t } = useTranslation();
   const [stockData, setStockData] = useState({});
@@ -41,6 +91,7 @@ export default function StocksPage() {
   const [error, setError] = useState(null);
   const [selectedStock, setSelectedStock] = useState('AAPL');
   const [lastUpdated, setLastUpdated] = useState(null);
+  const [isUsingRealAPI, setIsUsingRealAPI] = useState(false);
   
   // Состояние для калькулятора сложного процента
   const [calculator, setCalculator] = useState({
@@ -72,20 +123,89 @@ export default function StocksPage() {
     try {
       if (showLoading) setLoading(true);
       
-      // Имитация загрузки данных
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Проверяем доступность API ключа
+      const API_KEY = process.env.REACT_APP_ALPHA_VANTAGE_API_KEY || 'J753PYAH9OD50RBP';
       
-      const newData = generateRandomStockData();
-      setStockData(newData);
+      if (API_KEY && API_KEY !== 'demo') {
+        // Пытаемся получить реальные данные
+        try {
+          console.log('Загружаем реальные данные от Alpha Vantage...');
+          const realData = {};
+          
+          // Загружаем данные для каждой акции последовательно (чтобы не превысить лимиты API)
+          for (const stock of popularStocks.slice(0, 3)) { // Ограничиваем первыми 3 для экономии запросов
+            try {
+              const data = await fetchRealStockData(stock.symbol);
+              realData[stock.symbol] = {
+                ...data,
+                marketCap: getMarketCap(stock.symbol), // Статичные данные
+                pe: getPERatio(stock.symbol), // Статичные данные
+                high52w: data.high * 1.2, // Примерное значение
+                low52w: data.low * 0.8    // Примерное значение
+              };
+              
+              // Небольшая задержка между запросами
+              await new Promise(resolve => setTimeout(resolve, 500));
+            } catch (err) {
+              console.error(`Failed to fetch ${stock.symbol}:`, err);
+              // Продолжаем со следующей акцией
+            }
+          }
+          
+          if (Object.keys(realData).length > 0) {
+            setStockData(realData);
+            setIsUsingRealAPI(true);
+            setError(null);
+            console.log('Загружены реальные данные:', realData);
+          } else {
+            throw new Error('No real data available');
+          }
+          
+        } catch (apiError) {
+          console.log('Ошибка API, переключаемся на демо-данные:', apiError.message);
+          // Fallback на демо-данные
+          const demoData = generateRandomStockData();
+          setStockData(demoData);
+          setIsUsingRealAPI(false);
+          setError('API недоступен, показаны демо-данные');
+        }
+      } else {
+        // Используем демо-данные
+        console.log('API ключ не настроен, используем демо-данные');
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Имитация загрузки
+        const demoData = generateRandomStockData();
+        setStockData(demoData);
+        setIsUsingRealAPI(false);
+        setError('Демо-режим: настройте API ключ для реальных данных');
+      }
+      
       setLastUpdated(new Date());
-      setError(null);
+      
     } catch (err) {
-      console.error('Ошибка загрузки данных акций:', err);
+      console.error('Общая ошибка загрузки данных:', err);
       setError(err.message);
+      setIsUsingRealAPI(false);
     } finally {
       setLoading(false);
     }
-  }, []); // Пустой массив зависимостей
+  }, [popularStocks]);
+
+  // Вспомогательные функции для статичных данных
+  const getMarketCap = (symbol) => {
+    const caps = {
+      'AAPL': '2.7T', 'GOOGL': '1.6T', 'MSFT': '2.5T',
+      'TSLA': '745B', 'AMZN': '1.3T', 'NVDA': '1.1T'
+    };
+    return caps[symbol] || 'N/A';
+  };
+
+  const getPERatio = (symbol) => {
+    const ratios = {
+      'AAPL': 28.5, 'GOOGL': 25.3, 'MSFT': 32.1,
+      'TSLA': 45.2, 'AMZN': 58.7, 'NVDA': 65.4
+    };
+    return ratios[symbol] || 0;
+  };
 
   useEffect(() => {
     fetchStockData();
@@ -173,10 +293,15 @@ export default function StocksPage() {
           >
             {loading ? '⏳' : '🔄'} {t('updateData')}
           </button>
+          {isUsingRealAPI && (
+            <span className="text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded">
+              📡 Реальные данные
+            </span>
+          )}
         </div>
         {error && (
-          <div className="mt-2 text-sm text-orange-600 dark:text-orange-400">
-            {t('demoMode')}
+          <div className={`mt-2 text-sm ${isUsingRealAPI ? 'text-orange-600 dark:text-orange-400' : 'text-orange-600 dark:text-orange-400'}`}>
+            {error}
           </div>
         )}
       </div>
@@ -184,7 +309,7 @@ export default function StocksPage() {
       {/* Популярные акции */}
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
-          🔥 {t('popularStocks')}
+          🔥 {t('popularStocks')} {isUsingRealAPI && <span className="text-green-600 text-sm">(Live Data)</span>}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {popularStocks.map(stock => {
@@ -251,13 +376,13 @@ export default function StocksPage() {
             </div>
             <div className="text-center">
               <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                {stockData[selectedStock].pe.toFixed(1)}
+                {stockData[selectedStock].pe ? stockData[selectedStock].pe.toFixed(1) : 'N/A'}
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('peRatio')}</p>
             </div>
             <div className="text-center">
               <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                {formatCurrency(stockData[selectedStock].high52w)}
+                {stockData[selectedStock].high52w ? formatCurrency(stockData[selectedStock].high52w) : 'N/A'}
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('yearHigh')}</p>
             </div>
@@ -415,20 +540,22 @@ export default function StocksPage() {
       <div className="card bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-purple-200 dark:border-purple-800">
         <div className="text-center">
           <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-300 mb-2">
-            🔌 Данные предоставлены Alpha Vantage API
+            🔌 {isUsingRealAPI ? 'Реальные данные от Alpha Vantage API' : 'Демо-данные Alpha Vantage API'}
           </h3>
           <p className="text-purple-700 dark:text-purple-400 text-sm mb-3">
             Профессиональные финансовые данные для трейдеров и инвесторов
           </p>
           <div className="flex justify-center space-x-4 text-xs text-purple-600 dark:text-purple-400">
-            <span>✅ Реальные котировки</span>
+            <span>{isUsingRealAPI ? '✅ Реальные котировки' : '🔶 Демо котировки'}</span>
             <span>✅ Исторические данные</span>
             <span>✅ Технические индикаторы</span>
             <span>✅ Новости рынка</span>
           </div>
-          <p className="text-xs text-purple-500 dark:text-purple-400 mt-2">
-            Сейчас отображаются демо-данные. Для получения реальных котировок нужен API ключ.
-          </p>
+          {!isUsingRealAPI && (
+            <p className="text-xs text-purple-500 dark:text-purple-400 mt-2">
+              API ключ: J753PYAH9OD50RBP - настройте в переменных окружения REACT_APP_ALPHA_VANTAGE_API_KEY
+            </p>
+          )}
         </div>
       </div>
     </div>
