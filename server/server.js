@@ -370,8 +370,11 @@ app.get('/api/admin/stats', authenticateToken, requireAdmin, async (req, res) =>
       isActive: true
     });
     const adminUsers = await User.countDocuments({ role: 'admin' });
+    
+    // Подсчитываем количество ПОЛЬЗОВАТЕЛЕЙ с целями накопления
+    // (не общее количество целей, а количество людей, у которых есть хотя бы одна цель)
     const usersWithGoals = await User.countDocuments({
-      'financialData.savingsGoals.0': { $exists: true },
+      'financialData.savingsGoals.0': { $exists: true },  // проверяем наличие первого элемента в массиве целей
       isActive: true
     });
 

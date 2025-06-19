@@ -256,6 +256,102 @@ export const translations = {
     monthWord: 'месяц',
     monthsWord2: 'месяца', 
     monthsWord: 'месяцев',
+
+    // Админ-панель
+    adminPanelTitle: 'Админ-панель Финансовый компас',
+    welcomeAdmin: 'Добро пожаловать,',
+    manageUsersStats: 'Управляйте пользователями и следите за статистикой системы.',
+    connectedMongoDB: 'Подключено к MongoDB Atlas',
+    jwtAuth: 'JWT авторизация',
+    adminRights: 'Права администратора',
+    
+    // Табы админки
+    systemStats: 'Статистика системы',
+    userManagement: 'Управление пользователями',
+    database: 'База данных',
+    systemSettings: 'Настройки системы',
+    
+    // Статистика
+    platformStats: 'Статистика платформы',
+    totalUsers: 'Всего пользователей',
+    activeUsers7Days: 'Активные (7 дней)',
+    usersWithGoals: 'Пользователи с целями накопления',
+    averageIncome: 'Средний доход',
+    loadingStats: 'Загрузка статистики...',
+    statsLoadError: 'Ошибка загрузки статистики',
+    
+    // Управление пользователями
+    fullControlAccounts: 'Полный контроль над учетными записями',
+    searchUsers: 'Поиск пользователей',
+    createAdmin: 'Создать админа',
+    searchPlaceholder: 'Введите имя или email...',
+    searchButton: 'Поиск',
+    resetButton: 'Сброс',
+    totalFound: 'Всего найдено',
+    usersCount: 'пользователей',
+    noUsersFound: 'Пользователи не найдены',
+    
+    // Информация о пользователе
+    userInfo: 'Информация о пользователе',
+    registrationDate: 'Дата регистрации',
+    lastLogin: 'Последний вход',
+    never: 'Никогда',
+    role: 'Роль',
+    status: 'Статус',
+    active: 'Активен',
+    inactive: 'Неактивен',
+    financialData: 'Финансовые данные',
+    monthlyIncomeUser: 'Месячный доход',
+    notSpecified: 'Не указан',
+    savingsGoalsCount: 'Целей накопления',
+    selectedStrategy: 'Выбранная стратегия',
+    testResults: 'Результаты теста',
+    notTaken: 'Не проходил',
+    
+    // Действия с пользователями
+    editUser: 'Редактировать пользователя',
+    deleteUser: 'Удалить пользователя',
+    confirmDelete: 'Вы уверены, что хотите удалить этого пользователя?',
+    userUpdated: 'Пользователь обновлен!',
+    userDeleted: 'Пользователь успешно удален из базы данных!',
+    
+    // База данных
+    databaseManagement: 'Управление базой данных',
+    exportData: 'Экспорт данных',
+    optimizeDB: 'Оптимизация БД',
+    dbStats: 'Статистика БД',
+    clearDB: 'Очистка БД',
+    resetSystem: 'Сброс системы',
+    confirmOptimize: 'Выполнить оптимизацию базы данных?\n\nЭто может занять некоторое время.',
+    dbOptimized: 'База данных оптимизирована!',
+    dataExported: 'Данные экспортированы!',
+    dbStatsUpdated: 'Статистика БД обновлена!',
+    confirmClearDB: 'ОПАСНО! Вы собираетесь удалить ВСЕ данные!\n\nДля подтверждения введите: УДАЛИТЬ ВСЕ ДАННЫЕ',
+    operationCanceled: 'Операция отменена',
+    dbCleared: 'База данных очищена!',
+    confirmSystemReset: 'ВНИМАНИЕ! Сброс системы к заводским настройкам!\n\nВведите: СБРОС СИСТЕМЫ',
+    systemReset: 'Система сброшена к заводским настройкам!',
+    
+    // Настройки системы
+    globalSystemSettings: 'Глобальные настройки системы',
+    allowRegistration: 'Разрешить регистрацию',
+    allowRegistrationDesc: 'Новые пользователи могут создавать аккаунты',
+    enableCBRAPI: 'Включить API ЦБ РФ',
+    enableCBRAPIDesc: 'Получать актуальные курсы валют и данные об инфляции',
+    enableNotifications: 'Включить уведомления',
+    enableNotificationsDesc: 'Системные уведомления и push-сообщения',
+    settingUpdated: 'Настройка обновлена!',
+    
+    // Ошибки доступа
+    accessDenied: 'Доступ запрещен',
+    adminRightsRequired: 'Для доступа к админ-панели требуются права администратора',
+    backToHome: 'Вернуться на главную',
+    
+    // Общие сообщения
+    operationInProgress: 'Выполняется операция...',
+    pleasWait: 'Пожалуйста, подождите',
+    somethingWentWrong: 'Что-то пошло не так',
+    tryAgainLater: 'Попробуйте позже',
   },
 
   en: {
@@ -511,6 +607,102 @@ export const translations = {
     monthWord: 'month',
     monthsWord2: 'months', 
     monthsWord: 'months',
+
+    // Admin Panel
+    adminPanelTitle: 'Financial Compass Admin Panel',
+    welcomeAdmin: 'Welcome,',
+    manageUsersStats: 'Manage users and monitor system statistics.',
+    connectedMongoDB: 'Connected to MongoDB Atlas',
+    jwtAuth: 'JWT Authorization',
+    adminRights: 'Administrator Rights',
+    
+    // Admin tabs
+    systemStats: 'System Statistics',
+    userManagement: 'User Management',
+    database: 'Database',
+    systemSettings: 'System Settings',
+    
+    // Statistics
+    platformStats: 'Platform Statistics',
+    totalUsers: 'Total Users',
+    activeUsers7Days: 'Active (7 days)',
+    usersWithGoals: 'Users with Savings Goals',
+    averageIncome: 'Average Income',
+    loadingStats: 'Loading statistics...',
+    statsLoadError: 'Statistics loading error',
+    
+    // User management
+    fullControlAccounts: 'Full control over accounts',
+    searchUsers: 'Search Users',
+    createAdmin: 'Create Admin',
+    searchPlaceholder: 'Enter name or email...',
+    searchButton: 'Search',
+    resetButton: 'Reset',
+    totalFound: 'Total found',
+    usersCount: 'users',
+    noUsersFound: 'No users found',
+    
+    // User information
+    userInfo: 'User Information',
+    registrationDate: 'Registration Date',
+    lastLogin: 'Last Login',
+    never: 'Never',
+    role: 'Role',
+    status: 'Status',
+    active: 'Active',
+    inactive: 'Inactive',
+    financialData: 'Financial Data',
+    monthlyIncomeUser: 'Monthly Income',
+    notSpecified: 'Not specified',
+    savingsGoalsCount: 'Savings Goals',
+    selectedStrategy: 'Selected Strategy',
+    testResults: 'Test Results',
+    notTaken: 'Not taken',
+    
+    // User actions
+    editUser: 'Edit User',
+    deleteUser: 'Delete User',
+    confirmDelete: 'Are you sure you want to delete this user?',
+    userUpdated: 'User updated!',
+    userDeleted: 'User successfully deleted from database!',
+    
+    // Database
+    databaseManagement: 'Database Management',
+    exportData: 'Export Data',
+    optimizeDB: 'Optimize DB',
+    dbStats: 'DB Statistics',
+    clearDB: 'Clear DB',
+    resetSystem: 'Reset System',
+    confirmOptimize: 'Perform database optimization?\n\nThis may take some time.',
+    dbOptimized: 'Database optimized!',
+    dataExported: 'Data exported!',
+    dbStatsUpdated: 'DB statistics updated!',
+    confirmClearDB: 'DANGER! You are about to delete ALL data!\n\nTo confirm, enter: DELETE ALL DATA',
+    operationCanceled: 'Operation canceled',
+    dbCleared: 'Database cleared!',
+    confirmSystemReset: 'WARNING! System reset to factory settings!\n\nEnter: SYSTEM RESET',
+    systemReset: 'System reset to factory settings!',
+    
+    // System settings
+    globalSystemSettings: 'Global System Settings',
+    allowRegistration: 'Allow Registration',
+    allowRegistrationDesc: 'New users can create accounts',
+    enableCBRAPI: 'Enable CBR API',
+    enableCBRAPIDesc: 'Get current exchange rates and inflation data',
+    enableNotifications: 'Enable Notifications',
+    enableNotificationsDesc: 'System notifications and push messages',
+    settingUpdated: 'Setting updated!',
+    
+    // Access errors
+    accessDenied: 'Access Denied',
+    adminRightsRequired: 'Administrator rights required to access admin panel',
+    backToHome: 'Back to Home',
+    
+    // General messages
+    operationInProgress: 'Operation in progress...',
+    pleasWait: 'Please wait',
+    somethingWentWrong: 'Something went wrong',
+    tryAgainLater: 'Try again later',
   }
   };
 

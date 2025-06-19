@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from '../utils/translations';
 
 const AdminDashboard = () => {
   const { user, token } = useAuth();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('stats');
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
@@ -116,7 +118,7 @@ const AdminDashboard = () => {
       setStats(data);
     } catch (error) {
       console.error('Ошибка загрузки статистики:', error);
-      alert('Ошибка загрузки статистики: ' + error.message);
+      alert(t('statsLoadError') + ': ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -130,7 +132,7 @@ const AdminDashboard = () => {
       setPagination(data.pagination);
     } catch (error) {
       console.error('Ошибка загрузки пользователей:', error);
-      alert('Ошибка загрузки пользователей: ' + error.message);
+      alert('User loading error: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -146,7 +148,7 @@ const AdminDashboard = () => {
       setPagination({});
     } catch (error) {
       console.error('Ошибка поиска:', error);
-      alert('Ошибка поиска: ' + error.message);
+      alert('Search error: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -158,23 +160,23 @@ const AdminDashboard = () => {
         method: 'PUT',
         body: JSON.stringify(updateData),
       });
-      alert('Пользователь обновлен!');
+      alert(t('userUpdated'));
       loadUsers();
       setEditingUser(null);
     } catch (error) {
       console.error('Ошибка обновления:', error);
-      alert('Ошибка обновления: ' + error.message);
+      alert('Update error: ' + error.message);
     }
   };
 
   const deleteUser = async (userId) => {
     try {
       await apiCall(`/api/admin/users/${userId}`, { method: 'DELETE' });
-      alert('✅ Пользователь успешно удален из базы данных!');
+      alert('✅ ' + t('userDeleted'));
       loadUsers();
     } catch (error) {
       console.error('Ошибка удаления:', error);
-      alert('❌ Ошибка удаления: ' + error.message);
+      alert('❌ Delete error: ' + error.message);
     }
   };
 
@@ -186,12 +188,12 @@ const AdminDashboard = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(adminData),
       });
-      alert('✅ Админ создан!');
+      alert('✅ Admin created!');
       setShowCreateAdmin(false);
       loadUsers();
     } catch (error) {
       console.error('Ошибка создания админа:', error);
-      alert('❌ Ошибка создания админа: ' + error.message);
+      alert('❌ Admin creation error: ' + error.message);
     }
   };
 
@@ -210,25 +212,25 @@ const AdminDashboard = () => {
       a.click();
       window.URL.revokeObjectURL(url);
       
-      alert('✅ Данные экспортированы!');
+      alert('✅ ' + t('dataExported'));
     } catch (error) {
       console.error('Ошибка экспорта:', error);
-      alert('❌ Ошибка экспорта: ' + error.message);
+      alert('❌ Export error: ' + error.message);
     } finally {
       setLoading(false);
     }
   };
 
   const optimizeDatabase = async () => {
-    if (!window.confirm('Выполнить оптимизацию базы данных?\n\nЭто может занять некоторое время.')) return;
+    if (!window.confirm(t('confirmOptimize'))) return;
     
     try {
       setLoading(true);
       await apiCall('/api/admin/optimize', { method: 'POST' });
-      alert('✅ База данных оптимизирована!');
+      alert('✅ ' + t('dbOptimized'));
     } catch (error) {
       console.error('Ошибка оптимизации:', error);
-      alert('❌ Ошибка оптимизации: ' + error.message);
+      alert('❌ Optimization error: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -239,58 +241,54 @@ const AdminDashboard = () => {
       setLoading(true);
       const data = await apiCall('/api/admin/db-stats');
       setDbStats(data);
-      alert('✅ Статистика БД обновлена!');
+      alert('✅ ' + t('dbStatsUpdated'));
     } catch (error) {
       console.error('Ошибка получения статистики БД:', error);
-      alert('❌ Ошибка получения статистики БД: ' + error.message);
+      alert('❌ DB stats error: ' + error.message);
     } finally {
       setLoading(false);
     }
   };
 
   const clearDatabase = async () => {
-    const confirmation = window.prompt(
-      '⚠️ ОПАСНО! Вы собираетесь удалить ВСЕ данные!\n\nДля подтверждения введите: УДАЛИТЬ ВСЕ ДАННЫЕ'
-    );
+    const confirmation = window.prompt(t('confirmClearDB'));
     
     if (confirmation !== 'УДАЛИТЬ ВСЕ ДАННЫЕ') {
-      alert('Операция отменена');
+      alert(t('operationCanceled'));
       return;
     }
 
     try {
       setLoading(true);
       await apiCall('/api/admin/clear-database', { method: 'DELETE' });
-      alert('✅ База данных очищена!');
+      alert('✅ ' + t('dbCleared'));
       // Перезагружаем данные
       loadStats();
       loadUsers();
     } catch (error) {
       console.error('Ошибка очистки БД:', error);
-      alert('❌ Ошибка очистки БД: ' + error.message);
+      alert('❌ DB clear error: ' + error.message);
     } finally {
       setLoading(false);
     }
   };
 
   const resetSystem = async () => {
-    const confirmation = window.prompt(
-      '⚠️ ВНИМАНИЕ! Сброс системы к заводским настройкам!\n\nВведите: СБРОС СИСТЕМЫ'
-    );
+    const confirmation = window.prompt(t('confirmSystemReset'));
     
     if (confirmation !== 'СБРОС СИСТЕМЫ') {
-      alert('Операция отменена');
+      alert(t('operationCanceled'));
       return;
     }
 
     try {
       setLoading(true);
       await apiCall('/api/admin/reset-system', { method: 'POST' });
-      alert('✅ Система сброшена к заводским настройкам!');
+      alert('✅ ' + t('systemReset'));
       window.location.href = '/';
     } catch (error) {
       console.error('Ошибка сброса системы:', error);
-      alert('❌ Ошибка сброса системы: ' + error.message);
+      alert('❌ System reset error: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -306,10 +304,10 @@ const AdminDashboard = () => {
         body: JSON.stringify(newSettings),
       });
       
-      alert('✅ Настройка обновлена!');
+      alert('✅ ' + t('settingUpdated'));
     } catch (error) {
       console.error('Ошибка обновления настроек:', error);
-      alert('❌ Ошибка обновления настроек: ' + error.message);
+      alert('❌ Settings update error: ' + error.message);
       // Откатываем изменения
       setSystemSettings(systemSettings);
     }
@@ -338,17 +336,17 @@ const AdminDashboard = () => {
         <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg text-center">
           <div className="text-6xl mb-4">🚫</div>
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-            Доступ запрещен
+            {t('accessDenied')}
           </h1>
           <p className="text-gray-600 dark:text-gray-300">
-            Для доступа к админ-панели требуются права администратора
+            {t('adminRightsRequired')}
           </p>
           <div className="mt-4">
             <button 
               onClick={() => window.location.href = '/'}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
             >
-              Вернуться на главную
+              {t('backToHome')}
             </button>
           </div>
         </div>
@@ -362,21 +360,21 @@ const AdminDashboard = () => {
         {/* Заголовок */}
         <div className="mb-6 md:mb-8">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2">
-            🛡️ Админ-панель Финансовый компас
+            🛡️ {t('adminPanelTitle')}
           </h1>
           <p className="text-sm md:text-base text-gray-600 dark:text-gray-300">
-            Добро пожаловать, <span className="font-semibold text-blue-600 dark:text-blue-400">{user?.name}</span>! 
-            Управляйте пользователями и следите за статистикой системы.
+            {t('welcomeAdmin')} <span className="font-semibold text-blue-600 dark:text-blue-400">{user?.name}</span>! 
+            {t('manageUsersStats')}
           </p>
           <div className="mt-3 md:mt-4 flex flex-wrap gap-1 md:gap-2">
             <span className="inline-flex items-center px-2 md:px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium rounded-full">
-              ✅ Подключено к MongoDB Atlas
+              ✅ {t('connectedMongoDB')}
             </span>
             <span className="inline-flex items-center px-2 md:px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium rounded-full">
-              🔐 JWT авторизация
+              🔐 {t('jwtAuth')}
             </span>
             <span className="inline-flex items-center px-2 md:px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs font-medium rounded-full">
-              👑 Права администратора
+              👑 {t('adminRights')}
             </span>
           </div>
         </div>
@@ -386,10 +384,10 @@ const AdminDashboard = () => {
           <div className="border-b border-gray-200 dark:border-gray-700">
             <nav className="-mb-px flex overflow-x-auto scrollbar-hide space-x-2 md:space-x-8 pb-1">
               {[
-                { id: 'stats', label: 'Статистика', icon: '📊', fullLabel: 'Статистика системы' },
-                { id: 'users', label: 'Пользователи', icon: '👥', fullLabel: 'Управление пользователями' },
-                { id: 'database', label: 'База данных', icon: '🗄️', fullLabel: 'База данных' },
-                { id: 'settings', label: 'Настройки', icon: '⚙️', fullLabel: 'Настройки системы' }
+                { id: 'stats', label: t('systemStats').split(' ')[0], icon: '📊', fullLabel: t('systemStats') },
+                { id: 'users', label: t('userManagement').split(' ')[0], icon: '👥', fullLabel: t('userManagement') },
+                { id: 'database', label: t('database'), icon: '🗄️', fullLabel: t('database') },
+                { id: 'settings', label: t('systemSettings').split(' ')[0], icon: '⚙️', fullLabel: t('systemSettings') }
               ].map(tab => (
                 <button
                   key={tab.id}
@@ -412,12 +410,12 @@ const AdminDashboard = () => {
         {/* Контент табов */}
         {activeTab === 'stats' && (
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white mb-4 md:mb-6">📊 Статистика платформы</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white mb-4 md:mb-6">📊 {t('platformStats')}</h2>
             
             {loading ? (
               <div className="text-center py-8">
                 <div className="text-4xl mb-4">⏳</div>
-                <p className="text-gray-600 dark:text-gray-300">Загрузка статистики...</p>
+                <p className="text-gray-600 dark:text-gray-300">{t('loadingStats')}</p>
               </div>
             ) : stats ? (
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
@@ -426,7 +424,7 @@ const AdminDashboard = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-300">
-                        Всего пользователей
+                        {t('totalUsers')}
                       </p>
                       <p className="text-xl md:text-3xl font-bold text-gray-800 dark:text-white">
                         {stats.totalUsers}
@@ -440,7 +438,7 @@ const AdminDashboard = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-300">
-                        Активные (7 дней)
+                        {t('activeUsers7Days')}
                       </p>
                       <p className="text-xl md:text-3xl font-bold text-green-600">
                         {stats.activeUsers}
@@ -454,7 +452,7 @@ const AdminDashboard = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-300">
-                        С целями накопления
+                        {t('usersWithGoals')}
                       </p>
                       <p className="text-xl md:text-3xl font-bold text-blue-600">
                         {stats.usersWithGoals}
@@ -468,7 +466,7 @@ const AdminDashboard = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-300">
-                        Средний доход
+                        {t('averageIncome')}
                       </p>
                       <p className="text-lg md:text-3xl font-bold text-yellow-600">
                         {stats.averageIncome.toLocaleString('ru-RU')} ₽
@@ -481,7 +479,7 @@ const AdminDashboard = () => {
             ) : (
               <div className="text-center py-8">
                 <div className="text-4xl mb-4">❌</div>
-                <p className="text-gray-600 dark:text-gray-300">Ошибка загрузки статистики</p>
+                <p className="text-gray-600 dark:text-gray-300">{t('statsLoadError')}</p>
               </div>
             )}
           </div>
