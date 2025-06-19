@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from '../utils/translations';
+// import { useTranslation } from '../utils/translations'; // TODO: добавить переводы позже
 
 export default function StocksPage() {
   // const { t } = useTranslation(); // TODO: добавить переводы позже
