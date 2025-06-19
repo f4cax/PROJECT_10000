@@ -489,9 +489,9 @@ const AdminDashboard = () => {
           <div>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 md:mb-6 space-y-3 sm:space-y-0">
               <div>
-                <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">👥 Управление пользователями</h2>
+                <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">👥 {t('userManagementTitle')}</h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  Полный контроль над учетными записями
+                  {t('fullControlDescription')}
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
@@ -500,14 +500,14 @@ const AdminDashboard = () => {
                   className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg flex items-center justify-center space-x-2 transition-colors duration-200 text-sm"
                 >
                   <span>👑</span>
-                  <span>Создать админа</span>
+                  <span>{t('createAdminButton')}</span>
                 </button>
                 <button
                   onClick={loadUsers}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg flex items-center justify-center space-x-2 transition-colors duration-200 text-sm"
                 >
                   <span>🔄</span>
-                  <span>Обновить</span>
+                  <span>{t('refreshButton')}</span>
                 </button>
               </div>
             </div>
@@ -516,7 +516,7 @@ const AdminDashboard = () => {
             <div className="mb-4 md:mb-6 flex flex-col sm:flex-row gap-2 sm:gap-4">
               <input
                 type="text"
-                placeholder="Поиск по имени или email..."
+                placeholder={t('searchPlaceholderAdmin')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-800 dark:text-white text-sm"
@@ -526,13 +526,13 @@ const AdminDashboard = () => {
                 onClick={searchUsers}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm"
               >
-                🔍 Поиск
+                🔍 {t('searchButtonAdmin')}
               </button>
               <button
                 onClick={() => { setSearchQuery(''); loadUsers(); }}
                   className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm"
               >
-                Сбросить
+                {t('resetButtonAdmin')}
               </button>
               </div>
             </div>
@@ -563,23 +563,23 @@ const AdminDashboard = () => {
                             ? 'bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-200'
                             : 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200'
                         }`}>
-                          {userItem.role === 'admin' ? 'Админ' : 'Пользователь'}
+                          {userItem.role === 'admin' ? t('adminRole') : t('userRole')}
                         </span>
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                           userItem.isActive 
                             ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-200'
                             : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200'
                         }`}>
-                          {userItem.isActive ? 'Активен' : 'Заблокирован'}
+                          {userItem.isActive ? t('activeStatus') : t('blockedStatus')}
                         </span>
                       </div>
                     </div>
                     <div className="mb-3">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">Доход: </span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">{t('income')}: </span>
                       <span className="text-sm text-gray-900 dark:text-white">
                         {userItem.financialData?.monthlyIncome > 0 
                           ? `${userItem.financialData.monthlyIncome.toLocaleString('ru-RU')} ₽`
-                          : 'Не указан'
+                          : t('notSpecifiedIncome')
                         }
                       </span>
                     </div>
@@ -588,14 +588,14 @@ const AdminDashboard = () => {
                         onClick={() => setEditingUser(userItem)}
                         className="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-600 dark:text-blue-400 px-2 py-1 rounded text-xs"
                       >
-                        ✏️ Изменить
+                        ✏️ {t('editButton')}
                       </button>
                       {userItem.role !== 'admin' && (
                         <button
                           onClick={() => updateUser(userItem._id, { role: 'admin' })}
                           className="bg-purple-100 hover:bg-purple-200 dark:bg-purple-900 dark:hover:bg-purple-800 text-purple-600 dark:text-purple-400 px-2 py-1 rounded text-xs"
                         >
-                          👑 Админ
+                          👑 {t('adminButton')}
                         </button>
                       )}
                       <button
@@ -606,18 +606,18 @@ const AdminDashboard = () => {
                             : 'bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-600 dark:text-green-400'
                         }`}
                       >
-                        {userItem.isActive ? '🔒 Блок' : '🔓 Актив'}
+                        {userItem.isActive ? `🔒 ${t('blockButton')}` : `🔓 ${t('unblockButton')}`}
                       </button>
                       {userItem._id !== user?.id && (
                         <button
                           onClick={() => {
-                            if (window.confirm(`⚠️ Удалить пользователя "${userItem.name}"?`)) {
+                            if (window.confirm(t('confirmDeleteUser', { name: userItem.name }))) {
                               deleteUser(userItem._id);
                             }
                           }}
                           className="bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400 px-2 py-1 rounded text-xs"
                         >
-                          🗑️ Удалить
+                          🗑️ {t('deleteButton')}
                         </button>
                       )}
                     </div>
@@ -631,19 +631,19 @@ const AdminDashboard = () => {
                 <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Пользователь
+                      {t('user')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Роль
+                      {t('role')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Статус
+                      {t('status')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Доход
+                      {t('income')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Действия
+                      {t('actions')}
                     </th>
                   </tr>
                 </thead>
@@ -671,7 +671,7 @@ const AdminDashboard = () => {
                             ? 'bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-200'
                             : 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200'
                         }`}>
-                          {userItem.role === 'admin' ? 'Админ' : 'Пользователь'}
+                          {userItem.role === 'admin' ? t('adminRole') : t('userRole')}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -680,13 +680,13 @@ const AdminDashboard = () => {
                             ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-200'
                             : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200'
                         }`}>
-                          {userItem.isActive ? 'Активен' : 'Заблокирован'}
+                          {userItem.isActive ? t('activeStatus') : t('blockedStatus')}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                         {userItem.financialData?.monthlyIncome > 0 
                           ? `${userItem.financialData.monthlyIncome.toLocaleString('ru-RU')} ₽`
-                          : 'Не указан'
+                          : t('notSpecifiedIncome')
                         }
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -694,29 +694,29 @@ const AdminDashboard = () => {
                           <button
                             onClick={() => setEditingUser(userItem)}
                             className="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
-                            title="Редактировать пользователя"
+                            title={t('editUser')}
                           >
                             <span>✏️</span>
-                            <span>Изменить</span>
+                            <span>{t('editButton')}</span>
                           </button>
                           {userItem.role !== 'admin' && (
                             <button
                               onClick={() => updateUser(userItem._id, { role: 'admin' })}
                               className="bg-purple-100 hover:bg-purple-200 dark:bg-purple-900 dark:hover:bg-purple-800 text-purple-600 dark:text-purple-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
-                              title="Сделать администратором"
+                              title={t('createAdmin')}
                             >
                               <span>👑</span>
-                              <span>Админ</span>
+                              <span>{t('adminButton')}</span>
                             </button>
                           )}
                           {userItem.role === 'admin' && userItem._id !== user?.id && (
                             <button
                               onClick={() => updateUser(userItem._id, { role: 'user' })}
                               className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
-                              title="Снять права администратора"
+                              title={t('userRole')}
                             >
                               <span>👤</span>
-                              <span>Юзер</span>
+                              <span>{t('userButton')}</span>
                             </button>
                           )}
                           <button
@@ -726,23 +726,23 @@ const AdminDashboard = () => {
                                 ? 'bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400' 
                                 : 'bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-600 dark:text-green-400'
                             }`}
-                            title={userItem.isActive ? 'Заблокировать' : 'Разблокировать'}
+                            title={userItem.isActive ? t('blockButton') : t('unblockButton')}
                           >
                             <span>{userItem.isActive ? '🔒' : '🔓'}</span>
-                            <span>{userItem.isActive ? 'Блок' : 'Актив'}</span>
+                            <span>{userItem.isActive ? t('blockButton') : t('unblockButton')}</span>
                           </button>
                           {userItem._id !== user?.id && (
                             <button
                               onClick={() => {
-                                if (window.confirm(`⚠️ ВНИМАНИЕ! Вы уверены, что хотите НАВСЕГДА удалить пользователя "${userItem.name}"?\n\nЭто действие необратимо! Все данные пользователя будут потеряны.`)) {
+                                if (window.confirm(t('confirmDeleteUserLong', { name: userItem.name }))) {
                                   deleteUser(userItem._id);
                                 }
                               }}
                               className="bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
-                              title="Удалить из базы данных навсегда"
+                              title={t('deleteUser')}
                             >
                               <span>🗑️</span>
-                              <span>Удалить</span>
+                              <span>{t('deleteButton')}</span>
                             </button>
                           )}
                         </div>
@@ -762,17 +762,17 @@ const AdminDashboard = () => {
                   onClick={() => loadUsers(pagination.currentPage - 1)}
                   className="w-full sm:w-auto px-3 md:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 text-sm"
                 >
-                  ← Предыдущая
+                  ← {t('previousPage')}
                 </button>
                 <span className="px-3 md:px-4 py-2 text-sm text-gray-600 dark:text-gray-300 text-center">
-                  Страница {pagination.currentPage} из {pagination.totalPages}
+                  {t('pageOf', { current: pagination.currentPage, total: pagination.totalPages })}
                 </span>
                 <button
                   disabled={!pagination.hasNext}
                   onClick={() => loadUsers(pagination.currentPage + 1)}
                   className="w-full sm:w-auto px-3 md:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 text-sm"
                 >
-                  Следующая →
+                  {t('nextPage')} →
                 </button>
               </div>
             )}
@@ -781,34 +781,34 @@ const AdminDashboard = () => {
 
         {activeTab === 'database' && (
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white mb-4 md:mb-6">🗄️ База данных</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white mb-4 md:mb-6">🗄️ {t('databaseTitle')}</h2>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
               {/* Информация о базе данных */}
               <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
                 <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4 flex items-center">
                   <span className="text-xl md:text-2xl mr-2">🏢</span>
-                  Информация о БД
+                  {t('databaseInfo')}
                 </h3>
                 <div className="space-y-2 md:space-y-3">
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Тип базы:</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">{t('databaseType')}</span>
                     <span className="font-medium text-sm text-gray-800 dark:text-white">MongoDB Atlas</span>
                   </div>
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Коллекции:</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">{t('collections')}</span>
                     <span className="font-medium text-sm text-gray-800 dark:text-white">
                       {dbStats ? `${dbStats.collections} коллекций` : 'users, tests'}
                     </span>
                   </div>
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Подключение:</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">{t('connection')}</span>
                     <span className="inline-flex items-center px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium rounded-full">
-                      ✅ Активно
+                      ✅ {t('connectionActive')}
                     </span>
                   </div>
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Регион:</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">{t('region')}</span>
                     <span className="font-medium text-sm text-gray-800 dark:text-white">EU (Ireland)</span>
                   </div>
                 </div>
@@ -818,7 +818,7 @@ const AdminDashboard = () => {
               <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
                 <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4 flex items-center">
                   <span className="text-xl md:text-2xl mr-2">⚡</span>
-                  Операции с БД
+                  {t('databaseOperations')}
                 </h3>
                 <div className="space-y-2 md:space-y-3">
                   <button 
@@ -827,10 +827,10 @@ const AdminDashboard = () => {
                     className="w-full text-left p-3 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 border border-blue-200 dark:border-blue-800 rounded-lg transition-colors duration-200 disabled:opacity-50"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-sm md:text-base text-blue-800 dark:text-blue-200">📊 Экспорт данных</span>
+                      <span className="font-medium text-sm md:text-base text-blue-800 dark:text-blue-200">📊 {t('exportDataButton')}</span>
                       <span className="text-blue-600 dark:text-blue-400">{loading ? '⏳' : '→'}</span>
                     </div>
-                    <span className="text-xs md:text-sm text-blue-600 dark:text-blue-400">Скачать базу в JSON формате</span>
+                    <span className="text-xs md:text-sm text-blue-600 dark:text-blue-400">{t('exportDataDesc')}</span>
                   </button>
                   
                   <button 
@@ -839,10 +839,10 @@ const AdminDashboard = () => {
                     className="w-full text-left p-3 bg-yellow-50 dark:bg-yellow-900/20 hover:bg-yellow-100 dark:hover:bg-yellow-900/40 border border-yellow-200 dark:border-yellow-800 rounded-lg transition-colors duration-200 disabled:opacity-50"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-sm md:text-base text-yellow-800 dark:text-yellow-200">🔄 Оптимизация</span>
+                      <span className="font-medium text-sm md:text-base text-yellow-800 dark:text-yellow-200">🔄 {t('optimizationButton')}</span>
                       <span className="text-yellow-600 dark:text-yellow-400">{loading ? '⏳' : '→'}</span>
                     </div>
-                    <span className="text-xs md:text-sm text-yellow-600 dark:text-yellow-400">Очистка устаревших данных</span>
+                    <span className="text-xs md:text-sm text-yellow-600 dark:text-yellow-400">{t('optimizationDesc')}</span>
                   </button>
                   
                   <button 
@@ -851,10 +851,10 @@ const AdminDashboard = () => {
                     className="w-full text-left p-3 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/40 border border-purple-200 dark:border-purple-800 rounded-lg transition-colors duration-200 disabled:opacity-50"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-sm md:text-base text-purple-800 dark:text-purple-200">📋 Статистика БД</span>
+                      <span className="font-medium text-sm md:text-base text-purple-800 dark:text-purple-200">📋 {t('dbStatsButton')}</span>
                       <span className="text-purple-600 dark:text-purple-400">{loading ? '⏳' : '→'}</span>
                     </div>
-                    <span className="text-xs md:text-sm text-purple-600 dark:text-purple-400">Размер коллекций и индексы</span>
+                    <span className="text-xs md:text-sm text-purple-600 dark:text-purple-400">{t('dbStatsDesc')}</span>
                   </button>
                 </div>
               </div>
@@ -864,7 +864,7 @@ const AdminDashboard = () => {
             <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
               <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4 flex items-center">
                 <span className="text-xl md:text-2xl mr-2">📋</span>
-                Последние операции
+                {t('recentOperations')}
               </h3>
               <div className="space-y-2">
                 {[
@@ -889,19 +889,19 @@ const AdminDashboard = () => {
 
         {activeTab === 'settings' && (
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white mb-4 md:mb-6">⚙️ Настройки системы</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white mb-4 md:mb-6">⚙️ {t('systemSettingsTitle')}</h2>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
               {/* Финансовые настройки */}
               <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
                 <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4 flex items-center">
                   <span className="text-xl md:text-2xl mr-2">💰</span>
-                  Финансовые настройки
+                  {t('financialSettings')}
                 </h3>
                 <div className="space-y-3 md:space-y-4">
                   <div>
                     <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Правило распределения бюджета
+                      {t('budgetRule')}
                     </label>
                     <select className="w-full p-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white">
                       <option>50-25-15-10 (Mark Tilbury)</option>
@@ -911,7 +911,7 @@ const AdminDashboard = () => {
                   </div>
                   <div>
                     <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Валюта по умолчанию
+                      {t('defaultCurrency')}
                     </label>
                     <select className="w-full p-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white">
                       <option>RUB (Российский рубль)</option>
@@ -926,11 +926,11 @@ const AdminDashboard = () => {
               <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
                 <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4 flex items-center">
                   <span className="text-xl md:text-2xl mr-2">🔧</span>
-                  Системные настройки
+                  {t('systemSettingsSection')}
                 </h3>
                 <div className="space-y-3 md:space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300 pr-2">Регистрация новых пользователей</span>
+                    <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300 pr-2">{t('userRegistration')}</span>
                     <button 
                       onClick={() => toggleSetting('registration')}
                       disabled={loading}
@@ -944,7 +944,7 @@ const AdminDashboard = () => {
                     </button>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300 pr-2">API ЦБ РФ</span>
+                    <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300 pr-2">{t('cbrApiSetting')}</span>
                     <button 
                       onClick={() => toggleSetting('cbrApi')}
                       disabled={loading}
@@ -958,7 +958,7 @@ const AdminDashboard = () => {
                     </button>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300 pr-2">Автоматические уведомления</span>
+                    <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300 pr-2">{t('autoNotifications')}</span>
                     <button 
                       onClick={() => toggleSetting('notifications')}
                       disabled={loading}
@@ -979,7 +979,7 @@ const AdminDashboard = () => {
             <div className="mt-4 md:mt-6 bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
               <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4 flex items-center">
                 <span className="text-xl md:text-2xl mr-2">🚨</span>
-                Опасные действия
+                {t('dangerousActions')}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                 <button 
@@ -988,8 +988,8 @@ const AdminDashboard = () => {
                   className="p-3 md:p-4 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 transition-colors duration-200 disabled:opacity-50"
                 >
                   <div className="text-xl md:text-2xl mb-1 md:mb-2">{loading ? '⏳' : '🗑️'}</div>
-                  <div className="font-medium mb-1 text-sm md:text-base">Очистить БД</div>
-                  <div className="text-xs">Удалить все данные</div>
+                  <div className="font-medium mb-1 text-sm md:text-base">{t('clearDatabaseButton')}</div>
+                  <div className="text-xs">{t('clearDatabaseDesc')}</div>
                 </button>
                 <button 
                   onClick={resetSystem}
@@ -997,8 +997,8 @@ const AdminDashboard = () => {
                   className="p-3 md:p-4 bg-yellow-50 dark:bg-yellow-900/20 hover:bg-yellow-100 dark:hover:bg-yellow-900/40 border border-yellow-200 dark:border-yellow-800 rounded-lg text-yellow-700 dark:text-yellow-300 transition-colors duration-200 disabled:opacity-50"
                 >
                   <div className="text-xl md:text-2xl mb-1 md:mb-2">{loading ? '⏳' : '🔄'}</div>
-                  <div className="font-medium mb-1 text-sm md:text-base">Сброс системы</div>
-                  <div className="text-xs">Вернуть к начальным настройкам</div>
+                  <div className="font-medium mb-1 text-sm md:text-base">{t('systemResetButton')}</div>
+                  <div className="text-xs">{t('systemResetDesc')}</div>
                 </button>
                 <button 
                   onClick={exportData}
@@ -1006,8 +1006,8 @@ const AdminDashboard = () => {
                   className="p-3 md:p-4 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/40 border border-purple-200 dark:border-purple-800 rounded-lg text-purple-700 dark:text-purple-300 transition-colors duration-200 disabled:opacity-50"
                 >
                   <div className="text-xl md:text-2xl mb-1 md:mb-2">{loading ? '⏳' : '📤'}</div>
-                  <div className="font-medium mb-1 text-sm md:text-base">Экспорт всех данных</div>
-                  <div className="text-xs">Скачать полную копию</div>
+                  <div className="font-medium mb-1 text-sm md:text-base">{t('fullDataExportButton')}</div>
+                  <div className="text-xs">{t('fullDataExportDesc')}</div>
                 </button>
               </div>
             </div>
@@ -1020,7 +1020,7 @@ const AdminDashboard = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
             <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4">
-              Редактировать пользователя
+              {t('editUserTitle')}
             </h3>
             <form onSubmit={(e) => {
               e.preventDefault();
@@ -1034,7 +1034,7 @@ const AdminDashboard = () => {
             }}>
               <div className="space-y-3 md:space-y-4">
                 <div>
-                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Имя</label>
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('nameField')}</label>
                   <input
                     name="name"
                     defaultValue={editingUser.name}
@@ -1042,7 +1042,7 @@ const AdminDashboard = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('emailField')}</label>
                   <input
                     name="email"
                     type="email"
@@ -1051,25 +1051,25 @@ const AdminDashboard = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Роль</label>
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('roleField')}</label>
                   <select
                     name="role"
                     defaultValue={editingUser.role}
                     className="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
                   >
-                    <option value="user">Пользователь</option>
-                    <option value="admin">Админ</option>
+                    <option value="user">{t('userOption')}</option>
+                    <option value="admin">{t('adminOption')}</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Статус</label>
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('statusField')}</label>
                   <select
                     name="isActive"
                     defaultValue={editingUser.isActive.toString()}
                     className="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
                   >
-                    <option value="true">Активен</option>
-                    <option value="false">Заблокирован</option>
+                    <option value="true">{t('activeOption')}</option>
+                    <option value="false">{t('blockedOption')}</option>
                   </select>
                 </div>
               </div>
@@ -1079,13 +1079,13 @@ const AdminDashboard = () => {
                   onClick={() => setEditingUser(null)}
                   className="w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 text-sm"
                 >
-                  Отмена
+                  {t('cancelButton')}
                 </button>
                 <button
                   type="submit"
                   className="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
                 >
-                  Сохранить
+                  {t('saveButton')}
                 </button>
               </div>
             </form>
@@ -1098,7 +1098,7 @@ const AdminDashboard = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
             <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4">
-              Создать администратора
+              {t('createAdminTitle')}
             </h3>
             <form onSubmit={(e) => {
               e.preventDefault();
@@ -1111,7 +1111,7 @@ const AdminDashboard = () => {
             }}>
               <div className="space-y-3 md:space-y-4">
                 <div>
-                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Имя</label>
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('nameField')}</label>
                   <input
                     name="name"
                     required
@@ -1119,7 +1119,7 @@ const AdminDashboard = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('emailField')}</label>
                   <input
                     name="email"
                     type="email"
@@ -1128,7 +1128,7 @@ const AdminDashboard = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Пароль</label>
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('passwordField')}</label>
                   <input
                     name="password"
                     type="password"
@@ -1144,13 +1144,13 @@ const AdminDashboard = () => {
                   onClick={() => setShowCreateAdmin(false)}
                   className="w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 text-sm"
                 >
-                  Отмена
+                  {t('cancelButton')}
                 </button>
                 <button
                   type="submit"
                   className="w-full sm:w-auto px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm"
                 >
-                  Создать
+                  {t('createButton')}
                 </button>
               </div>
             </form>

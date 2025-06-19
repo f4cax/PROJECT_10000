@@ -83,7 +83,7 @@ export default function StocksPage() {
       if (API_KEY && API_KEY !== 'demo') {
         // Пытаемся получить реальные данные для всех акций
         try {
-
+          console.log('📡 Загружаем реальные данные от EODHD для всех акций...');
           const realData = {};
           
           // EODHD поддерживает множественные запросы одним вызовом API
@@ -93,10 +93,11 @@ export default function StocksPage() {
           const mainSymbol = symbols[0]; // Первая акция как основная
           
           try {
-
+            console.log(`📊 Загружаем данные для всех акций: ${symbols.join(', ')}...`);
             
             // Запрос всех акций одним вызовом
             const url = `https://eodhd.com/api/real-time/${mainSymbol}?s=${symbolsString}&api_token=${API_KEY}&fmt=json`;
+            console.log(`🔗 API запрос: ${url}`);
             
             const response = await fetch(url);
             if (!response.ok) {
@@ -104,6 +105,7 @@ export default function StocksPage() {
             }
             
             const data = await response.json();
+            console.log(`📈 Ответ от EODHD API:`, data);
             
             // EODHD возвращает массив данных для множественных запросов
             const stocksData = Array.isArray(data) ? data : [data];
@@ -133,7 +135,7 @@ export default function StocksPage() {
                   low52w: parseFloat(stockInfo.low || price) * 0.8
                 };
                 
-
+                console.log(`✅ Обработана акция ${symbol}:`, realData[symbol]);
               }
             });
             
@@ -164,37 +166,40 @@ export default function StocksPage() {
               setError(`Смешанный режим: ${realCount} акций с реальными данными EODHD, остальные - демо`);
             }
             
-
+            console.log('✅ Загружены реальные данные от EODHD для всех акций:', realData);
           } else {
             throw new Error('No real data available');
           }
           
         } catch (apiError) {
-          console.log('Ошибка EODHD API, переключаемся на демо-данные:', apiError.message);
+          console.warn('⚠️ Ошибка EODHD API, переключаемся на демо-данные:', apiError.message);
           // Fallback на демо-данные
           const demoData = generateRandomStockData();
           setStockData(demoData);
           setIsUsingRealAPI(false);
           setError('EODHD API недоступен, показаны демо-данные');
+          console.log('🔄 Используем демо-данные:', demoData);
         }
       } else {
         // Используем демо-данные
-        console.log('EODHD API ключ не настроен, используем демо-данные');
+        console.log('🔧 EODHD API ключ не настроен, используем демо-данные');
         await new Promise(resolve => setTimeout(resolve, 1000)); // Имитация загрузки
         const demoData = generateRandomStockData();
         setStockData(demoData);
         setIsUsingRealAPI(false);
         setError('Демо-режим: настройте EODHD API ключ для реальных данных всех акций (100,000 запросов/день)');
+        console.log('🎭 Демо-данные сгенерированы:', demoData);
       }
       
       setLastUpdated(new Date());
       
     } catch (err) {
-      console.error('Общая ошибка загрузки данных:', err);
+      console.error('❌ Общая ошибка загрузки данных:', err);
       setError(err.message);
       setIsUsingRealAPI(false);
     } finally {
       setLoading(false);
+      console.log('🏁 Завершена загрузка данных акций');
     }
   }, [popularStocks]);
 
@@ -532,11 +537,11 @@ export default function StocksPage() {
             🎯 {t('forBeginnerInvestors')}
           </h4>
           <ul className="text-sm text-blue-800 dark:text-blue-300 space-y-2">
-            <li>• Начните с индексных фондов (S&P 500, NASDAQ)</li>
-            <li>• Инвестируйте регулярно, а не пытайтесь угадать время</li>
-            <li>• Диверсифицируйте портфель по секторам</li>
-            <li>• Не паникуйте при кратковременных падениях</li>
-            <li>• Изучайте основы финансовой грамотности</li>
+            <li>• {t('startWithIndexFunds')}</li>
+            <li>• {t('investRegularly')}</li>
+            <li>• {t('diversifyBySectors')}</li>
+            <li>• {t('dontPanicShortTerm')}</li>
+            <li>• {t('studyFinancialLiteracy')}</li>
           </ul>
         </div>
         
@@ -545,11 +550,11 @@ export default function StocksPage() {
             ⚠️ {t('importantWarnings')}
           </h4>
           <ul className="text-sm text-orange-800 dark:text-orange-300 space-y-2">
-            <li>• Прошлая доходность не гарантирует будущие результаты</li>
-            <li>• Инвестируйте только те деньги, которые готовы потерять</li>
-            <li>• Высокая доходность всегда связана с высокими рисками</li>
-            <li>• Рассмотрите консультацию с финансовым советником</li>
-            <li>• Изучите налоговые аспекты инвестирования</li>
+            <li>• {t('pastPerformanceWarning')}</li>
+            <li>• {t('investOnlyAffordableMoney')}</li>
+            <li>• {t('highReturnHighRisk')}</li>
+            <li>• {t('considerFinancialAdvisor')}</li>
+            <li>• {t('studyTaxAspects')}</li>
           </ul>
         </div>
       </div>
@@ -569,11 +574,6 @@ export default function StocksPage() {
             <span>✅ Исторические данные</span>
             <span>✅ Глобальные биржи</span>
           </div>
-          {!isUsingRealAPI && (
-            <p className="text-xs text-purple-500 dark:text-purple-400 mt-2">
-              API ключ: 68545cf3... - настройте в переменных окружения REACT_APP_EODHD_API_KEY
-            </p>
-          )}
         </div>
       </div>
     </div>
