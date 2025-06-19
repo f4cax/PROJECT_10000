@@ -9,6 +9,7 @@ import CBRPage from './pages/CBRPage';
 import AssetsPage from './pages/AssetsPage';
 import TipsPage from './pages/TipsPage';
 import AboutPage from './pages/AboutPage';
+import ProfilePage from './pages/ProfilePage';
 import AdminDashboard from './pages/AdminDashboard';
 import FinancialTestPage from './pages/FinancialTestPage';
 // import { trackPageView } from './utils/analytics';
@@ -41,6 +42,7 @@ function App() {
                 <Route path="/tips" element={<TipsPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/test" element={<FinancialTestPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/admin" element={<AdminDashboard />} />
               </Routes>
             </main>

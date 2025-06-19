@@ -72,6 +72,8 @@ export default function Navbar() {
     { name: t('tips'), href: '/tips', icon: '💡' },
     { name: t('test'), href: '/test', icon: '🧠' },
     { name: t('about'), href: '/about', icon: 'ℹ️' },
+    // Профиль (только для авторизованных пользователей)
+    ...(user ? [{ name: t('userProfile') || 'Профиль', href: '/profile', icon: '👤' }] : []),
     // Админ-панель (только для админов)
     ...(user && user.role === 'admin' ? [{ name: t('admin'), href: '/admin', icon: '🛡️' }] : [])
   ];
@@ -113,10 +115,14 @@ export default function Navbar() {
             {/* Авторизация */}
             {user ? (
               <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3">
-                <div className="flex items-center space-x-1 lg:space-x-2 bg-gray-700 dark:bg-gray-800 px-1.5 sm:px-2 lg:px-3 py-1 rounded-lg">
+                <Link
+                  to="/profile"
+                  className="flex items-center space-x-1 lg:space-x-2 bg-gray-700 dark:bg-gray-800 hover:bg-gray-600 dark:hover:bg-gray-700 px-1.5 sm:px-2 lg:px-3 py-1 rounded-lg transition-colors duration-200"
+                  title="Перейти в профиль"
+                >
                   <span className="text-base sm:text-lg lg:text-xl">{user.role === 'admin' ? '👑' : '👤'}</span>
                   <span className="text-white text-xs sm:text-sm lg:text-base font-medium hidden sm:block">{user.name}</span>
-                </div>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="text-gray-300 hover:text-white transition-colors duration-200 p-0.5 sm:p-1 lg:p-2 hover:bg-gray-700 rounded-md"
@@ -187,7 +193,11 @@ export default function Navbar() {
             {/* Дополнительная информация */}
             {user && (
               <div className="mb-4">
-                <div className="flex items-center space-x-3 px-4 py-3 user-card rounded-lg">
+                <Link
+                  to="/profile"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center space-x-3 px-4 py-3 user-card rounded-lg hover:bg-gray-700 transition-colors duration-200"
+                >
                   <div className="relative">
                     <span className="text-2xl">{user.role === 'admin' ? '👑' : '👤'}</span>
                     {user.role === 'admin' && (
@@ -201,7 +211,12 @@ export default function Navbar() {
                       {user.role === 'admin' ? `👑 ${t('administrator') || 'Администратор'}` : `👤 ${t('user') || 'Пользователь'}`}
                     </div>
                   </div>
-                </div>
+                  <div className="text-gray-400 hover:text-white">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </Link>
               </div>
             )}
             

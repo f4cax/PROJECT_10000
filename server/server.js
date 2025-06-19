@@ -62,6 +62,25 @@ const UserSchema = new mongoose.Schema({
     trim: true,
     maxlength: [100, 'Имя не должно превышать 100 символов']
   },
+  age: {
+    type: Number,
+    min: [0, 'Возраст не может быть отрицательным'],
+    max: [150, 'Возраст не может превышать 150 лет']
+  },
+  region: {
+    type: String,
+    enum: ['moscow', 'spb', 'central', 'northwest', 'south', 'north-caucasus', 'volga', 'ural', 'siberia', 'far-east'],
+  },
+  language: {
+    type: String,
+    enum: ['ru', 'en'],
+    default: 'ru'
+  },
+  currency: {
+    type: String,
+    enum: ['RUB', 'USD', 'EUR'],
+    default: 'RUB'
+  },
   role: {
     type: String,
     enum: ['user', 'admin'],
@@ -71,8 +90,24 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
+  settings: {
+    notifications: { type: Boolean, default: true },
+    darkMode: { type: Boolean, default: false },
+    emailUpdates: { type: Boolean, default: true }
+  },
   financialData: {
     monthlyIncome: { type: Number, default: 0 },
+    totalAssets: { type: Number, default: 0 },
+    monthlyExpenses: { type: Number, default: 0 },
+    investments: { type: Number, default: 0 },
+    investmentType: {
+      type: String,
+      enum: ['index-funds', 'stocks', 'bonds', 'mixed', 'crypto'],
+      default: 'index-funds'
+    },
+    financialGoal: { type: String, default: '' },
+    goalAmount: { type: Number, default: 0 },
+    goalDeadline: { type: Date },
     budgetDistribution: {
       needs: { type: Number, default: 0 },
       safety: { type: Number, default: 0 },
@@ -304,11 +339,84 @@ app.get('/api/user/profile', authenticateToken, async (req, res) => {
   }
 });
 
+// 👤 Обновление профиля пользователя
+app.put('/api/user/profile', authenticateToken, async (req, res) => {
+  try {
+    const { name, email, age, region, language, currency } = req.body;
+
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (email) updateData.email = email;
+    if (age) updateData.age = age;
+    if (region) updateData.region = region;
+    if (language) updateData.language = language;
+    if (currency) updateData.currency = currency;
+
+    const user = await User.findByIdAndUpdate(
+      req.user.userId,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    ).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+
+    res.json({
+      message: 'Профиль обновлен',
+      user: user,
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ error: 'Email уже используется' });
+    }
+    console.error('Ошибка обновления профиля:', error);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
+});
+
+// ⚙️ Обновление настроек пользователя
+app.put('/api/user/settings', authenticateToken, async (req, res) => {
+  try {
+    const { notifications, darkMode, emailUpdates } = req.body;
+
+    const updateData = {};
+    if (typeof notifications === 'boolean') updateData['settings.notifications'] = notifications;
+    if (typeof darkMode === 'boolean') updateData['settings.darkMode'] = darkMode;
+    if (typeof emailUpdates === 'boolean') updateData['settings.emailUpdates'] = emailUpdates;
+
+    const user = await User.findByIdAndUpdate(
+      req.user.userId,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    ).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+
+    res.json({
+      message: 'Настройки обновлены',
+      settings: user.settings,
+    });
+  } catch (error) {
+    console.error('Ошибка обновления настроек:', error);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
+});
+
 // 💰 Сохранение финансовых данных
 app.put('/api/user/financial-data', authenticateToken, async (req, res) => {
   try {
     const {
       monthlyIncome,
+      totalAssets,
+      monthlyExpenses,
+      investments,
+      investmentType,
+      financialGoal,
+      goalAmount,
+      goalDeadline,
       budgetDistribution,
       selectedStrategy,
       savingsGoals,
@@ -317,6 +425,13 @@ app.put('/api/user/financial-data', authenticateToken, async (req, res) => {
 
     const updateData = {};
     if (monthlyIncome !== undefined) updateData['financialData.monthlyIncome'] = monthlyIncome;
+    if (totalAssets !== undefined) updateData['financialData.totalAssets'] = totalAssets;
+    if (monthlyExpenses !== undefined) updateData['financialData.monthlyExpenses'] = monthlyExpenses;
+    if (investments !== undefined) updateData['financialData.investments'] = investments;
+    if (investmentType) updateData['financialData.investmentType'] = investmentType;
+    if (financialGoal !== undefined) updateData['financialData.financialGoal'] = financialGoal;
+    if (goalAmount !== undefined) updateData['financialData.goalAmount'] = goalAmount;
+    if (goalDeadline) updateData['financialData.goalDeadline'] = goalDeadline;
     if (budgetDistribution) updateData['financialData.budgetDistribution'] = budgetDistribution;
     if (selectedStrategy) updateData['financialData.selectedStrategy'] = selectedStrategy;
     if (savingsGoals) updateData['financialData.savingsGoals'] = savingsGoals;
