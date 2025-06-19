@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from '../utils/translations';
 
 const ProfilePage = () => {
   const { user, token, updateUser } = useAuth();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('basic');
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -294,26 +296,26 @@ const ProfilePage = () => {
         console.log('✅ Контекст обновлен:', updatedUser.name);
       }
       
-      setMessage('Профиль обновлен');
+      setMessage(t('profileUpdated'));
       setTimeout(() => setMessage(''), 3000);
     } catch (error) {
       console.error('🔴 Ошибка обновления профиля:', error);
       console.error('🔴 Детали ошибки:', error.message);
       
-      let errorMessage = 'Ошибка обновления';
+      let errorMessage = t('updateError');
       if (error.message.includes('500')) {
-        errorMessage = 'Внутренняя ошибка сервера. Проверьте консоль для деталей.';
+        errorMessage = t('serverError');
       } else if (error.message.includes('400')) {
-        errorMessage = 'Неверные данные. Проверьте правильность заполнения полей.';
+        errorMessage = t('validationError');
       } else {
-        errorMessage = `Ошибка: ${error.message}`;
+        errorMessage = t('errorMessage', { message: error.message });
       }
       
       setMessage(errorMessage);
     } finally {
       setLoading(false);
     }
-  }, [apiCall, basicInfo, updateUser]);
+  }, [apiCall, basicInfo, updateUser, t]);
 
   const handleFinancialDataSave = useCallback(async () => {
     try {
@@ -328,15 +330,15 @@ const ProfilePage = () => {
         updateUser(updatedUser);
       }
       
-      setMessage('Финансовые данные обновлены');
+      setMessage(t('financialDataUpdated'));
       setTimeout(() => setMessage(''), 3000);
     } catch (error) {
       console.error('Ошибка обновления финансовых данных:', error);
-      setMessage('Ошибка обновления: ' + error.message);
+      setMessage(t('errorMessage', { message: error.message }));
     } finally {
       setLoading(false);
     }
-  }, [apiCall, financialData, updateUser, user]);
+  }, [apiCall, financialData, updateUser, user, t]);
 
   const calculateCompoundInterest = (principal, monthlyContribution, annualRate, years) => {
     const monthlyRate = annualRate / 12 / 100;
@@ -359,9 +361,9 @@ const ProfilePage = () => {
   }));
 
   const tabs = [
-    { id: 'basic', name: 'Основная информация', icon: '👤' },
-    { id: 'financial', name: 'Финансовые данные', icon: '💰' },
-    { id: 'projections', name: 'Прогнозы инвестиций', icon: '📈' }
+    { id: 'basic', name: t('basicInfo'), icon: '👤' },
+    { id: 'financial', name: t('financialData'), icon: '💰' },
+    { id: 'projections', name: t('investmentProjections'), icon: '📈' }
   ];
 
   if (!user) {
@@ -369,10 +371,10 @@ const ProfilePage = () => {
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-            Требуется авторизация
+            {t('authRequired')}
           </h2>
           <p className="text-gray-600 dark:text-gray-300">
-            Войдите в систему, чтобы получить доступ к профилю
+            {t('authRequiredDesc')}
           </p>
         </div>
       </div>
@@ -385,10 +387,10 @@ const ProfilePage = () => {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-2">
-            Загрузка профиля...
+            {t('loadingProfile')}
           </h2>
           <p className="text-gray-600 dark:text-gray-300">
-            Получаем актуальные данные с сервера
+            {t('loadingProfileDesc')}
           </p>
         </div>
       </div>
@@ -401,14 +403,14 @@ const ProfilePage = () => {
         {/* Заголовок */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
-            👤 Профиль пользователя
+            👤 {t('userProfile')}
           </h1>
           <p className="text-gray-600 dark:text-gray-300">
-            Управляйте своими данными и настройками
+            {t('manageProfileDesc')}
           </p>
           {basicInfo.name && (
             <p className="text-lg text-blue-600 dark:text-blue-400 mt-2">
-              Добро пожаловать, {basicInfo.name}!
+              {t('welcomeUser', { name: basicInfo.name })}
             </p>
           )}
         </div>
@@ -416,7 +418,7 @@ const ProfilePage = () => {
         {/* Сообщения */}
         {message && (
           <div className={`mb-6 p-4 rounded-lg ${
-            message.includes('Ошибка') || message.includes('error') 
+            message.includes('Ошибка') || message.includes('error') || message.includes('Error')
               ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
               : 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
           }`}>
@@ -452,24 +454,24 @@ const ProfilePage = () => {
           {activeTab === 'basic' && (
             <div>
               <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6">
-                Основная информация
+                {t('basicInfo')}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Имя
+                    {t('name')}
                   </label>
                   <input
                     type="text"
                     value={basicInfo.name}
                     onChange={(e) => setBasicInfo({...basicInfo, name: e.target.value})}
-                    placeholder="Введите ваше имя"
+                    placeholder={t('enterName')}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Email
+                    {t('email')}
                   </label>
                   <input
                     type="email"
@@ -480,7 +482,7 @@ const ProfilePage = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Возраст
+                    {t('age')}
                   </label>
                   <input
                     type="number"
@@ -488,13 +490,13 @@ const ProfilePage = () => {
                     onChange={(e) => setBasicInfo({...basicInfo, age: e.target.value})}
                     min="16"
                     max="100"
-                    placeholder="Ваш возраст"
+                    placeholder={t('enterAge')}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Регион
+                    {t('region')}
                   </label>
                   <select
                     value={basicInfo.region}
@@ -515,14 +517,14 @@ const ProfilePage = () => {
                   disabled={loading}
                   className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-6 py-2 rounded-lg font-medium transition-colors"
                 >
-                  {loading ? 'Сохранение...' : 'Сохранить'}
+                  {loading ? t('saving') : t('save')}
                 </button>
                 <button
                   onClick={refetchUserData}
                   disabled={loading || initialLoading}
                   className="bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-medium transition-colors"
                 >
-                  🔄 Обновить данные
+                  🔄 {t('refreshData')}
                 </button>
               </div>
             </div>
@@ -532,12 +534,12 @@ const ProfilePage = () => {
           {activeTab === 'financial' && (
             <div>
               <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6">
-                Финансовые данные
+                {t('financialData')}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Месячный доход (₽)
+                    {t('monthlyIncome')} (₽)
                   </label>
                   <input
                     type="number"
@@ -551,7 +553,7 @@ const ProfilePage = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Общие активы (₽)
+                    {t('totalAssets')} (₽)
                   </label>
                   <input
                     type="number"
@@ -565,7 +567,7 @@ const ProfilePage = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Текущие инвестиции (₽)
+                    {t('currentInvestments')} (₽)
                   </label>
                   <input
                     type="number"
@@ -579,7 +581,7 @@ const ProfilePage = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Сумма цели (₽)
+                    {t('goalAmount')} (₽)
                   </label>
                   <input
                     type="number"
@@ -598,7 +600,7 @@ const ProfilePage = () => {
                   disabled={loading}
                   className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-6 py-2 rounded-lg font-medium transition-colors"
                 >
-                  {loading ? 'Сохранение...' : 'Сохранить'}
+                  {loading ? t('saving') : t('save')}
                 </button>
               </div>
             </div>
@@ -608,24 +610,24 @@ const ProfilePage = () => {
           {activeTab === 'projections' && (
             <div>
               <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6">
-                Прогнозы инвестиций
+                {t('investmentProjections')}
               </h2>
               <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                 <p className="text-sm text-blue-700 dark:text-blue-300">
-                  📊 Расчет основан на доходности 8% годовых и ежемесячном пополнении 15% от дохода.
+                  📊 {t('projectionCalculationNote')}
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {investmentProjections.map(projection => (
                   <div key={projection.years} className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-6 text-white">
                     <div className="text-3xl font-bold mb-2">
-                      {projection.years} {projection.years === 1 ? 'год' : 'лет'}
+                      {projection.years} {projection.years === 1 ? t('year') : t('years')}
                     </div>
                     <div className="text-xl font-semibold mb-1">
                       {projection.amount.toLocaleString('ru-RU')} ₽
                     </div>
                     <div className="text-sm opacity-80">
-                      Прогнозируемая стоимость
+                      {t('projectedValue')}
                     </div>
                   </div>
                 ))}

@@ -355,6 +355,15 @@ export const translations = {
     userProfile: 'Профиль пользователя',
     manageProfileDesc: 'Управляйте своими данными и настройками',
     basicInfo: 'Основная информация',
+    authRequired: 'Требуется авторизация',
+    authRequiredDesc: 'Войдите в систему, чтобы получить доступ к профилю',
+    loadingProfile: 'Загрузка профиля...',
+    loadingProfileDesc: 'Получаем актуальные данные с сервера',
+    welcomeUser: 'Добро пожаловать, {name}!',
+    enterName: 'Введите ваше имя',
+    enterAge: 'Ваш возраст',
+    refreshData: 'Обновить данные',
+    projectionCalculationNote: 'Расчет основан на доходности 8% годовых и ежемесячном пополнении 15% от дохода',
     selectRegion: 'Выберите регион',
     totalAssets: 'Общие активы',
     monthlyExpenses: 'Месячные расходы',
@@ -375,7 +384,6 @@ export const translations = {
     projectedValue: 'Прогнозируемая стоимость',
     compoundInterestCalculator: 'Калькулятор сложного процента',
     monthlyContribution: 'Ежемесячное пополнение',
-    expectedReturn: 'Ожидаемая доходность',
     annually: 'в год',
     settingsAndPreferences: 'Настройки и предпочтения',
     notificationsDesc: 'Получать push-уведомления о важных событиях',
@@ -389,6 +397,10 @@ export const translations = {
     profileUpdated: 'Профиль обновлен',
     financialDataUpdated: 'Финансовые данные обновлены',
     settingsUpdated: 'Настройки обновлены',
+    updateError: 'Ошибка обновления',
+    serverError: 'Внутренняя ошибка сервера. Проверьте консоль для деталей.',
+    validationError: 'Неверные данные. Проверьте правильность заполнения полей.',
+    errorMessage: 'Ошибка: {message}',
   },
 
   en: {
@@ -743,6 +755,15 @@ export const translations = {
     userProfile: 'User Profile',
     manageProfileDesc: 'Manage your data and settings',
     basicInfo: 'Basic Information',
+    authRequired: 'Authentication Required',
+    authRequiredDesc: 'Please log in to access your profile',
+    loadingProfile: 'Loading profile...',
+    loadingProfileDesc: 'Getting fresh data from the server',
+    welcomeUser: 'Welcome, {name}!',
+    enterName: 'Enter your name',
+    enterAge: 'Your age',
+    refreshData: 'Refresh data',
+    projectionCalculationNote: 'Calculation based on 8% annual return and monthly contribution of 15% of income',
     selectRegion: 'Select region',
     totalAssets: 'Total Assets',
     monthlyExpenses: 'Monthly Expenses',
@@ -763,7 +784,6 @@ export const translations = {
     projectedValue: 'Projected Value',
     compoundInterestCalculator: 'Compound Interest Calculator',
     monthlyContribution: 'Monthly Contribution',
-    expectedReturn: 'Expected Return',
     annually: 'annually',
     settingsAndPreferences: 'Settings and Preferences',
     notificationsDesc: 'Receive push notifications about important events',
@@ -777,8 +797,12 @@ export const translations = {
     profileUpdated: 'Profile updated',
     financialDataUpdated: 'Financial data updated',
     settingsUpdated: 'Settings updated',
+    updateError: 'Update error',
+    serverError: 'Internal server error. Check console for details.',
+    validationError: 'Invalid data. Please check the correctness of the filled fields.',
+    errorMessage: 'Error: {message}',
   }
-  };
+};
 
 // Провайдер контекста для переводов
 export const TranslationProvider = ({ children }) => {
@@ -789,8 +813,18 @@ export const TranslationProvider = ({ children }) => {
     localStorage.setItem('language', newLanguage);
   };
   
-  const t = (key) => {
-    return translations[language]?.[key] || translations.ru[key] || key;
+  const t = (key, variables) => {
+    let translation = translations[language]?.[key] || translations.ru[key] || key;
+    
+    // Поддержка интерполяции переменных
+    if (variables && typeof translation === 'string') {
+      Object.keys(variables).forEach(varKey => {
+        const regex = new RegExp(`{${varKey}}`, 'g');
+        translation = translation.replace(regex, variables[varKey]);
+      });
+    }
+    
+    return translation;
   };
 
   const value = {
