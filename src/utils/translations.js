@@ -481,6 +481,7 @@ export const translations = {
     portfolioAssessment: 'Оценка портфеля',
     yourAssetsTitle: 'Ваши активы',
     assetsTracked: 'активов отслеживается',
+    assetsCount: 'Различных активов',
     portfolioEmpty: 'Портфель пуст',
     addFirstAsset: 'Добавьте свой первый актив, чтобы начать отслеживание портфеля',
     addFirstAssetButton: 'Добавить первый актив',
@@ -506,6 +507,7 @@ export const translations = {
     loginToAccount: 'Войти в аккаунт',
     loadingPortfolio: 'Загружаем ваш портфель...',
     perPiece: 'за шт.',
+    recommendations: 'Рекомендации',
   },
 
   en: {
@@ -986,6 +988,7 @@ export const translations = {
     portfolioAssessment: 'Portfolio Assessment',
     yourAssetsTitle: 'Your Assets',
     assetsTracked: 'assets tracked',
+    assetsCount: 'Different assets',
     portfolioEmpty: 'Portfolio is empty',
     addFirstAsset: 'Add your first asset to start tracking your portfolio',
     addFirstAssetButton: 'Add first asset',
@@ -1011,6 +1014,7 @@ export const translations = {
     loginToAccount: 'Login to Account',
     loadingPortfolio: 'Loading your portfolio...',
     perPiece: 'per piece',
+    recommendations: 'Recommendations',
   }
 };
 

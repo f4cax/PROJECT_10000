@@ -263,10 +263,10 @@ export default function AssetsPage() {
       {/* Заголовок */}
       <div className="text-center">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          💰 Управление активами
+          💰 {t('portfolioManagement') || 'Управление активами'}
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-400">
-          Полный контроль над вашим финансовым портфелем
+          {t('fullPortfolioControl') || 'Полный контроль над вашим финансовым портфелем'}
         </p>
       </div>
 
@@ -276,20 +276,20 @@ export default function AssetsPage() {
           onClick={() => setShowAddAsset(true)}
           className="btn-primary"
         >
-          ➕ Добавить актив
+          ➕ {t('addAsset') || 'Добавить актив'}
         </button>
         <button
           onClick={handleSync}
           disabled={syncing}
           className="btn-secondary"
         >
-          {syncing ? '🔄 Синхронизация...' : '🔄 Синхронизировать цены'}
+          {syncing ? `🔄 ${t('syncing') || 'Синхронизация...'}` : `🔄 ${t('syncPrices') || 'Синхронизировать цены'}`}
         </button>
         <button
           onClick={() => loadAssets()}
           className="btn-secondary"
         >
-          🔃 Обновить данные
+          🔃 {t('refreshData') || 'Обновить данные'}
         </button>
       </div>
 
@@ -297,33 +297,33 @@ export default function AssetsPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="card text-center bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20">
           <h3 className="text-lg font-semibold text-green-900 dark:text-green-300 mb-2">
-            💎 Общая стоимость
+            💎 {t('totalValue') || 'Общая стоимость'}
           </h3>
           <div className="text-3xl font-bold text-green-600 dark:text-green-400">
             {formatCurrency(portfolio.totalValue)}
           </div>
           {portfolio.lastCalculated && (
             <p className="text-xs text-green-700 dark:text-green-500 mt-1">
-              Обновлено: {new Date(portfolio.lastCalculated).toLocaleTimeString()}
+              {t('updated') || 'Обновлено'}: {new Date(portfolio.lastCalculated).toLocaleTimeString()}
             </p>
           )}
         </div>
 
         <div className="card text-center">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-            📊 Количество активов
+            📊 {t('numberOfAssets') || 'Количество активов'}
           </h3>
           <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
             {assets.length}
           </div>
           <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-            Различных активов
+            {t('assetsCount') || 'Различных активов'}
           </p>
         </div>
 
         <div className={`card text-center ${portfolio.totalGainLoss >= 0 ? 'bg-green-50 dark:bg-green-900/20' : 'bg-red-50 dark:bg-red-900/20'}`}>
           <h3 className={`text-lg font-semibold mb-2 ${portfolio.totalGainLoss >= 0 ? 'text-green-900 dark:text-green-300' : 'text-red-900 dark:text-red-300'}`}>
-            📈 Доходность
+            📈 {t('profitability') || 'Доходность'}
           </h3>
           <div className={`text-3xl font-bold ${portfolio.totalGainLoss >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
             {portfolio.totalGainLoss >= 0 ? '+' : ''}{formatCurrency(portfolio.totalGainLoss)}
@@ -335,13 +335,13 @@ export default function AssetsPage() {
 
         <div className="card text-center">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-            🎯 Диверсификация
+            🎯 {t('diversification') || 'Диверсификация'}
           </h3>
           <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
             {analytics?.diversification?.score?.toFixed(0) || 0}%
           </div>
           <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-            Оценка портфеля
+            {t('portfolioAssessment') || 'Оценка портфеля'}
           </p>
         </div>
       </div>
@@ -350,7 +350,7 @@ export default function AssetsPage() {
       {portfolio.distribution && Object.keys(portfolio.distribution).some(key => portfolio.distribution[key] > 0) && (
         <div className="card">
           <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
-            🥧 Распределение портфеля
+            🥧 {t('portfolioDistribution') || 'Распределение портфеля'}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {Object.entries(portfolio.distribution).map(([type, amount]) => {
@@ -387,11 +387,11 @@ export default function AssetsPage() {
       <div className="card">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
-            📝 Ваши активы
+            📝 {t('yourAssetsTitle') || 'Ваши активы'}
           </h2>
           {assets.filter(a => a.isTracked).length > 0 && (
             <span className="text-sm bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full">
-              📡 {assets.filter(a => a.isTracked).length} активов отслеживается
+              📡 {assets.filter(a => a.isTracked).length} {t('assetsTracked') || 'активов отслеживается'}
             </span>
           )}
         </div>
@@ -400,16 +400,16 @@ export default function AssetsPage() {
           <div className="text-center py-12">
             <div className="text-6xl mb-4">📁</div>
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              Портфель пуст
+              {t('portfolioEmpty') || 'Портфель пуст'}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Добавьте свой первый актив, чтобы начать отслеживание портфеля
+              {t('addFirstAsset') || 'Добавьте свой первый актив, чтобы начать отслеживание портфеля'}
             </p>
             <button
               onClick={() => setShowAddAsset(true)}
               className="btn-primary"
             >
-              ➕ Добавить первый актив
+              ➕ {t('addFirstAssetButton') || 'Добавить первый актив'}
             </button>
           </div>
         ) : (
@@ -439,13 +439,13 @@ export default function AssetsPage() {
                         )}
                         {asset.isTracked && (
                           <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-1 rounded">
-                            📡 Отслеживается
+                            📡 {t('tracked') || 'Отслеживается'}
                           </span>
                         )}
                       </div>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {percentage.toFixed(1)}% от портфеля
-                        {asset.quantity && <span> • {asset.quantity} шт.</span>}
+                        {percentage.toFixed(1)}% {t('fromPortfolio') || 'от портфеля'}
+                        {asset.quantity && <span> • {asset.quantity} {t('pieces') || 'шт.'}</span>}
                         {asset.category && <span> • {asset.category}</span>}
                       </p>
                       {asset.description && (
@@ -455,7 +455,7 @@ export default function AssetsPage() {
                       )}
                       {asset.lastUpdated && asset.isTracked && (
                         <p className="text-xs text-gray-500 dark:text-gray-500">
-                          Обновлено: {new Date(asset.lastUpdated).toLocaleString()}
+                          {t('updated') || 'Обновлено'}: {new Date(asset.lastUpdated).toLocaleString()}
                         </p>
                       )}
                     </div>
@@ -469,7 +469,7 @@ export default function AssetsPage() {
                       </div>
                       {asset.currentPrice && asset.quantity && (
                         <div className="text-sm text-gray-600 dark:text-gray-400">
-                          {formatCurrency(asset.currentPrice)} за шт.
+                          {formatCurrency(asset.currentPrice)} {t('perPiece') || 'за шт.'}
                         </div>
                       )}
                       {gainLoss !== 0 && (
@@ -490,14 +490,14 @@ export default function AssetsPage() {
                       <button
                         onClick={() => setEditingAsset(asset)}
                         className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-2"
-                        title="Редактировать"
+                        title={t('edit') || 'Редактировать'}
                       >
                         ✏️
                       </button>
                       <button
                         onClick={() => handleDeleteAsset(asset._id)}
                         className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-2"
-                        title="Удалить"
+                        title={t('delete') || 'Удалить'}
                       >
                         🗑️
                       </button>
@@ -517,7 +517,7 @@ export default function AssetsPage() {
           {analytics.topAssets?.length > 0 && (
             <div className="card">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                🥇 Топ активы
+                🥇 {t('topAssets') || 'Топ активы'}
               </h3>
               <div className="space-y-3">
                 {analytics.topAssets.map((asset, index) => (
@@ -541,12 +541,12 @@ export default function AssetsPage() {
           {/* Рекомендации */}
           <div className="card bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
             <h3 className="text-xl font-semibold text-blue-900 dark:text-blue-300 mb-4">
-              💡 Рекомендации
+              💡 {t('recommendations') || 'Рекомендации'}
             </h3>
             
             {analytics.diversification?.recommendations?.length > 0 && (
               <div className="mb-4">
-                <h4 className="font-medium text-blue-800 dark:text-blue-400 mb-2">По диверсификации:</h4>
+                <h4 className="font-medium text-blue-800 dark:text-blue-400 mb-2">{t('diversificationRecommendations') || 'По диверсификации'}:</h4>
                 <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
                   {analytics.diversification.recommendations.map((rec, index) => (
                     <li key={index}>• {rec}</li>
@@ -557,7 +557,7 @@ export default function AssetsPage() {
             
             {analytics.suggestions?.length > 0 && (
               <div>
-                <h4 className="font-medium text-blue-800 dark:text-blue-400 mb-2">Общие советы:</h4>
+                <h4 className="font-medium text-blue-800 dark:text-blue-400 mb-2">{t('generalTips') || 'Общие советы'}:</h4>
                 <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
                   {analytics.suggestions.map((suggestion, index) => (
                     <li key={index}>• {suggestion}</li>
@@ -568,7 +568,7 @@ export default function AssetsPage() {
             
             {(!analytics.diversification?.recommendations?.length && !analytics.suggestions?.length) && (
               <p className="text-blue-700 dark:text-blue-300">
-                🎉 Отличная работа! Ваш портфель сбалансирован.
+                {t('excellentWork') || '🎉 Отличная работа! Ваш портфель сбалансирован.'}
               </p>
             )}
           </div>
