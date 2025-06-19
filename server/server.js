@@ -69,7 +69,26 @@ const UserSchema = new mongoose.Schema({
   },
   region: {
     type: String,
-    enum: ['moscow', 'spb', 'central', 'northwest', 'south', 'north-caucasus', 'volga', 'ural', 'siberia', 'far-east'],
+    enum: [
+      'moscow', 'spb', 'adygea', 'altai', 'bashkortostan', 'buryatia', 
+      'dagestan', 'ingushetia', 'kabardino-balkaria', 'kalmykia', 
+      'karachay-cherkessia', 'karelia', 'komi', 'crimea', 'mari-el', 
+      'mordovia', 'sakha', 'north-ossetia', 'tatarstan', 'tuva', 
+      'udmurtia', 'khakassia', 'chechnya', 'chuvashia', 'altai-krai', 
+      'krasnodar-krai', 'krasnoyarsk-krai', 'primorsky-krai', 
+      'stavropol-krai', 'khabarovsk-krai', 'amur', 'arkhangelsk', 
+      'astrakhan', 'belgorod', 'bryansk', 'vladimir', 'volgograd', 
+      'vologda', 'voronezh', 'ivanovo', 'irkutsk', 'kaliningrad', 
+      'kaluga', 'kamchatka', 'kemerovo', 'kirov', 'kostroma', 
+      'kurgan', 'kursk', 'leningrad', 'lipetsk', 'magadan', 
+      'moscow-region', 'murmansk', 'nizhny-novgorod', 'novgorod', 
+      'novosibirsk', 'omsk', 'orenburg', 'oryol', 'penza', 'perm', 
+      'pskov', 'rostov', 'ryazan', 'samara', 'saratov', 'sakhalin', 
+      'sverdlovsk', 'smolensk', 'tambov', 'tver', 'tomsk', 'tula', 
+      'tyumen', 'ulyanovsk', 'chelyabinsk', 'zabaykalsky', 'yaroslavl', 
+      'nenetsky', 'khanty-mansi', 'chukotka', 'yamalo-nenets', 
+      'sevastopol', 'jewish'
+    ],
   },
   language: {
     type: String,
