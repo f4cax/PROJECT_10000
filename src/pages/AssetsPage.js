@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from '../utils/translations';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function AssetsPage() {
   const { t } = useTranslation();
+  const { token, isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(true);
   const [assets, setAssets] = useState([]);
   const [portfolio, setPortfolio] = useState({
@@ -28,16 +30,18 @@ export default function AssetsPage() {
     isTracked: false
   });
 
+  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
   // Загрузка активов пользователя
   const loadAssets = useCallback(async (sync = false) => {
     try {
-      const token = localStorage.getItem('token');
       if (!token) {
         setLoading(false);
         return;
       }
 
-      const url = sync ? '/api/user/assets?sync=true' : '/api/user/assets';
+      const endpoint = sync ? '/api/user/assets?sync=true' : '/api/user/assets';
+      const url = `${apiUrl}${endpoint}`;
       const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -53,25 +57,24 @@ export default function AssetsPage() {
           totalGainLossPercent: 0,
           distribution: {}
         });
-      } else if (response.status === 401) {
-        // Пользователь не авторизован
-        localStorage.removeItem('token');
-      }
+              } else if (response.status === 401) {
+          // Пользователь не авторизован
+          console.error('Ошибка авторизации при загрузке активов');
+        }
     } catch (error) {
       console.error('Ошибка загрузки активов:', error);
     } finally {
       setLoading(false);
       setSyncing(false);
     }
-  }, []);
+  }, [token, apiUrl]);
 
   // Загрузка аналитики
   const loadAnalytics = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
       if (!token) return;
 
-      const response = await fetch('/api/user/portfolio/analytics', {
+      const response = await fetch(`${apiUrl}/api/user/portfolio/analytics`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -84,7 +87,7 @@ export default function AssetsPage() {
     } catch (error) {
       console.error('Ошибка загрузки аналитики:', error);
     }
-  }, []);
+  }, [token, apiUrl]);
 
   useEffect(() => {
     loadAssets();
@@ -103,8 +106,7 @@ export default function AssetsPage() {
     if (!newAsset.name || newAsset.amount <= 0) return;
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/user/assets', {
+      const response = await fetch(`${apiUrl}/api/user/assets`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -140,8 +142,7 @@ export default function AssetsPage() {
     if (!window.confirm('Вы уверены, что хотите удалить этот актив?')) return;
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/user/assets/${assetId}`, {
+      const response = await fetch(`${apiUrl}/api/user/assets/${assetId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -160,8 +161,7 @@ export default function AssetsPage() {
   // Редактирование актива
   const handleEditAsset = async (assetId, updateData) => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/user/assets/${assetId}`, {
+      const response = await fetch(`${apiUrl}/api/user/assets/${assetId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -213,8 +213,7 @@ export default function AssetsPage() {
     return colors[type] || 'gray';
   };
 
-  // Проверка авторизации
-  const isAuthenticated = !!localStorage.getItem('token');
+
 
   if (loading) {
     return (
