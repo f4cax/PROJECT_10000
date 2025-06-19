@@ -34,15 +34,17 @@ const generateRandomStockData = () => {
   return result;
 };
 
-// Функция для получения реальных данных от Alpha Vantage API
+// Функция для получения реальных данных от EODHD API
 const fetchRealStockData = async (symbol) => {
-  const API_KEY = process.env.REACT_APP_ALPHA_VANTAGE_API_KEY || 'J753PYAH9OD50RBP';
+  const API_KEY = process.env.REACT_APP_EODHD_API_KEY || '68545cf3e0b555.23627356';
   
-  console.log(`🔑 API Key: ${API_KEY.substring(0, 8)}...`); // Показываем первые 8 символов ключа
+  console.log(`🔑 EODHD API Key: ${API_KEY.substring(0, 8)}...`);
   
   try {
-    const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${API_KEY}`;
-    console.log(`📡 Запрос к Alpha Vantage: ${url}`);
+    // EODHD требует формат SYMBOL.US
+    const formattedSymbol = symbol.includes('.') ? symbol : `${symbol}.US`;
+    const url = `https://eodhd.com/api/real-time/${formattedSymbol}?api_token=${API_KEY}&fmt=json`;
+    console.log(`📡 Запрос к EODHD: ${url}`);
     
     const response = await fetch(url);
     
@@ -51,45 +53,34 @@ const fetchRealStockData = async (symbol) => {
     }
     
     const data = await response.json();
-    console.log(`📊 Ответ от Alpha Vantage для ${symbol}:`, data);
+    console.log(`📊 Ответ от EODHD для ${symbol}:`, data);
     
     // Проверяем есть ли данные
-    if (data['Error Message']) {
-      console.error(`❌ Ошибка API: ${data['Error Message']}`);
-      throw new Error(data['Error Message']);
+    if (data.error) {
+      console.error(`❌ Ошибка EODHD API: ${data.error}`);
+      throw new Error(data.error);
     }
     
-    if (data['Note']) {
-      console.error(`⚠️ Лимит API: ${data['Note']}`);
-      throw new Error('API limit exceeded - ' + data['Note']);
+    if (!data.code) {
+      console.error(`❌ Пустой ответ от EODHD для ${symbol}:`, data);
+      throw new Error('No data received from EODHD');
     }
     
-    if (data['Information']) {
-      console.error(`ℹ️ Информация от API: ${data['Information']}`);
-      throw new Error('API информация - ' + data['Information']);
-    }
+    console.log(`✅ Получены данные EODHD для ${symbol}:`, data);
     
-    const quote = data['Global Quote'];
-    if (!quote || Object.keys(quote).length === 0) {
-      console.error(`❌ Пустой ответ от API для ${symbol}. Полный ответ:`, data);
-      throw new Error('No data received - empty response');
-    }
-    
-    console.log(`✅ Получены данные для ${symbol}:`, quote);
-    
-    // Преобразуем данные Alpha Vantage в наш формат
-    const price = parseFloat(quote['05. price']);
-    const previousClose = parseFloat(quote['08. previous close']);
-    const change = price - previousClose;
-    const changePercent = (change / previousClose) * 100;
+    // Преобразуем данные EODHD в наш формат
+    const price = parseFloat(data.close || data.price || 0);
+    const previousClose = parseFloat(data.previousClose || 0);
+    const change = parseFloat(data.change || 0);
+    const changePercent = parseFloat(data.change_p || 0);
     
     return {
       price: Number(price.toFixed(2)),
       change: Number(change.toFixed(2)),
       changePercent: Number(changePercent.toFixed(2)),
-      volume: parseInt(quote['06. volume']).toLocaleString(),
-      high: parseFloat(quote['03. high']),
-      low: parseFloat(quote['04. low']),
+      volume: (data.volume || 0).toLocaleString(),
+      high: parseFloat(data.high || price),
+      low: parseFloat(data.low || price),
       previousClose: previousClose
     };
   } catch (error) {
@@ -135,10 +126,10 @@ export default function StocksPage() {
 
   // Тестирование соединения с API
   const testAPIConnection = async () => {
-    console.log('🔧 Тестируем соединение с Alpha Vantage API...');
+    console.log('🔧 Тестируем соединение с EODHD API...');
     try {
-      // Используем demo ключ для тестирования
-      const testUrl = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey=demo';
+      // Используем demo ключ для тестирования с AAPL
+      const testUrl = 'https://eodhd.com/api/real-time/AAPL.US?api_token=demo&fmt=json';
       console.log(`📡 Тест запрос: ${testUrl}`);
       
       const response = await fetch(testUrl);
@@ -146,14 +137,12 @@ export default function StocksPage() {
       
       console.log('📊 Тест ответ:', data);
       
-      if (data['Global Quote']) {
-        alert('✅ API работает! Проблема может быть в вашем API ключе.');
-      } else if (data['Note']) {
-        alert('⚠️ API лимит исчерпан: ' + data['Note']);
-      } else if (data['Error Message']) {
-        alert('❌ Ошибка API: ' + data['Error Message']);
+      if (data.code && data.close) {
+        alert('✅ EODHD API работает! Ваш ключ должен работать.');
+      } else if (data.error) {
+        alert('❌ Ошибка EODHD API: ' + data.error);
       } else {
-        alert('❓ Неожиданный ответ от API. Проверьте консоль.');
+        alert('❓ Неожиданный ответ от EODHD API. Проверьте консоль.');
       }
     } catch (error) {
       console.error('❌ Ошибка тестирования:', error);
@@ -167,13 +156,12 @@ export default function StocksPage() {
       if (showLoading) setLoading(true);
       
       // Проверяем доступность API ключа
-      const API_KEY = process.env.REACT_APP_ALPHA_VANTAGE_API_KEY || 'J753PYAH9OD50RBP';
+      const API_KEY = process.env.REACT_APP_EODHD_API_KEY || '68545cf3e0b555.23627356';
       
-      // Временно принудительно используем демо-режим из-за исчерпанного лимита API
-      if (false && API_KEY && API_KEY !== 'demo') {
+      if (API_KEY && API_KEY !== 'demo') {
         // Пытаемся получить реальные данные
         try {
-          console.log('Загружаем реальные данные от Alpha Vantage...');
+          console.log('Загружаем реальные данные от EODHD...');
           const realData = {};
           
           // Загружаем данные только для выбранной акции
@@ -208,28 +196,28 @@ export default function StocksPage() {
           if (Object.keys(realData).length > 0) {
             setStockData(realData);
             setIsUsingRealAPI(true);
-            setError(`Смешанный режим: ${realDataStock} - реальные данные, остальные - демо`);
+            setError(`Смешанный режим: ${realDataStock} - реальные данные EODHD (15-20 мин. задержка), остальные - демо`);
             console.log('Загружены смешанные данные:', realData);
           } else {
             throw new Error('No real data available');
           }
           
         } catch (apiError) {
-          console.log('Ошибка API, переключаемся на демо-данные:', apiError.message);
+          console.log('Ошибка EODHD API, переключаемся на демо-данные:', apiError.message);
           // Fallback на демо-данные
           const demoData = generateRandomStockData();
           setStockData(demoData);
           setIsUsingRealAPI(false);
-          setError('API недоступен, показаны демо-данные');
+          setError('EODHD API недоступен, показаны демо-данные');
         }
       } else {
         // Используем демо-данные
-        console.log('API ключ не настроен, используем демо-данные');
+        console.log('EODHD API ключ не настроен, используем демо-данные');
         await new Promise(resolve => setTimeout(resolve, 1000)); // Имитация загрузки
         const demoData = generateRandomStockData();
         setStockData(demoData);
         setIsUsingRealAPI(false);
-        setError('Демо-режим: API лимит исчерпан (25 запросов/день). Лимит сбросится завтра в 00:00 UTC');
+        setError('Демо-режим: настройте EODHD API ключ для реальных данных (100,000 запросов/день)');
       }
       
       setLastUpdated(new Date());
@@ -385,7 +373,7 @@ export default function StocksPage() {
           </div>
         )}
         <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-          API Key: {(process.env.REACT_APP_ALPHA_VANTAGE_API_KEY || 'J753PYAH9OD50RBP').substring(0, 8)}...
+          EODHD API Key: {(process.env.REACT_APP_EODHD_API_KEY || '68545cf3e0b555.23627356').substring(0, 8)}...
         </div>
       </div>
 
@@ -630,20 +618,20 @@ export default function StocksPage() {
       <div className="card bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-purple-200 dark:border-purple-800">
         <div className="text-center">
           <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-300 mb-2">
-            🔌 {isUsingRealAPI ? 'Реальные данные от Alpha Vantage API' : 'Демо-данные Alpha Vantage API'}
+            🔌 {isUsingRealAPI ? 'Реальные данные от EODHD API' : 'Демо-данные EODHD API'}
           </h3>
           <p className="text-purple-700 dark:text-purple-400 text-sm mb-3">
             Профессиональные финансовые данные для трейдеров и инвесторов
           </p>
           <div className="flex justify-center space-x-4 text-xs text-purple-600 dark:text-purple-400">
-            <span>{isUsingRealAPI ? '✅ Реальные котировки' : '🔶 Демо котировки'}</span>
+            <span>{isUsingRealAPI ? '✅ Реальные котировки (15-20 мин)' : '🔶 Демо котировки'}</span>
+            <span>✅ 100,000 запросов/день</span>
             <span>✅ Исторические данные</span>
-            <span>✅ Технические индикаторы</span>
-            <span>✅ Новости рынка</span>
+            <span>✅ Глобальные биржи</span>
           </div>
           {!isUsingRealAPI && (
             <p className="text-xs text-purple-500 dark:text-purple-400 mt-2">
-              API ключ: J753PYAH9OD50RBP - настройте в переменных окружения REACT_APP_ALPHA_VANTAGE_API_KEY
+              API ключ: 68545cf3... - настройте в переменных окружения REACT_APP_EODHD_API_KEY
             </p>
           )}
         </div>
