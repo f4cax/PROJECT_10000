@@ -15,6 +15,9 @@ export default function CBRPage() {
     targetRate: 4.0
   });
 
+  // Основные популярные валюты для отображения
+  const mainCurrencies = ['USD', 'EUR', 'GBP', 'CNY', 'JPY', 'CHF'];
+
   // Загрузка данных ЦБ РФ
   useEffect(() => {
     const fetchCBRData = async () => {
@@ -38,10 +41,10 @@ export default function CBRPage() {
           Valute: {
             USD: { Value: 92.5, Previous: 91.8, CharCode: 'USD', Name: 'Доллар США' },
             EUR: { Value: 100.2, Previous: 99.5, CharCode: 'EUR', Name: 'Евро' },
-            CNY: { Value: 12.8, Previous: 12.6, CharCode: 'CNY', Name: 'Китайский юань' },
             GBP: { Value: 117.3, Previous: 116.8, CharCode: 'GBP', Name: 'Фунт стерлингов' },
+            CNY: { Value: 12.8, Previous: 12.6, CharCode: 'CNY', Name: 'Китайский юань' },
             JPY: { Value: 0.65, Previous: 0.64, CharCode: 'JPY', Name: 'Японская иена' },
-            KZT: { Value: 0.20, Previous: 0.19, CharCode: 'KZT', Name: 'Казахстанский тенге' }
+            CHF: { Value: 103.2, Previous: 102.8, CharCode: 'CHF', Name: 'Швейцарский франк' }
           }
         });
       } finally {
@@ -101,6 +104,19 @@ export default function CBRPage() {
     return 'text-red-600 dark:text-red-400';
   };
 
+  // Получение флага валюты
+  const getCurrencyFlag = (code) => {
+    const flags = {
+      'USD': '🇺🇸',
+      'EUR': '🇪🇺',
+      'GBP': '🇬🇧',
+      'CNY': '🇨🇳',
+      'JPY': '🇯🇵',
+      'CHF': '🇨🇭'
+    };
+    return flags[code] || '💱';
+  };
+
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto space-y-8 fade-in">
@@ -135,14 +151,17 @@ export default function CBRPage() {
 
       {/* Основные курсы валют */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {exchangeRates && Object.entries(exchangeRates.Valute).slice(0, 6).map(([code, currency]) => {
+        {exchangeRates && mainCurrencies.map(code => {
+          const currency = exchangeRates.Valute[code];
+          if (!currency) return null;
+          
           const change = getCurrencyChange(currency);
           return (
             <div key={code} className="card hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                    {currency.CharCode}
+                    {getCurrencyFlag(currency.CharCode)}
                   </div>
                   <div className="ml-3">
                     <h3 className="font-semibold text-gray-900 dark:text-white">{currency.CharCode}</h3>

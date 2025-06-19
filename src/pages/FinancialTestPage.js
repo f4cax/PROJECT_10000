@@ -161,6 +161,37 @@ export default function FinancialTestPage() {
   const [answers, setAnswers] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [totalScore, setTotalScore] = useState(0);
+  const [shuffledQuestions, setShuffledQuestions] = useState([]);
+
+  // Функция для перемешивания вопросов (алгоритм Fisher-Yates)
+  const shuffleQuestions = (questions) => {
+    const shuffled = [...questions];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    
+    // Также перемешиваем варианты ответов в каждом вопросе
+    return shuffled.map(question => ({
+      ...question,
+      options: shuffleArray([...question.options])
+    }));
+  };
+
+  // Вспомогательная функция для перемешивания массива
+  const shuffleArray = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  // Инициализация перемешанных вопросов при загрузке компонента
+  useEffect(() => {
+    setShuffledQuestions(shuffleQuestions(FINANCIAL_TEST_QUESTIONS));
+  }, []);
 
   // Загружаем сохраненные результаты теста
   useEffect(() => {
@@ -175,7 +206,7 @@ export default function FinancialTestPage() {
     const newAnswers = [...answers, selectedOption];
     setAnswers(newAnswers);
     
-    if (currentQuestion < FINANCIAL_TEST_QUESTIONS.length - 1) {
+    if (currentQuestion < shuffledQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
       // Подсчет результата
@@ -210,6 +241,8 @@ export default function FinancialTestPage() {
     setAnswers([]);
     setShowResult(false);
     setTotalScore(0);
+    // Перемешиваем вопросы заново при сбросе теста
+    setShuffledQuestions(shuffleQuestions(FINANCIAL_TEST_QUESTIONS));
   };
 
   const getScoreColor = () => {
@@ -219,12 +252,22 @@ export default function FinancialTestPage() {
   };
 
   const getProgressPercentage = () => {
-    return ((currentQuestion + 1) / FINANCIAL_TEST_QUESTIONS.length) * 100;
+    return ((currentQuestion + 1) / shuffledQuestions.length) * 100;
   };
+
+  // Не показываем тест пока вопросы не перемешаны
+  if (shuffledQuestions.length === 0) {
+    return (
+      <div className="max-w-3xl mx-auto text-center py-8">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto"></div>
+        <p className="mt-4 text-gray-600">Подготовка теста...</p>
+      </div>
+    );
+  }
 
   if (showResult) {
     const strategy = getRecommendedStrategy();
-    const maxScore = FINANCIAL_TEST_QUESTIONS.length * 3;
+    const maxScore = shuffledQuestions.length * 3;
     const percentage = Math.round((totalScore / maxScore) * 100);
 
     return (
@@ -317,7 +360,7 @@ export default function FinancialTestPage() {
             📚 Правильные ответы
           </h3>
           <div className="space-y-3">
-            {FINANCIAL_TEST_QUESTIONS.map((question, index) => {
+            {shuffledQuestions.map((question, index) => {
               const userAnswer = answers[index];
               const correctAnswer = question.options.find(opt => opt.correct);
               const isCorrect = userAnswer.correct;
@@ -354,7 +397,7 @@ export default function FinancialTestPage() {
     );
   }
 
-  const question = FINANCIAL_TEST_QUESTIONS[currentQuestion];
+  const question = shuffledQuestions[currentQuestion];
 
   return (
     <div className="max-w-3xl mx-auto space-y-8 fade-in">
@@ -371,7 +414,7 @@ export default function FinancialTestPage() {
       <div className="card">
         <div className="flex justify-between items-center mb-3">
           <span className="text-sm text-gray-600">
-            Вопрос {currentQuestion + 1} из {FINANCIAL_TEST_QUESTIONS.length}
+            Вопрос {currentQuestion + 1} из {shuffledQuestions.length}
           </span>
           <span className="text-sm font-semibold text-primary-600">
             {Math.round(getProgressPercentage())}%
