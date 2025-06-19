@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from '../utils/translations';
 
 // Генерация случайных данных для демонстрации "обновления" (fallback)
@@ -101,15 +101,15 @@ export default function StocksPage() {
     years: 10
   });
 
-  // Популярные акции для отслеживания
-  const popularStocks = [
+  // Популярные акции для отслеживания - мемоизируем для стабильности
+  const popularStocks = useMemo(() => [
     { symbol: 'AAPL', name: 'Apple Inc.', sector: t('technology') },
     { symbol: 'GOOGL', name: 'Alphabet Inc.', sector: t('technology') },
     { symbol: 'MSFT', name: 'Microsoft Corp.', sector: t('technology') },
     { symbol: 'TSLA', name: 'Tesla Inc.', sector: t('automotive') },
     { symbol: 'AMZN', name: 'Amazon.com Inc.', sector: t('ecommerce') },
     { symbol: 'NVDA', name: 'NVIDIA Corp.', sector: t('technology') }
-  ];
+  ], [t]);
 
   // Индексы для мониторинга
   const majorIndices = [
