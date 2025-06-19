@@ -233,7 +233,7 @@ const ProfilePage = () => {
     return () => {
       isMounted = false; // Очистка при размонтировании
     };
-  }, [user?.id, token]); // Только ID пользователя и токен
+  }, [user, token, apiCall, updateUser]); // Добавляем все используемые зависимости
 
   // Функция для ручного обновления данных
   const refetchUserData = useCallback(async () => {
