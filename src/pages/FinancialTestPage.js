@@ -287,10 +287,10 @@ export default function FinancialTestPage() {
         {/* Результат */}
         <div className="card text-center">
           <div className="text-6xl mb-4">{strategy.icon}</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             {strategy.title}
           </h2>
-          <p className="text-gray-600 mb-4">{strategy.description}</p>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">{strategy.description}</p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div>
@@ -324,7 +324,7 @@ export default function FinancialTestPage() {
               {strategy.recommendations.map((rec, index) => (
                 <li key={index} className="flex items-start">
                   <span className="text-green-500 mr-2">✓</span>
-                  <span className="text-sm text-gray-700">{rec}</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">{rec}</span>
                 </li>
               ))}
             </ul>
@@ -347,7 +347,7 @@ export default function FinancialTestPage() {
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{t('suitableInstruments')}:</p>
                 <div className="flex flex-wrap gap-1">
                   {strategy.instruments.map((instrument, index) => (
-                    <span key={index} className="text-xs bg-gray-100 px-2 py-1 rounded">
+                    <span key={index} className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-2 py-1 rounded">
                       {instrument}
                     </span>
                   ))}
@@ -366,18 +366,23 @@ export default function FinancialTestPage() {
             {shuffledQuestions.map((question, index) => {
               const userAnswer = answers[index];
               const correctAnswer = question.options.find(opt => opt.correct);
-              const isCorrect = userAnswer.correct;
+              const isCorrect = userAnswer?.correct || false;
+
+              // Проверяем что userAnswer и correctAnswer существуют
+              if (!userAnswer || !correctAnswer) {
+                return null;
+              }
 
               return (
-                <div key={question.id} className={`p-3 rounded-lg border ${isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-                  <p className="font-medium text-sm text-gray-900 mb-2">
+                <div key={question.id} className={`p-3 rounded-lg border ${isCorrect ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'}`}>
+                  <p className="font-medium text-sm text-gray-900 dark:text-white mb-2">
                     {question.id}. {question.question}
                   </p>
                   <div className="text-xs space-y-1">
-                    <p className={isCorrect ? 'text-green-700' : 'text-red-700'}>
+                    <p className={isCorrect ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'}>
                       {t('yourAnswer')}: {userAnswer.text} ({userAnswer.points} {t('points')})
                     </p>
-                    <p className="text-green-700">
+                    <p className="text-green-700 dark:text-green-300">
                       {t('correctAnswer')}: {correctAnswer.text}
                     </p>
                   </div>
@@ -433,7 +438,7 @@ export default function FinancialTestPage() {
 
       {/* Вопрос */}
       <div className="card">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
           {question.question}
         </h2>
         
@@ -442,11 +447,11 @@ export default function FinancialTestPage() {
             <button
               key={index}
               onClick={() => handleAnswer(option)}
-              className="w-full text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-primary-300 transition-colors"
+              className="w-full text-left p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-primary-300 dark:hover:border-primary-600 transition-colors"
             >
               <div className="flex items-center">
-                <div className="w-6 h-6 border border-gray-300 rounded-full mr-3 flex-shrink-0"></div>
-                <span className="text-gray-900">{option.text}</span>
+                <div className="w-6 h-6 border border-gray-300 dark:border-gray-600 rounded-full mr-3 flex-shrink-0"></div>
+                <span className="text-gray-900 dark:text-white">{option.text}</span>
               </div>
             </button>
           ))}
