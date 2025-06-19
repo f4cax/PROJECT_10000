@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { TranslationProvider } from './utils/translations';
 import { AuthProvider } from './contexts/AuthContext';
@@ -15,6 +15,17 @@ import FinancialTestPage from './pages/FinancialTestPage';
 import './styles/App.css';
 
 function App() {
+  // Принудительная инициализация светлой темы
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (!savedTheme) {
+      localStorage.setItem('theme', 'light');
+      document.documentElement.classList.remove('dark');
+    } else if (savedTheme === 'light') {
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
   return (
     <AuthProvider>
       <TranslationProvider>
