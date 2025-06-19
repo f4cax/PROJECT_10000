@@ -119,6 +119,7 @@ const ProfilePage = () => {
     { value: 'jewish', label: 'Еврейская автономная область' }
   ];
 
+  // API вызов без зависимостей, которые могут часто меняться
   const apiCall = useCallback(async (url, options = {}) => {
     const currentToken = token || localStorage.getItem('authToken');
     const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
@@ -145,54 +146,64 @@ const ProfilePage = () => {
     return response.json();
   }, [token]);
 
-  // Загрузка свежих данных пользователя с сервера
-  const loadUserData = useCallback(async () => {
-    try {
-      setInitialLoading(true);
-      const userData = await apiCall('/api/user/profile');
-      
-      // Обновляем локальные состояния
-      setBasicInfo({
-        name: userData.name || '',
-        email: userData.email || '',
-        age: userData.age || '',
-        region: userData.region || '',
-        language: userData.language || 'ru',
-        currency: userData.currency || 'RUB'
-      });
-
-      if (userData.financialData) {
-        setFinancialData({
-          monthlyIncome: userData.financialData.monthlyIncome || 0,
-          totalAssets: userData.financialData.totalAssets || 0,
-          monthlyExpenses: userData.financialData.monthlyExpenses || 0,
-          investments: userData.financialData.investments || 0,
-          investmentType: userData.financialData.investmentType || 'index-funds',
-          financialGoal: userData.financialData.financialGoal || '',
-          goalAmount: userData.financialData.goalAmount || 0,
-          goalDeadline: userData.financialData.goalDeadline || ''
-        });
-      }
-
-      // Обновляем контекст
-      if (updateUser) {
-        updateUser(userData);
-      }
-      
-    } catch (error) {
-      console.error('Ошибка загрузки данных пользователя:', error);
-      setMessage('Ошибка загрузки данных: ' + error.message);
-    } finally {
-      setInitialLoading(false);
-    }
-  }, [updateUser, apiCall]);
-
-  // Загрузка данных при инициализации
+  // Загрузка данных при инициализации - только при наличии пользователя и токена
   useEffect(() => {
-    if (user && token) {
-      loadUserData();
-    } else if (user) {
-      // Если нет токена, используем данные из контекста
+    if (!user || !token) {
+      setInitialLoading(false);
+      return;
+    }
+
+    let isMounted = true; // Флаг для предотвращения обновления состояния после размонтирования
+
+    const loadUserData = async () => {
+      try {
+        setInitialLoading(true);
+        const userData = await apiCall('/api/user/profile');
+        
+        if (!isMounted) return; // Проверяем, что компонент еще смонтирован
+        
+        // Обновляем локальные состояния
+        setBasicInfo({
+          name: userData.name || '',
+          email: userData.email || '',
+          age: userData.age || '',
+          region: userData.region || '',
+          language: userData.language || 'ru',
+          currency: userData.currency || 'RUB'
+        });
+
+        if (userData.financialData) {
+          setFinancialData({
+            monthlyIncome: userData.financialData.monthlyIncome || 0,
+            totalAssets: userData.financialData.totalAssets || 0,
+            monthlyExpenses: userData.financialData.monthlyExpenses || 0,
+            investments: userData.financialData.investments || 0,
+            investmentType: userData.financialData.investmentType || 'index-funds',
+            financialGoal: userData.financialData.financialGoal || '',
+            goalAmount: userData.financialData.goalAmount || 0,
+            goalDeadline: userData.financialData.goalDeadline || ''
+          });
+        }
+
+        // Обновляем контекст
+        if (updateUser) {
+          updateUser(userData);
+        }
+        
+      } catch (error) {
+        if (isMounted) {
+          console.error('Ошибка загрузки данных пользователя:', error);
+          setMessage('Ошибка загрузки данных: ' + error.message);
+        }
+      } finally {
+        if (isMounted) {
+          setInitialLoading(false);
+        }
+      }
+    };
+
+    // Если у пользователя уже есть данные, используем их, иначе загружаем с сервера
+    if (user.name || user.email) {
       setBasicInfo({
         name: user.name || '',
         email: user.email || '',
@@ -215,8 +226,54 @@ const ProfilePage = () => {
         });
       }
       setInitialLoading(false);
+    } else {
+      loadUserData();
     }
-  }, [user, token, loadUserData]);
+
+    return () => {
+      isMounted = false; // Очистка при размонтировании
+    };
+  }, [user?.id, token]); // Только ID пользователя и токен
+
+  // Функция для ручного обновления данных
+  const refetchUserData = useCallback(async () => {
+    try {
+      setInitialLoading(true);
+      const userData = await apiCall('/api/user/profile');
+      
+      setBasicInfo({
+        name: userData.name || '',
+        email: userData.email || '',
+        age: userData.age || '',
+        region: userData.region || '',
+        language: userData.language || 'ru',
+        currency: userData.currency || 'RUB'
+      });
+
+      if (userData.financialData) {
+        setFinancialData({
+          monthlyIncome: userData.financialData.monthlyIncome || 0,
+          totalAssets: userData.financialData.totalAssets || 0,
+          monthlyExpenses: userData.financialData.monthlyExpenses || 0,
+          investments: userData.financialData.investments || 0,
+          investmentType: userData.financialData.investmentType || 'index-funds',
+          financialGoal: userData.financialData.financialGoal || '',
+          goalAmount: userData.financialData.goalAmount || 0,
+          goalDeadline: userData.financialData.goalDeadline || ''
+        });
+      }
+
+      if (updateUser) {
+        updateUser(userData);
+      }
+      
+    } catch (error) {
+      console.error('Ошибка загрузки данных пользователя:', error);
+      setMessage('Ошибка загрузки данных: ' + error.message);
+    } finally {
+      setInitialLoading(false);
+    }
+  }, [apiCall, updateUser]);
 
   const handleBasicInfoSave = useCallback(async () => {
     try {
@@ -226,10 +283,8 @@ const ProfilePage = () => {
         body: JSON.stringify(basicInfo)
       });
       
-      // Сервер возвращает { message: '...', user: userData }
       const updatedUser = response.user || response;
       
-      // Обновляем контекст с новыми данными
       if (updateUser) {
         updateUser(updatedUser);
       }
@@ -252,8 +307,6 @@ const ProfilePage = () => {
         body: JSON.stringify(financialData)
       });
       
-      // Для финансовых данных возвращается только { message: '...', financialData: {...} }
-      // Нужно обновить пользователя с новыми финансовыми данными
       if (updateUser && response.financialData) {
         const updatedUser = { ...user, financialData: response.financialData };
         updateUser(updatedUser);
@@ -327,8 +380,8 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-      <div className="container mx-auto px-4 py-8">
+    <div className="bg-gray-100 dark:bg-gray-900">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Заголовок */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
@@ -440,7 +493,7 @@ const ProfilePage = () => {
                   </select>
                 </div>
               </div>
-              <div className="mt-6 flex space-x-4">
+              <div className="mt-6 flex flex-wrap gap-4">
                 <button
                   onClick={handleBasicInfoSave}
                   disabled={loading}
@@ -449,7 +502,7 @@ const ProfilePage = () => {
                   {loading ? 'Сохранение...' : 'Сохранить'}
                 </button>
                 <button
-                  onClick={loadUserData}
+                  onClick={refetchUserData}
                   disabled={loading || initialLoading}
                   className="bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-medium transition-colors"
                 >
