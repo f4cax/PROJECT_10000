@@ -10,7 +10,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 export default function HomePage() {
   const { t } = useTranslation();
-  const { saveMonthlyIncome, saveStrategy, isAuthenticated, user } = useAuth();
+  const { saveMonthlyIncome, saveStrategy, saveSavingsGoals, isAuthenticated, user } = useAuth();
   const [monthlyIncome, setMonthlyIncome] = useState(0);
   const [budgetDistribution, setBudgetDistribution] = useState({
     needs: 0,        // 50% - Обязательные расходы
@@ -20,7 +20,7 @@ export default function HomePage() {
   });
   const [notifications, setNotifications] = useState([]);
   const [selectedStrategy, setSelectedStrategy] = useState(null);
-  const [savingsGoal, setSavingsGoal] = useState(null);
+  const [savingsGoals, setSavingsGoals] = useState([]);
   
   // Отслеживание была ли выполнена первоначальная загрузка
   const hasLoadedInitialData = useRef(false);
@@ -44,7 +44,7 @@ export default function HomePage() {
   };
 
   // Генерация уведомлений и советов с учётом стратегии
-  const generateNotifications = (income, budget, strategy, goal) => {
+  const generateNotifications = (income, budget, strategy, goals) => {
     const notifications = [];
 
     if (income < 30000) {
@@ -102,16 +102,18 @@ export default function HomePage() {
       }
     }
 
-    // Уведомления по цели
-    if (goal && budget.safety > 0) {
-      const monthsToGoal = Math.ceil((goal.targetAmount - goal.currentAmount) / budget.safety);
-      const monthWord = monthsToGoal === 1 ? t('monthWord') : monthsToGoal < 5 ? t('monthsWord2') : t('monthsWord');
-      notifications.push({
-        id: 6,
-        type: 'success',
-        title: `${t('savingsProgress')} "${goal.title}"`,
-        message: `${t('savingMonthly')} ${budget.safety.toLocaleString()} ${t('achieveGoalInStrategy')} ${monthsToGoal} ${monthWord}!`,
-        icon: '🎯'
+    // Уведомления по целям
+    if (goals && goals.length > 0 && budget.safety > 0) {
+      goals.forEach((goal, index) => {
+        const monthsToGoal = Math.ceil((goal.targetAmount - goal.currentAmount) / budget.safety);
+        const monthWord = monthsToGoal === 1 ? t('monthWord') : monthsToGoal < 5 ? t('monthsWord2') : t('monthsWord');
+        notifications.push({
+          id: 6 + index,
+          type: 'success',
+          title: `${t('savingsProgress')} "${goal.title}"`,
+          message: `${t('savingMonthly')} ${budget.safety.toLocaleString()} ${t('achieveGoalInStrategy')} ${monthsToGoal} ${monthWord}!`,
+          icon: '🎯'
+        });
       });
     }
 
@@ -186,8 +188,8 @@ export default function HomePage() {
       }
       
       if (data.savingsGoals && data.savingsGoals.length > 0) {
-        console.log('Загружаем цель накопления');
-        setSavingsGoal(data.savingsGoals[0]);
+        console.log('Загружаем цели накопления');
+        setSavingsGoals(data.savingsGoals);
       }
       
       // Отмечаем что данные загружены
@@ -219,7 +221,7 @@ export default function HomePage() {
     if (monthlyIncome > 0) {
       const budget = calculateBudget(monthlyIncome);
       setBudgetDistribution(budget);
-      setNotifications(generateNotifications(monthlyIncome, budget, selectedStrategy, savingsGoal));
+      setNotifications(generateNotifications(monthlyIncome, budget, selectedStrategy, savingsGoals));
       
       // Автосохранение в БД если пользователь авторизован
       if (isAuthenticated) {
@@ -227,7 +229,7 @@ export default function HomePage() {
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monthlyIncome, selectedStrategy, savingsGoal, isAuthenticated, saveMonthlyIncome]);
+  }, [monthlyIncome, selectedStrategy, savingsGoals, isAuthenticated, saveMonthlyIncome]);
 
   // Автосохранение стратегии (только если изменилась)
   useEffect(() => {
@@ -307,11 +309,64 @@ export default function HomePage() {
           />
 
           {/* Цели накопления */}
-          <SavingsGoalCard
-            goal={savingsGoal}
-            onGoalChange={setSavingsGoal}
-            monthlyBudget={budgetDistribution}
-          />
+          <div className="space-y-6">
+            {savingsGoals.map((goal, index) => (
+              <SavingsGoalCard
+                key={goal.id || index}
+                goal={goal}
+                onGoalChange={(updatedGoal) => {
+                  if (updatedGoal === null) {
+                    // Удаление цели
+                    const newGoals = savingsGoals.filter((_, i) => i !== index);
+                    setSavingsGoals(newGoals);
+                    if (isAuthenticated) {
+                      saveSavingsGoals(newGoals);
+                    }
+                  } else {
+                    // Обновление цели
+                    const newGoals = [...savingsGoals];
+                    newGoals[index] = updatedGoal;
+                    setSavingsGoals(newGoals);
+                    if (isAuthenticated) {
+                      saveSavingsGoals(newGoals);
+                    }
+                  }
+                }}
+                monthlyBudget={budgetDistribution}
+              />
+            ))}
+            
+            {/* Кнопка добавления новой цели */}
+            <div className="card bg-gradient-to-r from-primary-50 to-blue-50 border-primary-200 text-center">
+              <div className="text-4xl mb-3">🎯</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {t('setSavingsGoal')}
+              </h3>
+              <p className="text-gray-600 mb-4">
+                {t('language') === 'ru' 
+                  ? 'Добавьте новую финансовую цель для мотивации и планирования.'
+                  : 'Add a new financial goal for motivation and planning.'
+                }
+              </p>
+              <button
+                onClick={() => {
+                  const newGoal = {
+                    id: Date.now(),
+                    title: '',
+                    targetAmount: '',
+                    currentAmount: 0,
+                    deadline: '',
+                    category: 'other',
+                    priority: 'medium'
+                  };
+                  setSavingsGoals([...savingsGoals, newGoal]);
+                }}
+                className="btn-primary"
+              >
+                📝 {t('setSavingsGoal')}
+              </button>
+            </div>
+          </div>
 
           {/* Диаграмма распределения */}
           <div className="max-w-2xl mx-auto">

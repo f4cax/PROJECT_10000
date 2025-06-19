@@ -5,7 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
   const { t } = useTranslation();
   const { saveSavingsGoals, isAuthenticated } = useAuth();
-  const [isEditing, setIsEditing] = useState(!goal);
+  const [isEditing, setIsEditing] = useState(!goal || !goal.title);
   const [tempGoal, setTempGoal] = useState(goal || {
     title: '',
     targetAmount: '',
@@ -155,7 +155,7 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
             <label className="label">{t('desiredDate')}</label>
             <input
               type="date"
-              value={tempGoal.deadline}
+              value={tempGoal.deadline || ''}
               onChange={(e) => setTempGoal({ ...tempGoal, deadline: e.target.value })}
               className="input-field"
               min={new Date().toISOString().split('T')[0]}
@@ -207,28 +207,7 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
     );
   }
 
-  if (!goal) {
-    return (
-      <div className="card bg-gradient-to-r from-primary-50 to-blue-50 border-primary-200 text-center">
-        <div className="text-4xl mb-3">🎯</div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
-          {t('setSavingsGoal')}
-        </h3>
-        <p className="text-gray-600 mb-4">
-          {t('language') === 'ru' 
-            ? 'Определите, на что вы копите деньги. Это поможет мотивировать себя и получать персональные советы.'
-            : 'Define what you are saving money for. This will help motivate yourself and get personalized advice.'
-          }
-        </p>
-        <button
-          onClick={() => setIsEditing(true)}
-          className="btn-primary"
-        >
-          📝 {t('setSavingsGoal')}
-        </button>
-      </div>
-    );
-  }
+
 
   const progress = calculateProgress();
   const monthsToGoal = calculateMonthsToGoal();
@@ -288,28 +267,28 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
 
       {/* Прогноз */}
       {monthlyBudget && (
-        <div className="bg-white rounded-lg p-3 space-y-2">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-3 space-y-2 border border-gray-200 dark:border-gray-600">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">{t('monthlyDeposit')}:</span>
-            <span className="font-semibold">{formatNumber(monthlyBudget.safety)} {t('rublesSymbol')}</span>
+            <span className="text-gray-700 dark:text-gray-300 font-medium">{t('monthlyDeposit')}:</span>
+            <span className="font-semibold text-gray-900 dark:text-white">{formatNumber(monthlyBudget.safety)} {t('rublesSymbol')}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">{t('achieveGoalIn')}:</span>
-            <span className={`font-semibold ${monthsToGoal.isRealistic ? 'text-primary-600' : 'text-orange-600'}`}>
+            <span className="text-gray-700 dark:text-gray-300 font-medium">{t('achieveGoalIn')}:</span>
+            <span className={`font-semibold ${monthsToGoal.isRealistic ? 'text-primary-600 dark:text-primary-400' : 'text-orange-600 dark:text-orange-400'}`}>
               {monthsToGoal.calculated} {t('months')}
             </span>
           </div>
           {goal.deadline && (
             <>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Желаемая дата:</span>
-                <span className="font-semibold">
+                <span className="text-gray-700 dark:text-gray-300 font-medium">Желаемая дата:</span>
+                <span className="font-semibold text-gray-900 dark:text-white">
                   {new Date(goal.deadline).toLocaleDateString('ru-RU')}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Времени до дедлайна:</span>
-                <span className="font-semibold">
+                <span className="text-gray-700 dark:text-gray-300 font-medium">Времени до дедлайна:</span>
+                <span className="font-semibold text-gray-900 dark:text-white">
                   {monthsToGoal.toDeadline} {monthsToGoal.toDeadline === 1 ? 'месяц' : monthsToGoal.toDeadline < 5 ? 'месяца' : 'месяцев'}
                 </span>
               </div>
