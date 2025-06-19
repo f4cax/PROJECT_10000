@@ -104,25 +104,25 @@ export default function Navbar() {
           </div>
 
           {/* Правая часть: Управление */}
-          <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 nav-buttons">
-            <div className="flex items-center space-x-0.5 sm:space-x-1 md:space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3 nav-buttons">
+            <div className="flex items-center space-x-0.5 sm:space-x-1 lg:space-x-2">
               <LanguageToggle />
               <ThemeToggle />
             </div>
             
             {/* Авторизация */}
             {user ? (
-              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3">
-                <div className="flex items-center space-x-1 md:space-x-2 bg-gray-700 dark:bg-gray-800 px-1.5 sm:px-2 md:px-3 py-1 rounded-lg">
-                  <span className="text-base sm:text-lg md:text-xl">{user.role === 'admin' ? '👑' : '👤'}</span>
-                  <span className="text-white text-xs md:text-sm font-medium hidden sm:block">{user.name}</span>
+              <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3">
+                <div className="flex items-center space-x-1 lg:space-x-2 bg-gray-700 dark:bg-gray-800 px-1.5 sm:px-2 lg:px-3 py-1 rounded-lg">
+                  <span className="text-base sm:text-lg lg:text-xl">{user.role === 'admin' ? '👑' : '👤'}</span>
+                  <span className="text-white text-xs sm:text-sm lg:text-base font-medium hidden sm:block">{user.name}</span>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="text-gray-300 hover:text-white transition-colors duration-200 p-0.5 sm:p-1 md:p-2 hover:bg-gray-700 rounded-md"
+                  className="text-gray-300 hover:text-white transition-colors duration-200 p-0.5 sm:p-1 lg:p-2 hover:bg-gray-700 rounded-md"
                   title="Выйти из аккаунта"
                 >
-                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
                 </button>
@@ -130,7 +130,7 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={() => setShowAuthModal(true)}
-                className="bg-primary-600 hover:bg-primary-700 text-white px-2 sm:px-3 md:px-4 py-1 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors duration-200"
+                className="bg-primary-600 hover:bg-primary-700 text-white px-2 sm:px-3 lg:px-4 py-1 lg:py-2 rounded-lg text-xs sm:text-sm lg:text-base font-medium transition-colors duration-200"
               >
                 {t('login')}
               </button>

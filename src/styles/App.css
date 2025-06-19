@@ -164,7 +164,7 @@ html.dark {
     margin-top: 0.75rem !important;
   }
   
-  /* Админ-панель мобильная оптимизация */
+  /* Админ-панель общая мобильная оптимизация */
   .admin-tab {
     white-space: nowrap;
     min-width: auto;
@@ -173,14 +173,64 @@ html.dark {
   .admin-card {
     padding: 0.75rem !important;
   }
+}
+
+
+
+/* Очень маленькие экраны (до 375px) - iPhone SE и подобные */
+@media (max-width: 375px) {
+  .container {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
   
+  h1 {
+    font-size: 1.25rem !important; /* text-xl */
+    line-height: 1.75rem !important;
+  }
+  
+  .card {
+    padding: 0.5rem !important;
+  }
+  
+  /* Навбар супер компактный */
+  .nav-title {
+    font-size: 0.75rem !important; /* text-xs */
+    line-height: 1rem !important;
+  }
+  
+  /* Минимальные кнопки */
+  .nav-buttons {
+    gap: 0.125rem !important; /* space-x-0.5 */
+  }
+  
+  .nav-buttons button {
+    padding: 0.125rem 0.25rem !important; /* p-0.5 px-1 */
+    font-size: 0.625rem !important; /* text-xs */
+    min-width: 24px !important;
+  }
+  
+  .nav-buttons span {
+    font-size: 0.625rem !important; /* text-xs */
+  }
+  
+  .nav-buttons svg {
+    width: 0.75rem !important; /* w-3 */
+    height: 0.75rem !important; /* h-3 */
+  }
+  
+  /* Админ-панель супер компактная */
   .admin-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: 1fr !important;
+  }
+  
+  .admin-tab-text {
+    font-size: 0.625rem !important; /* text-xs */
   }
 }
 
-/* Очень маленькие экраны (до 480px) */
-@media (max-width: 480px) {
+/* Средние экраны (376px-429px) - iPhone 16 Pro и похожие */
+@media (min-width: 376px) and (max-width: 429px) {
   .container {
     padding-left: 0.75rem !important;
     padding-right: 0.75rem !important;
@@ -195,81 +245,91 @@ html.dark {
     padding: 0.75rem !important;
   }
   
-  /* Навбар */
-  .nav-title {
-    font-size: 1rem !important;
-  }
-  
-  /* Кнопки в навбаре */
-  .nav-buttons {
-    gap: 0.25rem !important;
-  }
-  
-  /* Админ-панель очень маленькие экраны */
-  .admin-grid {
-    grid-template-columns: 1fr !important;
-  }
-  
-  .admin-tab-text {
-    font-size: 0.75rem !important;
-  }
-}
-
-/* Специальные стили для iPhone 16 Pro и схожих устройств (390px) */
-@media (max-width: 390px) {
-  /* Еще более компактный навбар */
+  /* Навбар средних размеров */
   .nav-title {
     font-size: 0.875rem !important; /* text-sm */
     line-height: 1.25rem !important;
   }
   
-  /* Суперкомпактные кнопки */
+  /* Средние кнопки */
   .nav-buttons {
-    gap: 0.125rem !important; /* space-x-0.5 */
+    gap: 0.25rem !important; /* space-x-1 */
   }
   
-  /* Уменьшаем иконки в навбаре */
+  .nav-buttons button {
+    padding: 0.25rem 0.5rem !important; /* p-1 px-2 */
+    font-size: 0.75rem !important; /* text-sm */
+    min-width: 28px !important;
+  }
+  
   .nav-buttons span {
-    font-size: 0.75rem !important;
+    font-size: 0.75rem !important; /* text-sm */
   }
   
-  /* Компактные карточки */
-  .card {
-    padding: 0.5rem !important;
-    margin-bottom: 0.5rem !important;
+  .nav-buttons svg {
+    width: 0.875rem !important; /* w-3.5 */
+    height: 0.875rem !important; /* h-3.5 */
   }
   
-  /* Еще более мелкий текст */
+  /* Админ-панель средних размеров */
+  .admin-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
   .admin-tab-text {
-    font-size: 0.625rem !important; /* text-xs */
+    font-size: 0.75rem !important; /* text-sm */
   }
 }
 
-/* Исключительно маленькие экраны (до 375px) */
-@media (max-width: 375px) {
-  /* Максимально компактный логотип */
-  .nav-title {
-    font-size: 0.75rem !important; /* text-xs */
-    line-height: 1rem !important;
-  }
-  
-  /* Минимальные отступы везде */
+/* Большие мобильные экраны (430px+) - iPhone 16 Pro Max и подобные */
+@media (min-width: 430px) and (max-width: 640px) {
   .container {
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
   }
   
-  /* Очень компактные кнопки авторизации */
+  h1 {
+    font-size: 1.875rem !important; /* text-3xl */
+    line-height: 2.25rem !important;
+  }
+  
+  .card {
+    padding: 1rem !important;
+  }
+  
+  /* Навбар нормальных размеров */
+  .nav-title {
+    font-size: 1rem !important; /* text-base */
+    line-height: 1.5rem !important;
+  }
+  
+  /* Большие кнопки как раньше */
+  .nav-buttons {
+    gap: 0.5rem !important; /* space-x-2 */
+  }
+  
   .nav-buttons button {
-    padding-left: 0.375rem !important; /* px-1.5 */
-    padding-right: 0.375rem !important;
-    font-size: 0.6875rem !important; /* между text-xs и text-sm */
+    padding: 0.375rem 0.75rem !important; /* p-1.5 px-3 */
+    font-size: 0.875rem !important; /* text-base */
+    min-width: 36px !important;
   }
   
-  /* Минимальные размеры для иконок */
+  .nav-buttons span {
+    font-size: 0.875rem !important; /* text-base */
+  }
+  
   .nav-buttons svg {
-    width: 0.75rem !important; /* w-3 */
-    height: 0.75rem !important; /* h-3 */
+    width: 1rem !important; /* w-4 */
+    height: 1rem !important; /* h-4 */
+  }
+  
+  /* Админ-панель нормальных размеров */
+  .admin-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .admin-tab-text {
+    font-size: 0.875rem !important; /* text-base */
   }
 }
 
