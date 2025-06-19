@@ -305,7 +305,6 @@ export const translations = {
     notSpecified: 'Не указан',
     savingsGoalsCount: 'Целей накопления',
     selectedStrategy: 'Выбранная стратегия',
-    testResults: 'Результаты теста',
     notTaken: 'Не проходил',
     
     // Действия с пользователями
@@ -656,7 +655,6 @@ export const translations = {
     notSpecified: 'Not specified',
     savingsGoalsCount: 'Savings Goals',
     selectedStrategy: 'Selected Strategy',
-    testResults: 'Test Results',
     notTaken: 'Not taken',
     
     // User actions
