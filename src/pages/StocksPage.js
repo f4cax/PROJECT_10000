@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from '../utils/translations';
 
 export default function StocksPage() {
-  const { t } = useTranslation();
+  // const { t } = useTranslation(); // TODO: добавить переводы позже
   const [stockData, setStockData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
