@@ -5,6 +5,15 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+// Поддержка fetch для Node.js < 18
+if (typeof fetch === 'undefined') {
+  try {
+    global.fetch = require('node-fetch');
+  } catch (error) {
+    console.log('node-fetch не установлен, используем встроенный fetch или упрощенный режим');
+  }
+}
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -156,6 +165,45 @@ const UserSchema = new mongoose.Schema({
       strategy: { type: String, default: null },
       completedAt: { type: Date, default: null },
     },
+    // Портфель активов пользователя
+    assets: [{
+      _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
+      type: {
+        type: String,
+        enum: ['cash', 'stocks', 'crypto', 'realestate', 'business', 'bonds', 'other'],
+        required: true
+      },
+      name: { type: String, required: true, trim: true },
+      amount: { type: Number, required: true, min: 0 },
+      currency: { type: String, enum: ['RUB', 'USD', 'EUR'], default: 'RUB' },
+      // Для акций и криптовалют
+      symbol: { type: String, trim: true }, // AAPL, BTC, ETH и т.д.
+      quantity: { type: Number, min: 0 }, // количество акций/монет
+      purchasePrice: { type: Number, min: 0 }, // цена покупки
+      currentPrice: { type: Number, min: 0 }, // текущая цена (обновляется автоматически)
+      lastUpdated: { type: Date, default: Date.now },
+      // Метаданные
+      description: { type: String, trim: true },
+      category: { type: String, trim: true }, // подкатегория активов
+      isTracked: { type: Boolean, default: false }, // отслеживать ли цену автоматически
+      createdAt: { type: Date, default: Date.now },
+      updatedAt: { type: Date, default: Date.now }
+    }],
+    // Кэш для расчетов портфеля
+    portfolioCache: {
+      totalValue: { type: Number, default: 0 },
+      totalGainLoss: { type: Number, default: 0 },
+      totalGainLossPercent: { type: Number, default: 0 },
+      lastCalculated: { type: Date, default: Date.now },
+      distribution: {
+        cash: { type: Number, default: 0 },
+        stocks: { type: Number, default: 0 },
+        crypto: { type: Number, default: 0 },
+        realestate: { type: Number, default: 0 },
+        bonds: { type: Number, default: 0 },
+        other: { type: Number, default: 0 }
+      }
+    }
   },
   createdAt: {
     type: Date,
@@ -496,6 +544,360 @@ app.post('/api/user/savings-goals', authenticateToken, async (req, res) => {
     });
   } catch (error) {
     console.error('Ошибка добавления цели:', error);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
+});
+
+// ======================
+// 💰 УПРАВЛЕНИЕ АКТИВАМИ
+// ======================
+
+// Функция для получения реальных цен активов
+const fetchAssetPrices = async (assets) => {
+  const updatedAssets = [];
+  
+  for (const asset of assets) {
+    try {
+      let currentPrice = asset.currentPrice || 0;
+      
+      if (asset.isTracked && asset.symbol) {
+        if (asset.type === 'stocks') {
+          // Получаем цену акций через EODHD API
+          const response = await fetch(`https://eodhd.com/api/real-time/${asset.symbol}.US?api_token=${process.env.EODHD_API_KEY || '68545cf3e0b555.23627356'}&fmt=json`);
+          if (response.ok) {
+            const data = await response.json();
+            currentPrice = parseFloat(data.close || data.price || asset.currentPrice);
+          }
+        } else if (asset.type === 'crypto') {
+          // Получаем цену криптовалют через CoinGecko API (бесплатно)
+          const cryptoMap = {
+            'BTC': 'bitcoin',
+            'ETH': 'ethereum', 
+            'ADA': 'cardano',
+            'DOT': 'polkadot',
+            'LINK': 'chainlink'
+          };
+          const coinId = cryptoMap[asset.symbol.toUpperCase()];
+          if (coinId) {
+            const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd`);
+            if (response.ok) {
+              const data = await response.json();
+              currentPrice = data[coinId]?.usd || asset.currentPrice;
+            }
+          }
+        }
+      }
+      
+      // Пересчитываем стоимость актива
+      const totalValue = asset.quantity ? (currentPrice * asset.quantity) : asset.amount;
+      
+      updatedAssets.push({
+        ...asset.toObject(),
+        currentPrice,
+        amount: totalValue,
+        lastUpdated: new Date()
+      });
+    } catch (error) {
+      console.error(`Ошибка обновления цены для ${asset.symbol}:`, error);
+      updatedAssets.push(asset.toObject());
+    }
+  }
+  
+  return updatedAssets;
+};
+
+// Функция для расчета портфеля
+const calculatePortfolio = (assets) => {
+  const distribution = {
+    cash: 0, stocks: 0, crypto: 0, realestate: 0, bonds: 0, other: 0
+  };
+  
+  let totalValue = 0;
+  let totalGainLoss = 0;
+  
+  assets.forEach(asset => {
+    totalValue += asset.amount;
+    distribution[asset.type] += asset.amount;
+    
+    if (asset.quantity && asset.purchasePrice && asset.currentPrice) {
+      const purchaseValue = asset.quantity * asset.purchasePrice;
+      const currentValue = asset.quantity * asset.currentPrice;
+      totalGainLoss += (currentValue - purchaseValue);
+    }
+  });
+  
+  const totalGainLossPercent = totalValue > 0 ? (totalGainLoss / totalValue) * 100 : 0;
+  
+  return {
+    totalValue,
+    totalGainLoss,
+    totalGainLossPercent,
+    lastCalculated: new Date(),
+    distribution
+  };
+};
+
+// 📊 Получить все активы пользователя
+app.get('/api/user/assets', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('financialData.assets financialData.portfolioCache');
+    
+    if (!user) {
+      return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+
+    // Обновляем цены если запрошено
+    let assets = user.financialData.assets || [];
+    if (req.query.sync === 'true') {
+      assets = await fetchAssetPrices(assets);
+      
+      // Пересчитываем портфель
+      const portfolioCache = calculatePortfolio(assets);
+      
+      // Обновляем пользователя
+      await User.findByIdAndUpdate(req.user.userId, {
+        'financialData.assets': assets,
+        'financialData.portfolioCache': portfolioCache
+      });
+      
+      user.financialData.assets = assets;
+      user.financialData.portfolioCache = portfolioCache;
+    }
+
+    res.json({
+      assets: user.financialData.assets,
+      portfolio: user.financialData.portfolioCache,
+      lastSync: new Date()
+    });
+  } catch (error) {
+    console.error('Ошибка получения активов:', error);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
+});
+
+// ➕ Добавить новый актив
+app.post('/api/user/assets', authenticateToken, async (req, res) => {
+  try {
+    const {
+      type, name, amount, currency = 'RUB',
+      symbol, quantity, purchasePrice, description, category, isTracked = false
+    } = req.body;
+
+    // Валидация
+    if (!type || !name || amount <= 0) {
+      return res.status(400).json({ error: 'Тип, название и сумма актива обязательны' });
+    }
+
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+
+    // Создаем новый актив
+    const newAsset = {
+      type,
+      name: name.trim(),
+      amount: parseFloat(amount),
+      currency,
+      symbol: symbol?.toUpperCase().trim(),
+      quantity: quantity ? parseFloat(quantity) : undefined,
+      purchasePrice: purchasePrice ? parseFloat(purchasePrice) : undefined,
+      currentPrice: purchasePrice ? parseFloat(purchasePrice) : undefined,
+      description: description?.trim(),
+      category: category?.trim(),
+      isTracked,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    // Добавляем актив
+    user.financialData.assets.push(newAsset);
+    
+    // Пересчитываем портфель
+    const portfolioCache = calculatePortfolio(user.financialData.assets);
+    user.financialData.portfolioCache = portfolioCache;
+    
+    await user.save();
+
+    res.status(201).json({
+      message: 'Актив добавлен',
+      asset: user.financialData.assets[user.financialData.assets.length - 1],
+      portfolio: portfolioCache
+    });
+  } catch (error) {
+    console.error('Ошибка добавления актива:', error);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
+});
+
+// ✏️ Обновить актив
+app.put('/api/user/assets/:assetId', authenticateToken, async (req, res) => {
+  try {
+    const { assetId } = req.params;
+    const updateData = req.body;
+
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+
+    const assetIndex = user.financialData.assets.findIndex(asset => asset._id.toString() === assetId);
+    if (assetIndex === -1) {
+      return res.status(404).json({ error: 'Актив не найден' });
+    }
+
+    // Обновляем актив
+    Object.keys(updateData).forEach(key => {
+      if (updateData[key] !== undefined) {
+        user.financialData.assets[assetIndex][key] = updateData[key];
+      }
+    });
+    user.financialData.assets[assetIndex].updatedAt = new Date();
+
+    // Пересчитываем портфель
+    const portfolioCache = calculatePortfolio(user.financialData.assets);
+    user.financialData.portfolioCache = portfolioCache;
+
+    await user.save();
+
+    res.json({
+      message: 'Актив обновлен',
+      asset: user.financialData.assets[assetIndex],
+      portfolio: portfolioCache
+    });
+  } catch (error) {
+    console.error('Ошибка обновления актива:', error);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
+});
+
+// 🗑️ Удалить актив
+app.delete('/api/user/assets/:assetId', authenticateToken, async (req, res) => {
+  try {
+    const { assetId } = req.params;
+
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+
+    const assetIndex = user.financialData.assets.findIndex(asset => asset._id.toString() === assetId);
+    if (assetIndex === -1) {
+      return res.status(404).json({ error: 'Актив не найден' });
+    }
+
+    // Удаляем актив
+    user.financialData.assets.splice(assetIndex, 1);
+
+    // Пересчитываем портфель
+    const portfolioCache = calculatePortfolio(user.financialData.assets);
+    user.financialData.portfolioCache = portfolioCache;
+
+    await user.save();
+
+    res.json({
+      message: 'Актив удален',
+      portfolio: portfolioCache
+    });
+  } catch (error) {
+    console.error('Ошибка удаления актива:', error);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
+});
+
+// 🔄 Синхронизировать цены активов
+app.post('/api/user/assets/sync', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+
+    // Обновляем цены всех отслеживаемых активов
+    const updatedAssets = await fetchAssetPrices(user.financialData.assets);
+    
+    // Пересчитываем портфель
+    const portfolioCache = calculatePortfolio(updatedAssets);
+    
+    // Сохраняем обновления
+    user.financialData.assets = updatedAssets;
+    user.financialData.portfolioCache = portfolioCache;
+    await user.save();
+
+    res.json({
+      message: 'Цены синхронизированы',
+      syncedAssets: updatedAssets.filter(a => a.isTracked).length,
+      portfolio: portfolioCache,
+      lastSync: new Date()
+    });
+  } catch (error) {
+    console.error('Ошибка синхронизации:', error);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
+});
+
+// 📈 Получить аналитику портфеля
+app.get('/api/user/portfolio/analytics', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('financialData');
+    if (!user) {
+      return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+
+    const assets = user.financialData.assets || [];
+    const portfolio = user.financialData.portfolioCache;
+    
+    // Расширенная аналитика
+    const analytics = {
+      portfolio,
+      diversification: {
+        score: 0, // 0-100, насколько диверсифицирован портфель
+        recommendations: []
+      },
+      topAssets: assets
+        .sort((a, b) => b.amount - a.amount)
+        .slice(0, 5)
+        .map(asset => ({
+          name: asset.name,
+          type: asset.type,
+          amount: asset.amount,
+          percentage: portfolio.totalValue > 0 ? (asset.amount / portfolio.totalValue * 100) : 0
+        })),
+      riskMetrics: {
+        volatility: 'medium', // low, medium, high
+        riskScore: 50, // 0-100
+        riskLevel: 'moderate'
+      },
+      suggestions: []
+    };
+
+    // Оценка диверсификации
+    const types = Object.keys(portfolio.distribution);
+    const activeTypes = types.filter(type => portfolio.distribution[type] > 0).length;
+    analytics.diversification.score = Math.min((activeTypes / types.length) * 100, 100);
+    
+    // Рекомендации по диверсификации
+    if (analytics.diversification.score < 30) {
+      analytics.diversification.recommendations.push('Рассмотрите диверсификацию портфеля по разным классам активов');
+    }
+    if (portfolio.distribution.cash > portfolio.totalValue * 0.2) {
+      analytics.diversification.recommendations.push('Слишком много наличных средств, рассмотрите инвестирование');
+    }
+    if (portfolio.distribution.stocks > portfolio.totalValue * 0.7) {
+      analytics.diversification.recommendations.push('Высокая концентрация в акциях, добавьте облигации для снижения риска');
+    }
+
+    // Общие рекомендации
+    if (portfolio.totalValue < 100000) {
+      analytics.suggestions.push('Начните с создания резервного фонда в размере 3-6 месячных расходов');
+    }
+    if (assets.filter(a => a.type === 'realestate').length === 0 && portfolio.totalValue > 1000000) {
+      analytics.suggestions.push('Рассмотрите инвестиции в недвижимость для диверсификации');
+    }
+
+    res.json(analytics);
+  } catch (error) {
+    console.error('Ошибка получения аналитики:', error);
     res.status(500).json({ error: 'Внутренняя ошибка сервера' });
   }
 });
