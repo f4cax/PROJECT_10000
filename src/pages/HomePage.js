@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import BudgetChart from '../components/charts/BudgetChart';
 import BudgetRuleCard from '../components/forms/BudgetRuleCard';
 import IncomeForm from '../components/forms/IncomeForm';
@@ -99,7 +99,7 @@ export default function HomePage() {
         id: 6,
         type: 'success',
         title: `${t('savingsProgress')} "${goal.title}"`,
-        message: `${t('savingMonthly')} ${budget.safety.toLocaleString()} ${t('achieveGoalIn')} ${monthsToGoal} ${monthWord}!`,
+        message: `${t('savingMonthly')} ${budget.safety.toLocaleString()} ${t('achieveGoalInStrategy')} ${monthsToGoal} ${monthWord}!`,
         icon: '🎯'
       });
     }
@@ -118,7 +118,7 @@ export default function HomePage() {
   };
 
   // Функция для создания объекта стратегии по ID (синхронизировано с FinancialStrategyCard)
-  const createStrategyById = (strategyId) => {
+  const createStrategyById = useCallback((strategyId) => {
     const strategiesMap = {
       'conservative': {
         id: 'conservative',
@@ -150,7 +150,7 @@ export default function HomePage() {
     };
     
     return strategiesMap[strategyId] || null;
-  };
+  }, [t]);
 
   // Загрузка данных пользователя при авторизации
   useEffect(() => {
@@ -171,7 +171,7 @@ export default function HomePage() {
         setSavingsGoal(data.savingsGoals[0]); // Пока поддерживаем одну цель
       }
     }
-  }, [isAuthenticated, user, t]); // Добавляем t в зависимости для обновления при смене языка
+  }, [isAuthenticated, user, t, createStrategyById]); // Добавляем t и createStrategyById в зависимости
 
   // Обновление стратегии при смене языка
   useEffect(() => {
@@ -179,7 +179,7 @@ export default function HomePage() {
       const updatedStrategy = createStrategyById(selectedStrategy.id);
       setSelectedStrategy(updatedStrategy);
     }
-  }, [t]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [t, createStrategyById]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (monthlyIncome > 0) {

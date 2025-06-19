@@ -76,7 +76,7 @@ export default function FinancialStrategyCard({ selectedStrategy, onStrategyChan
   const getInvestmentTypeLabel = (type) => {
     switch (type) {
       case 'bonds': return t('bonds');
-      case 'stocks': return t('stocks');
+      case 'stocks': return t('portfolioStocks');
       case 'alternative': return t('alternative');
       case 'cash': return t('cash');
       default: return type;
