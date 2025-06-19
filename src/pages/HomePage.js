@@ -343,10 +343,7 @@ export default function HomePage() {
                 {t('setSavingsGoal')}
               </h3>
               <p className="text-gray-600 mb-4">
-                {t('language') === 'ru' 
-                  ? 'Добавьте новую финансовую цель для мотивации и планирования.'
-                  : 'Add a new financial goal for motivation and planning.'
-                }
+                {t('addNewGoalDescription')}
               </p>
               <button
                 onClick={() => {

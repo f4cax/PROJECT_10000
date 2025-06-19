@@ -142,6 +142,7 @@ export const translations = {
     
     // Цели накопления
     setSavingsGoal: 'Поставить финансовую цель',
+    addNewGoalDescription: 'Добавьте новую финансовую цель для мотивации и планирования.',
     editGoal: 'Редактировать цель',
     goalName: 'Название цели',
     targetAmount: 'Целевая сумма',
@@ -396,6 +397,7 @@ export const translations = {
     
     // Savings goals
     setSavingsGoal: 'Set Financial Goal',
+    addNewGoalDescription: 'Add a new financial goal for motivation and planning.',
     editGoal: 'Edit Goal',
     goalName: 'Goal Name',
     targetAmount: 'Target Amount',
