@@ -1,5 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from '../utils/translations';
+
+// Генерация случайных данных для демонстрации "обновления"
+const generateRandomStockData = () => {
+  const baseData = {
+    'AAPL': { basePrice: 175, basePE: 28.5, marketCap: '2.7T' },
+    'GOOGL': { basePrice: 2450, basePE: 25.3, marketCap: '1.6T' },
+    'MSFT': { basePrice: 345, basePE: 32.1, marketCap: '2.5T' },
+    'TSLA': { basePrice: 235, basePE: 45.2, marketCap: '745B' },
+    'AMZN': { basePrice: 3120, basePE: 58.7, marketCap: '1.3T' },
+    'NVDA': { basePrice: 450, basePE: 65.4, marketCap: '1.1T' }
+  };
+
+  const result = {};
+  Object.keys(baseData).forEach(symbol => {
+    const base = baseData[symbol];
+    const changePercent = (Math.random() - 0.5) * 8; // От -4% до +4%
+    const newPrice = base.basePrice * (1 + changePercent / 100);
+    const change = newPrice - base.basePrice;
+    
+    result[symbol] = {
+      price: Number(newPrice.toFixed(2)),
+      change: Number(change.toFixed(2)),
+      changePercent: Number(changePercent.toFixed(2)),
+      volume: Math.floor(Math.random() * 50000000 + 10000000).toLocaleString(),
+      marketCap: base.marketCap,
+      pe: base.basePE + (Math.random() - 0.5) * 5,
+      high52w: newPrice * (1 + Math.random() * 0.3),
+      low52w: newPrice * (1 - Math.random() * 0.3)
+    };
+  });
+
+  return result;
+};
 
 export default function StocksPage() {
   const { t } = useTranslation();
@@ -34,41 +67,8 @@ export default function StocksPage() {
     { symbol: 'VTI', name: 'Total Stock Market ETF', description: 'Весь рынок США' }
   ];
 
-  // Генерация случайных данных для демонстрации "обновления"
-  const generateRandomStockData = () => {
-    const baseData = {
-      'AAPL': { basePrice: 175, basePE: 28.5, marketCap: '2.7T' },
-      'GOOGL': { basePrice: 2450, basePE: 25.3, marketCap: '1.6T' },
-      'MSFT': { basePrice: 345, basePE: 32.1, marketCap: '2.5T' },
-      'TSLA': { basePrice: 235, basePE: 45.2, marketCap: '745B' },
-      'AMZN': { basePrice: 3120, basePE: 58.7, marketCap: '1.3T' },
-      'NVDA': { basePrice: 450, basePE: 65.4, marketCap: '1.1T' }
-    };
-
-    const result = {};
-    Object.keys(baseData).forEach(symbol => {
-      const base = baseData[symbol];
-      const changePercent = (Math.random() - 0.5) * 8; // От -4% до +4%
-      const newPrice = base.basePrice * (1 + changePercent / 100);
-      const change = newPrice - base.basePrice;
-      
-      result[symbol] = {
-        price: Number(newPrice.toFixed(2)),
-        change: Number(change.toFixed(2)),
-        changePercent: Number(changePercent.toFixed(2)),
-        volume: Math.floor(Math.random() * 50000000 + 10000000).toLocaleString(),
-        marketCap: base.marketCap,
-        pe: base.basePE + (Math.random() - 0.5) * 5,
-        high52w: newPrice * (1 + Math.random() * 0.3),
-        low52w: newPrice * (1 - Math.random() * 0.3)
-      };
-    });
-
-    return result;
-  };
-
   // Загрузка данных акций
-  const fetchStockData = async (showLoading = true) => {
+  const fetchStockData = useCallback(async (showLoading = true) => {
     try {
       if (showLoading) setLoading(true);
       
@@ -85,11 +85,11 @@ export default function StocksPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // Пустой массив зависимостей
 
   useEffect(() => {
     fetchStockData();
-  }, []);
+  }, [fetchStockData]);
 
   // Расчет сложного процента
   const calculateCompoundInterest = () => {
