@@ -244,11 +244,11 @@ export default function HomePage() {
             />
             <BudgetRuleCard
               title={t('investments')}
-              subtitle={`15${t('percentFromIncome')}`}
+              subtitle={selectedStrategy ? `${selectedStrategy.title} • 15${t('percentFromIncome')}` : `15${t('percentFromIncome')}`}
               amount={budgetDistribution.investments}
               color="bg-green-500"
-              description={selectedStrategy ? `${selectedStrategy.description}` : t('investmentsDesc')}
-              icon="📈"
+              description={selectedStrategy ? `${selectedStrategy.icon} ${selectedStrategy.description}\n${selectedStrategy.expectedReturn}` : t('investmentsDesc')}
+              icon={selectedStrategy ? selectedStrategy.icon : "📈"}
             />
             <BudgetRuleCard
               title={t('entertainment')}
