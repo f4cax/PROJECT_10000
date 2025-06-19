@@ -7,6 +7,15 @@ html {
   --tw-border-opacity: 1;
 }
 
+/* Скрытие скроллбара для табов */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
+
 /* Базовые стили для светлой темы */
 html:not(.dark) {
   background-color: rgb(249 250 251 / var(--tw-bg-opacity)) !important;
@@ -154,6 +163,20 @@ html.dark {
   .space-y-4 > * + * {
     margin-top: 0.75rem !important;
   }
+  
+  /* Админ-панель мобильная оптимизация */
+  .admin-tab {
+    white-space: nowrap;
+    min-width: auto;
+  }
+  
+  .admin-card {
+    padding: 0.75rem !important;
+  }
+  
+  .admin-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 }
 
 /* Очень маленькие экраны (до 480px) */
@@ -180,6 +203,15 @@ html.dark {
   /* Кнопки в навбаре */
   .nav-buttons {
     gap: 0.25rem !important;
+  }
+  
+  /* Админ-панель очень маленькие экраны */
+  .admin-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .admin-tab-text {
+    font-size: 0.75rem !important;
   }
 }
 

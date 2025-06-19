@@ -360,48 +360,49 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="container mx-auto px-4 py-8">
         {/* Заголовок */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
-            🛡️ Админ-панель ФинансГид
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2">
+            🛡️ Админ-панель Финансовый компас
           </h1>
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-sm md:text-base text-gray-600 dark:text-gray-300">
             Добро пожаловать, <span className="font-semibold text-blue-600 dark:text-blue-400">{user?.name}</span>! 
             Управляйте пользователями и следите за статистикой системы.
           </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <span className="inline-flex items-center px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium rounded-full">
+          <div className="mt-3 md:mt-4 flex flex-wrap gap-1 md:gap-2">
+            <span className="inline-flex items-center px-2 md:px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium rounded-full">
               ✅ Подключено к MongoDB Atlas
             </span>
-            <span className="inline-flex items-center px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium rounded-full">
+            <span className="inline-flex items-center px-2 md:px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium rounded-full">
               🔐 JWT авторизация
             </span>
-            <span className="inline-flex items-center px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs font-medium rounded-full">
+            <span className="inline-flex items-center px-2 md:px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs font-medium rounded-full">
               👑 Права администратора
             </span>
           </div>
         </div>
 
         {/* Табы */}
-        <div className="mb-6">
+        <div className="mb-4 md:mb-6">
           <div className="border-b border-gray-200 dark:border-gray-700">
-            <nav className="-mb-px flex space-x-8">
+            <nav className="-mb-px flex overflow-x-auto scrollbar-hide space-x-2 md:space-x-8 pb-1">
               {[
-                { id: 'stats', label: '📊 Статистика системы', icon: '📊' },
-                { id: 'users', label: '👥 Управление пользователями', icon: '👥' },
-                { id: 'database', label: '🗄️ База данных', icon: '🗄️' },
-                { id: 'settings', label: '⚙️ Настройки системы', icon: '⚙️' }
+                { id: 'stats', label: 'Статистика', icon: '📊', fullLabel: 'Статистика системы' },
+                { id: 'users', label: 'Пользователи', icon: '👥', fullLabel: 'Управление пользователями' },
+                { id: 'database', label: 'База данных', icon: '🗄️', fullLabel: 'База данных' },
+                { id: 'settings', label: 'Настройки', icon: '⚙️', fullLabel: 'Настройки системы' }
               ].map(tab => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`py-3 px-4 border-b-2 font-medium text-sm transition-all duration-200 ${
+                  className={`flex-shrink-0 py-2 md:py-3 px-3 md:px-4 border-b-2 font-medium text-xs md:text-sm transition-all duration-200 ${
                     activeTab === tab.id
                       ? 'border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 hover:border-gray-300'
                   }`}
                 >
-                  <span className="mr-2">{tab.icon}</span>
-                  {tab.label}
+                  <span className="mr-1 md:mr-2">{tab.icon}</span>
+                  <span className="hidden sm:inline">{tab.fullLabel}</span>
+                  <span className="sm:hidden">{tab.label}</span>
                 </button>
               ))}
             </nav>
@@ -411,7 +412,7 @@ const AdminDashboard = () => {
         {/* Контент табов */}
         {activeTab === 'stats' && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">📊 Статистика платформы</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white mb-4 md:mb-6">📊 Статистика платформы</h2>
             
             {loading ? (
               <div className="text-center py-8">
@@ -419,61 +420,61 @@ const AdminDashboard = () => {
                 <p className="text-gray-600 dark:text-gray-300">Загрузка статистики...</p>
               </div>
             ) : stats ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
                 {/* Карточки статистики */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+                <div className="bg-white dark:bg-gray-800 p-3 md:p-6 rounded-lg shadow-lg">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                      <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-300">
                         Всего пользователей
                       </p>
-                      <p className="text-3xl font-bold text-gray-800 dark:text-white">
+                      <p className="text-xl md:text-3xl font-bold text-gray-800 dark:text-white">
                         {stats.totalUsers}
                       </p>
                     </div>
-                    <div className="text-4xl">👥</div>
+                    <div className="text-2xl md:text-4xl">👥</div>
                   </div>
                 </div>
 
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+                <div className="bg-white dark:bg-gray-800 p-3 md:p-6 rounded-lg shadow-lg">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                      <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-300">
                         Активные (7 дней)
                       </p>
-                      <p className="text-3xl font-bold text-green-600">
+                      <p className="text-xl md:text-3xl font-bold text-green-600">
                         {stats.activeUsers}
                       </p>
                     </div>
-                    <div className="text-4xl">✅</div>
+                    <div className="text-2xl md:text-4xl">✅</div>
                   </div>
                 </div>
 
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+                <div className="bg-white dark:bg-gray-800 p-3 md:p-6 rounded-lg shadow-lg">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                      <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-300">
                         С целями накопления
                       </p>
-                      <p className="text-3xl font-bold text-blue-600">
+                      <p className="text-xl md:text-3xl font-bold text-blue-600">
                         {stats.usersWithGoals}
                       </p>
                     </div>
-                    <div className="text-4xl">🎯</div>
+                    <div className="text-2xl md:text-4xl">🎯</div>
                   </div>
                 </div>
 
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+                <div className="bg-white dark:bg-gray-800 p-3 md:p-6 rounded-lg shadow-lg">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                      <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-300">
                         Средний доход
                       </p>
-                      <p className="text-3xl font-bold text-yellow-600">
+                      <p className="text-lg md:text-3xl font-bold text-yellow-600">
                         {stats.averageIncome.toLocaleString('ru-RU')} ₽
                       </p>
                     </div>
-                    <div className="text-4xl">💰</div>
+                    <div className="text-2xl md:text-4xl">💰</div>
                   </div>
                 </div>
               </div>
@@ -488,24 +489,24 @@ const AdminDashboard = () => {
 
         {activeTab === 'users' && (
           <div>
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 md:mb-6 space-y-3 sm:space-y-0">
               <div>
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">👥 Управление пользователями</h2>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
-                  Полный контроль над учетными записями: редактирование, назначение ролей, удаление
+                <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">👥 Управление пользователями</h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  Полный контроль над учетными записями
                 </p>
               </div>
-              <div className="flex space-x-3">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                 <button
                   onClick={() => setShowCreateAdmin(true)}
-                  className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200"
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg flex items-center justify-center space-x-2 transition-colors duration-200 text-sm"
                 >
                   <span>👑</span>
                   <span>Создать админа</span>
                 </button>
                 <button
                   onClick={loadUsers}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg flex items-center justify-center space-x-2 transition-colors duration-200 text-sm"
                 >
                   <span>🔄</span>
                   <span>Обновить</span>
@@ -514,69 +515,51 @@ const AdminDashboard = () => {
             </div>
 
             {/* Поиск */}
-            <div className="mb-6 flex gap-4">
+            <div className="mb-4 md:mb-6 flex flex-col sm:flex-row gap-2 sm:gap-4">
               <input
                 type="text"
                 placeholder="Поиск по имени или email..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
+                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-800 dark:text-white text-sm"
               />
-              <button
-                onClick={searchUsers}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
-              >
-                🔍 Поиск
-              </button>
-              <button
-                onClick={() => { setSearchQuery(''); loadUsers(); }}
-                className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg"
-              >
-                Сбросить
-              </button>
+              <div className="flex space-x-2">
+                <button
+                  onClick={searchUsers}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm"
+                >
+                  🔍 Поиск
+                </button>
+                <button
+                  onClick={() => { setSearchQuery(''); loadUsers(); }}
+                  className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm"
+                >
+                  Сбросить
+                </button>
+              </div>
             </div>
 
-            {/* Таблица пользователей */}
+            {/* Responsive таблица пользователей */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-700">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Пользователь
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Роль
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Статус
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Доход
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Действия
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                  {users.map((userItem) => (
-                    <tr key={userItem._id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="text-2xl mr-3">
-                            {userItem.role === 'admin' ? '👑' : '👤'}
+              {/* Мобильная версия (карточки) */}
+              <div className="block md:hidden">
+                {users.map((userItem) => (
+                  <div key={userItem._id} className="p-4 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center">
+                        <div className="text-2xl mr-3">
+                          {userItem.role === 'admin' ? '👑' : '👤'}
+                        </div>
+                        <div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">
+                            {userItem.name}
                           </div>
-                          <div>
-                            <div className="text-sm font-medium text-gray-900 dark:text-white">
-                              {userItem.name}
-                            </div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">
-                              {userItem.email}
-                            </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">
+                            {userItem.email}
                           </div>
                         </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      </div>
+                      <div className="flex flex-col space-y-1 items-end">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                           userItem.role === 'admin' 
                             ? 'bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-200'
@@ -584,8 +567,6 @@ const AdminDashboard = () => {
                         }`}>
                           {userItem.role === 'admin' ? 'Админ' : 'Пользователь'}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                           userItem.isActive 
                             ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-200'
@@ -593,94 +574,205 @@ const AdminDashboard = () => {
                         }`}>
                           {userItem.isActive ? 'Активен' : 'Заблокирован'}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                      </div>
+                    </div>
+                    <div className="mb-3">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">Доход: </span>
+                      <span className="text-sm text-gray-900 dark:text-white">
                         {userItem.financialData?.monthlyIncome > 0 
                           ? `${userItem.financialData.monthlyIncome.toLocaleString('ru-RU')} ₽`
                           : 'Не указан'
                         }
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => setEditingUser(userItem)}
-                            className="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
-                            title="Редактировать пользователя"
-                          >
-                            <span>✏️</span>
-                            <span>Изменить</span>
-                          </button>
-                          {userItem.role !== 'admin' && (
-                            <button
-                              onClick={() => updateUser(userItem._id, { role: 'admin' })}
-                              className="bg-purple-100 hover:bg-purple-200 dark:bg-purple-900 dark:hover:bg-purple-800 text-purple-600 dark:text-purple-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
-                              title="Сделать администратором"
-                            >
-                              <span>👑</span>
-                              <span>Админ</span>
-                            </button>
-                          )}
-                          {userItem.role === 'admin' && userItem._id !== user?.id && (
-                            <button
-                              onClick={() => updateUser(userItem._id, { role: 'user' })}
-                              className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
-                              title="Снять права администратора"
-                            >
-                              <span>👤</span>
-                              <span>Юзер</span>
-                            </button>
-                          )}
-                          <button
-                            onClick={() => updateUser(userItem._id, { isActive: !userItem.isActive })}
-                            className={`px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1 ${
-                              userItem.isActive 
-                                ? 'bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400' 
-                                : 'bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-600 dark:text-green-400'
-                            }`}
-                            title={userItem.isActive ? 'Заблокировать' : 'Разблокировать'}
-                          >
-                            <span>{userItem.isActive ? '🔒' : '🔓'}</span>
-                            <span>{userItem.isActive ? 'Блок' : 'Актив'}</span>
-                          </button>
-                          {userItem._id !== user?.id && (
-                            <button
-                              onClick={() => {
-                                if (window.confirm(`⚠️ ВНИМАНИЕ! Вы уверены, что хотите НАВСЕГДА удалить пользователя "${userItem.name}"?\n\nЭто действие необратимо! Все данные пользователя будут потеряны.`)) {
-                                  deleteUser(userItem._id);
-                                }
-                              }}
-                              className="bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
-                              title="Удалить из базы данных навсегда"
-                            >
-                              <span>🗑️</span>
-                              <span>Удалить</span>
-                            </button>
-                          )}
-                        </div>
-                      </td>
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      <button
+                        onClick={() => setEditingUser(userItem)}
+                        className="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-600 dark:text-blue-400 px-2 py-1 rounded text-xs"
+                      >
+                        ✏️ Изменить
+                      </button>
+                      {userItem.role !== 'admin' && (
+                        <button
+                          onClick={() => updateUser(userItem._id, { role: 'admin' })}
+                          className="bg-purple-100 hover:bg-purple-200 dark:bg-purple-900 dark:hover:bg-purple-800 text-purple-600 dark:text-purple-400 px-2 py-1 rounded text-xs"
+                        >
+                          👑 Админ
+                        </button>
+                      )}
+                      <button
+                        onClick={() => updateUser(userItem._id, { isActive: !userItem.isActive })}
+                        className={`px-2 py-1 rounded text-xs ${
+                          userItem.isActive 
+                            ? 'bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400' 
+                            : 'bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-600 dark:text-green-400'
+                        }`}
+                      >
+                        {userItem.isActive ? '🔒 Блок' : '🔓 Актив'}
+                      </button>
+                      {userItem._id !== user?.id && (
+                        <button
+                          onClick={() => {
+                            if (window.confirm(`⚠️ Удалить пользователя "${userItem.name}"?`)) {
+                              deleteUser(userItem._id);
+                            }
+                          }}
+                          className="bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400 px-2 py-1 rounded text-xs"
+                        >
+                          🗑️ Удалить
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop версия (таблица) */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Пользователь
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Роль
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Статус
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Доход
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Действия
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {users.map((userItem) => (
+                      <tr key={userItem._id}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="text-2xl mr-3">
+                              {userItem.role === 'admin' ? '👑' : '👤'}
+                            </div>
+                            <div>
+                              <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                {userItem.name}
+                              </div>
+                              <div className="text-sm text-gray-500 dark:text-gray-400">
+                                {userItem.email}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            userItem.role === 'admin' 
+                              ? 'bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-200'
+                              : 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200'
+                          }`}>
+                            {userItem.role === 'admin' ? 'Админ' : 'Пользователь'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            userItem.isActive 
+                              ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-200'
+                              : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200'
+                          }`}>
+                            {userItem.isActive ? 'Активен' : 'Заблокирован'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                          {userItem.financialData?.monthlyIncome > 0 
+                            ? `${userItem.financialData.monthlyIncome.toLocaleString('ru-RU')} ₽`
+                            : 'Не указан'
+                          }
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => setEditingUser(userItem)}
+                              className="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
+                              title="Редактировать пользователя"
+                            >
+                              <span>✏️</span>
+                              <span>Изменить</span>
+                            </button>
+                            {userItem.role !== 'admin' && (
+                              <button
+                                onClick={() => updateUser(userItem._id, { role: 'admin' })}
+                                className="bg-purple-100 hover:bg-purple-200 dark:bg-purple-900 dark:hover:bg-purple-800 text-purple-600 dark:text-purple-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
+                                title="Сделать администратором"
+                              >
+                                <span>👑</span>
+                                <span>Админ</span>
+                              </button>
+                            )}
+                            {userItem.role === 'admin' && userItem._id !== user?.id && (
+                              <button
+                                onClick={() => updateUser(userItem._id, { role: 'user' })}
+                                className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
+                                title="Снять права администратора"
+                              >
+                                <span>👤</span>
+                                <span>Юзер</span>
+                              </button>
+                            )}
+                            <button
+                              onClick={() => updateUser(userItem._id, { isActive: !userItem.isActive })}
+                              className={`px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1 ${
+                                userItem.isActive 
+                                  ? 'bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400' 
+                                  : 'bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-600 dark:text-green-400'
+                              }`}
+                              title={userItem.isActive ? 'Заблокировать' : 'Разблокировать'}
+                            >
+                              <span>{userItem.isActive ? '🔒' : '🔓'}</span>
+                              <span>{userItem.isActive ? 'Блок' : 'Актив'}</span>
+                            </button>
+                            {userItem._id !== user?.id && (
+                              <button
+                                onClick={() => {
+                                  if (window.confirm(`⚠️ ВНИМАНИЕ! Вы уверены, что хотите НАВСЕГДА удалить пользователя "${userItem.name}"?\n\nЭто действие необратимо! Все данные пользователя будут потеряны.`)) {
+                                    deleteUser(userItem._id);
+                                  }
+                                }}
+                                className="bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
+                                title="Удалить из базы данных навсегда"
+                              >
+                                <span>🗑️</span>
+                                <span>Удалить</span>
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             {/* Пагинация */}
             {pagination.totalPages > 1 && (
-              <div className="mt-6 flex justify-center space-x-2">
+              <div className="mt-4 md:mt-6 flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-2">
                 <button
                   disabled={!pagination.hasPrev}
                   onClick={() => loadUsers(pagination.currentPage - 1)}
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50"
+                  className="w-full sm:w-auto px-3 md:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 text-sm"
                 >
                   ← Предыдущая
                 </button>
-                <span className="px-4 py-2 text-gray-600 dark:text-gray-300">
+                <span className="px-3 md:px-4 py-2 text-sm text-gray-600 dark:text-gray-300 text-center">
                   Страница {pagination.currentPage} из {pagination.totalPages}
                 </span>
                 <button
                   disabled={!pagination.hasNext}
                   onClick={() => loadUsers(pagination.currentPage + 1)}
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50"
+                  className="w-full sm:w-auto px-3 md:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 text-sm"
                 >
                   Следующая →
                 </button>
@@ -691,56 +783,56 @@ const AdminDashboard = () => {
 
         {activeTab === 'database' && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">🗄️ База данных</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white mb-4 md:mb-6">🗄️ База данных</h2>
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
               {/* Информация о базе данных */}
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-                <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center">
-                  <span className="text-2xl mr-2">🏢</span>
+              <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
+                <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4 flex items-center">
+                  <span className="text-xl md:text-2xl mr-2">🏢</span>
                   Информация о БД
                 </h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-gray-600 dark:text-gray-400">Тип базы:</span>
-                    <span className="font-medium text-gray-800 dark:text-white">MongoDB Atlas</span>
+                <div className="space-y-2 md:space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-gray-200 dark:border-gray-700">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Тип базы:</span>
+                    <span className="font-medium text-sm text-gray-800 dark:text-white">MongoDB Atlas</span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-gray-600 dark:text-gray-400">Коллекции:</span>
-                    <span className="font-medium text-gray-800 dark:text-white">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-gray-200 dark:border-gray-700">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Коллекции:</span>
+                    <span className="font-medium text-sm text-gray-800 dark:text-white">
                       {dbStats ? `${dbStats.collections} коллекций` : 'users, tests'}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-gray-600 dark:text-gray-400">Подключение:</span>
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-gray-200 dark:border-gray-700">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Подключение:</span>
                     <span className="inline-flex items-center px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium rounded-full">
                       ✅ Активно
                     </span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-gray-600 dark:text-gray-400">Регион:</span>
-                    <span className="font-medium text-gray-800 dark:text-white">EU (Ireland)</span>
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Регион:</span>
+                    <span className="font-medium text-sm text-gray-800 dark:text-white">EU (Ireland)</span>
                   </div>
                 </div>
               </div>
 
               {/* Операции с БД */}
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-                <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center">
-                  <span className="text-2xl mr-2">⚡</span>
+              <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
+                <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4 flex items-center">
+                  <span className="text-xl md:text-2xl mr-2">⚡</span>
                   Операции с БД
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-2 md:space-y-3">
                   <button 
                     onClick={exportData}
                     disabled={loading}
                     className="w-full text-left p-3 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 border border-blue-200 dark:border-blue-800 rounded-lg transition-colors duration-200 disabled:opacity-50"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-blue-800 dark:text-blue-200">📊 Экспорт данных</span>
+                      <span className="font-medium text-sm md:text-base text-blue-800 dark:text-blue-200">📊 Экспорт данных</span>
                       <span className="text-blue-600 dark:text-blue-400">{loading ? '⏳' : '→'}</span>
                     </div>
-                    <span className="text-sm text-blue-600 dark:text-blue-400">Скачать базу в JSON формате</span>
+                    <span className="text-xs md:text-sm text-blue-600 dark:text-blue-400">Скачать базу в JSON формате</span>
                   </button>
                   
                   <button 
@@ -749,10 +841,10 @@ const AdminDashboard = () => {
                     className="w-full text-left p-3 bg-yellow-50 dark:bg-yellow-900/20 hover:bg-yellow-100 dark:hover:bg-yellow-900/40 border border-yellow-200 dark:border-yellow-800 rounded-lg transition-colors duration-200 disabled:opacity-50"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-yellow-800 dark:text-yellow-200">🔄 Оптимизация</span>
+                      <span className="font-medium text-sm md:text-base text-yellow-800 dark:text-yellow-200">🔄 Оптимизация</span>
                       <span className="text-yellow-600 dark:text-yellow-400">{loading ? '⏳' : '→'}</span>
                     </div>
-                    <span className="text-sm text-yellow-600 dark:text-yellow-400">Очистка устаревших данных</span>
+                    <span className="text-xs md:text-sm text-yellow-600 dark:text-yellow-400">Очистка устаревших данных</span>
                   </button>
                   
                   <button 
@@ -761,19 +853,19 @@ const AdminDashboard = () => {
                     className="w-full text-left p-3 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/40 border border-purple-200 dark:border-purple-800 rounded-lg transition-colors duration-200 disabled:opacity-50"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-purple-800 dark:text-purple-200">📋 Статистика БД</span>
+                      <span className="font-medium text-sm md:text-base text-purple-800 dark:text-purple-200">📋 Статистика БД</span>
                       <span className="text-purple-600 dark:text-purple-400">{loading ? '⏳' : '→'}</span>
                     </div>
-                    <span className="text-sm text-purple-600 dark:text-purple-400">Размер коллекций и индексы</span>
+                    <span className="text-xs md:text-sm text-purple-600 dark:text-purple-400">Размер коллекций и индексы</span>
                   </button>
                 </div>
               </div>
             </div>
 
             {/* Журнал системных операций */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-              <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center">
-                <span className="text-2xl mr-2">📋</span>
+            <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
+              <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4 flex items-center">
+                <span className="text-xl md:text-2xl mr-2">📋</span>
                 Последние операции
               </h3>
               <div className="space-y-2">
@@ -783,13 +875,13 @@ const AdminDashboard = () => {
                   { time: '14:25', action: 'Подключение к MongoDB Atlas установлено', type: 'success' },
                   { time: '14:20', action: 'Система запущена', type: 'info' }
                 ].map((log, index) => (
-                  <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <span className="text-sm text-gray-500 dark:text-gray-400 font-mono">{log.time}</span>
-                    <span className={`w-2 h-2 rounded-full ${
+                  <div key={index} className="flex items-center space-x-2 md:space-x-3 p-2 md:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <span className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-mono flex-shrink-0">{log.time}</span>
+                    <span className={`w-2 h-2 rounded-full flex-shrink-0 ${
                       log.type === 'success' ? 'bg-green-500' : 
                       log.type === 'info' ? 'bg-blue-500' : 'bg-yellow-500'
                     }`}></span>
-                    <span className="text-sm text-gray-700 dark:text-gray-300 flex-1">{log.action}</span>
+                    <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300 flex-1 break-words">{log.action}</span>
                   </div>
                 ))}
               </div>
@@ -799,31 +891,31 @@ const AdminDashboard = () => {
 
         {activeTab === 'settings' && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">⚙️ Настройки системы</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white mb-4 md:mb-6">⚙️ Настройки системы</h2>
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
               {/* Финансовые настройки */}
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-                <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center">
-                  <span className="text-2xl mr-2">💰</span>
+              <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
+                <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4 flex items-center">
+                  <span className="text-xl md:text-2xl mr-2">💰</span>
                   Финансовые настройки
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-3 md:space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Правило распределения бюджета
                     </label>
-                    <select className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white">
+                    <select className="w-full p-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white">
                       <option>50-25-15-10 (Mark Tilbury)</option>
                       <option>50-30-20 (Классическое)</option>
                       <option>60-20-20 (Агрессивное)</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Валюта по умолчанию
                     </label>
-                    <select className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white">
+                    <select className="w-full p-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white">
                       <option>RUB (Российский рубль)</option>
                       <option>USD (Доллар США)</option>
                       <option>EUR (Евро)</option>
@@ -833,51 +925,51 @@ const AdminDashboard = () => {
               </div>
 
               {/* Системные настройки */}
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-                <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center">
-                  <span className="text-2xl mr-2">🔧</span>
+              <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
+                <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4 flex items-center">
+                  <span className="text-xl md:text-2xl mr-2">🔧</span>
                   Системные настройки
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-3 md:space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-700 dark:text-gray-300">Регистрация новых пользователей</span>
+                    <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300 pr-2">Регистрация новых пользователей</span>
                     <button 
                       onClick={() => toggleSetting('registration')}
                       disabled={loading}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors disabled:opacity-50 ${
+                      className={`relative inline-flex h-5 w-9 md:h-6 md:w-11 items-center rounded-full transition-colors disabled:opacity-50 flex-shrink-0 ${
                         systemSettings.registration ? 'bg-green-600' : 'bg-gray-200 dark:bg-gray-600'
                       }`}
                     >
-                      <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        systemSettings.registration ? 'translate-x-6' : 'translate-x-1'
+                      <span className={`inline-block h-3 w-3 md:h-4 md:w-4 transform rounded-full bg-white transition-transform ${
+                        systemSettings.registration ? 'translate-x-5 md:translate-x-6' : 'translate-x-1'
                       }`}></span>
                     </button>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-700 dark:text-gray-300">API ЦБ РФ</span>
+                    <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300 pr-2">API ЦБ РФ</span>
                     <button 
                       onClick={() => toggleSetting('cbrApi')}
                       disabled={loading}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors disabled:opacity-50 ${
+                      className={`relative inline-flex h-5 w-9 md:h-6 md:w-11 items-center rounded-full transition-colors disabled:opacity-50 flex-shrink-0 ${
                         systemSettings.cbrApi ? 'bg-green-600' : 'bg-gray-200 dark:bg-gray-600'
                       }`}
                     >
-                      <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        systemSettings.cbrApi ? 'translate-x-6' : 'translate-x-1'
+                      <span className={`inline-block h-3 w-3 md:h-4 md:w-4 transform rounded-full bg-white transition-transform ${
+                        systemSettings.cbrApi ? 'translate-x-5 md:translate-x-6' : 'translate-x-1'
                       }`}></span>
                     </button>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-700 dark:text-gray-300">Автоматические уведомления</span>
+                    <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300 pr-2">Автоматические уведомления</span>
                     <button 
                       onClick={() => toggleSetting('notifications')}
                       disabled={loading}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors disabled:opacity-50 ${
+                      className={`relative inline-flex h-5 w-9 md:h-6 md:w-11 items-center rounded-full transition-colors disabled:opacity-50 flex-shrink-0 ${
                         systemSettings.notifications ? 'bg-green-600' : 'bg-gray-200 dark:bg-gray-600'
                       }`}
                     >
-                      <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        systemSettings.notifications ? 'translate-x-6' : 'translate-x-1'
+                      <span className={`inline-block h-3 w-3 md:h-4 md:w-4 transform rounded-full bg-white transition-transform ${
+                        systemSettings.notifications ? 'translate-x-5 md:translate-x-6' : 'translate-x-1'
                       }`}></span>
                     </button>
                   </div>
@@ -886,37 +978,37 @@ const AdminDashboard = () => {
             </div>
 
             {/* Действия системы */}
-            <div className="mt-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-              <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center">
-                <span className="text-2xl mr-2">🚨</span>
+            <div className="mt-4 md:mt-6 bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg">
+              <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4 flex items-center">
+                <span className="text-xl md:text-2xl mr-2">🚨</span>
                 Опасные действия
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                 <button 
                   onClick={clearDatabase}
                   disabled={loading}
-                  className="p-4 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 transition-colors duration-200 disabled:opacity-50"
+                  className="p-3 md:p-4 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 transition-colors duration-200 disabled:opacity-50"
                 >
-                  <div className="text-2xl mb-2">{loading ? '⏳' : '🗑️'}</div>
-                  <div className="font-medium mb-1">Очистить БД</div>
+                  <div className="text-xl md:text-2xl mb-1 md:mb-2">{loading ? '⏳' : '🗑️'}</div>
+                  <div className="font-medium mb-1 text-sm md:text-base">Очистить БД</div>
                   <div className="text-xs">Удалить все данные</div>
                 </button>
                 <button 
                   onClick={resetSystem}
                   disabled={loading}
-                  className="p-4 bg-yellow-50 dark:bg-yellow-900/20 hover:bg-yellow-100 dark:hover:bg-yellow-900/40 border border-yellow-200 dark:border-yellow-800 rounded-lg text-yellow-700 dark:text-yellow-300 transition-colors duration-200 disabled:opacity-50"
+                  className="p-3 md:p-4 bg-yellow-50 dark:bg-yellow-900/20 hover:bg-yellow-100 dark:hover:bg-yellow-900/40 border border-yellow-200 dark:border-yellow-800 rounded-lg text-yellow-700 dark:text-yellow-300 transition-colors duration-200 disabled:opacity-50"
                 >
-                  <div className="text-2xl mb-2">{loading ? '⏳' : '🔄'}</div>
-                  <div className="font-medium mb-1">Сброс системы</div>
+                  <div className="text-xl md:text-2xl mb-1 md:mb-2">{loading ? '⏳' : '🔄'}</div>
+                  <div className="font-medium mb-1 text-sm md:text-base">Сброс системы</div>
                   <div className="text-xs">Вернуть к начальным настройкам</div>
                 </button>
                 <button 
                   onClick={exportData}
                   disabled={loading}
-                  className="p-4 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/40 border border-purple-200 dark:border-purple-800 rounded-lg text-purple-700 dark:text-purple-300 transition-colors duration-200 disabled:opacity-50"
+                  className="p-3 md:p-4 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/40 border border-purple-200 dark:border-purple-800 rounded-lg text-purple-700 dark:text-purple-300 transition-colors duration-200 disabled:opacity-50"
                 >
-                  <div className="text-2xl mb-2">{loading ? '⏳' : '📤'}</div>
-                  <div className="font-medium mb-1">Экспорт всех данных</div>
+                  <div className="text-xl md:text-2xl mb-1 md:mb-2">{loading ? '⏳' : '📤'}</div>
+                  <div className="font-medium mb-1 text-sm md:text-base">Экспорт всех данных</div>
                   <div className="text-xs">Скачать полную копию</div>
                 </button>
               </div>
@@ -927,9 +1019,9 @@ const AdminDashboard = () => {
 
       {/* Модальное окно редактирования пользователя */}
       {editingUser && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-md w-full mx-4">
-            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4">
               Редактировать пользователя
             </h3>
             <form onSubmit={(e) => {
@@ -942,58 +1034,58 @@ const AdminDashboard = () => {
                 isActive: formData.get('isActive') === 'true'
               });
             }}>
-              <div className="space-y-4">
+              <div className="space-y-3 md:space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Имя</label>
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Имя</label>
                   <input
                     name="name"
                     defaultValue={editingUser.name}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
+                    className="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
                   <input
                     name="email"
                     type="email"
                     defaultValue={editingUser.email}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
+                    className="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Роль</label>
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Роль</label>
                   <select
                     name="role"
                     defaultValue={editingUser.role}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
+                    className="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
                   >
                     <option value="user">Пользователь</option>
                     <option value="admin">Админ</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Статус</label>
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Статус</label>
                   <select
                     name="isActive"
                     defaultValue={editingUser.isActive.toString()}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
+                    className="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
                   >
                     <option value="true">Активен</option>
                     <option value="false">Заблокирован</option>
                   </select>
                 </div>
               </div>
-              <div className="mt-6 flex justify-end space-x-4">
+              <div className="mt-4 md:mt-6 flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
                 <button
                   type="button"
                   onClick={() => setEditingUser(null)}
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300"
+                  className="w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 text-sm"
                 >
                   Отмена
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+                  className="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
                 >
                   Сохранить
                 </button>
@@ -1005,9 +1097,9 @@ const AdminDashboard = () => {
 
       {/* Модальное окно создания админа */}
       {showCreateAdmin && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-md w-full mx-4">
-            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-white mb-3 md:mb-4">
               Создать администратора
             </h3>
             <form onSubmit={(e) => {
@@ -1019,46 +1111,46 @@ const AdminDashboard = () => {
                 password: formData.get('password')
               });
             }}>
-              <div className="space-y-4">
+              <div className="space-y-3 md:space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Имя</label>
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Имя</label>
                   <input
                     name="name"
                     required
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
+                    className="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
                   <input
                     name="email"
                     type="email"
                     required
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
+                    className="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Пароль</label>
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Пароль</label>
                   <input
                     name="password"
                     type="password"
                     required
                     minLength="6"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
+                    className="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
                   />
                 </div>
               </div>
-              <div className="mt-6 flex justify-end space-x-4">
+              <div className="mt-4 md:mt-6 flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
                 <button
                   type="button"
                   onClick={() => setShowCreateAdmin(false)}
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300"
+                  className="w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 text-sm"
                 >
                   Отмена
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg"
+                  className="w-full sm:w-auto px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm"
                 >
                   Создать
                 </button>
