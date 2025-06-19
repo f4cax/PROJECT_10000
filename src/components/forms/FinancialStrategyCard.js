@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { useTranslation } from '../../utils/translations';
 
 export default function FinancialStrategyCard({ selectedStrategy, onStrategyChange }) {
   const { t } = useTranslation();
   
-  const strategies = [
+  const strategies = useMemo(() => [
     {
       id: 'conservative',
       title: t('conservativeTitle'),
@@ -65,13 +65,29 @@ export default function FinancialStrategyCard({ selectedStrategy, onStrategyChan
       pros: [t('highPotentialReturn'), t('fastCapitalGrowth')],
       cons: [t('highVolatility'), t('canLoseMoney'), t('stress')]
     }
-  ];
+  ], [t]);
 
-  const handleStrategyClick = (strategy) => {
-    // Создаем новый объект чтобы React правильно обновил состояние
-    const newStrategy = { ...strategy };
+  const handleStrategyClick = useCallback((strategy) => {
+    // Если уже выбрана та же стратегия, не делаем ничего
+    if (selectedStrategy?.id === strategy.id) {
+      return;
+    }
+    
+    // Создаем новый объект стратегии для четкого обновления состояния
+    const newStrategy = {
+      id: strategy.id,
+      title: strategy.title,
+      subtitle: strategy.subtitle,
+      description: strategy.description,
+      expectedReturn: strategy.expectedReturn,
+      riskLevel: strategy.riskLevel,
+      icon: strategy.icon,
+      color: strategy.color,
+      investmentSplit: { ...strategy.investmentSplit }
+    };
+    
     onStrategyChange(newStrategy);
-  };
+  }, [selectedStrategy, onStrategyChange]);
 
   const getInvestmentTypeLabel = (type) => {
     switch (type) {
