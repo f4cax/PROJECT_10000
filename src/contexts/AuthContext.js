@@ -137,8 +137,17 @@ export const AuthProvider = ({ children }) => {
 
   // Обновление данных пользователя в контексте
   const updateUser = (userData) => {
+    console.log('📝 AuthContext: Обновляем пользователя:', userData.name);
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
+    
+    // Принудительное событие для обновления навигации
+    window.dispatchEvent(new StorageEvent('storage', {
+      key: 'user',
+      newValue: JSON.stringify(userData)
+    }));
+    
+    console.log('✅ AuthContext: Пользователь обновлен в localStorage');
   };
 
   const value = {

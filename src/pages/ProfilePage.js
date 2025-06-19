@@ -278,22 +278,38 @@ const ProfilePage = () => {
   const handleBasicInfoSave = useCallback(async () => {
     try {
       setLoading(true);
+      console.log('🔵 Отправляем данные профиля:', basicInfo);
+      
       const response = await apiCall('/api/user/profile', {
         method: 'PUT',
         body: JSON.stringify(basicInfo)
       });
       
+      console.log('🟢 Ответ сервера:', response);
+      
       const updatedUser = response.user || response;
       
       if (updateUser) {
         updateUser(updatedUser);
+        console.log('✅ Контекст обновлен:', updatedUser.name);
       }
       
       setMessage('Профиль обновлен');
       setTimeout(() => setMessage(''), 3000);
     } catch (error) {
-      console.error('Ошибка обновления профиля:', error);
-      setMessage('Ошибка обновления: ' + error.message);
+      console.error('🔴 Ошибка обновления профиля:', error);
+      console.error('🔴 Детали ошибки:', error.message);
+      
+      let errorMessage = 'Ошибка обновления';
+      if (error.message.includes('500')) {
+        errorMessage = 'Внутренняя ошибка сервера. Проверьте консоль для деталей.';
+      } else if (error.message.includes('400')) {
+        errorMessage = 'Неверные данные. Проверьте правильность заполнения полей.';
+      } else {
+        errorMessage = `Ошибка: ${error.message}`;
+      }
+      
+      setMessage(errorMessage);
     } finally {
       setLoading(false);
     }

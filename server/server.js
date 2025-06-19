@@ -342,15 +342,20 @@ app.get('/api/user/profile', authenticateToken, async (req, res) => {
 // 👤 Обновление профиля пользователя
 app.put('/api/user/profile', authenticateToken, async (req, res) => {
   try {
+    console.log('📝 Обновление профиля пользователя:', req.user.userId);
+    console.log('📥 Данные запроса:', req.body);
+    
     const { name, email, age, region, language, currency } = req.body;
 
     const updateData = {};
-    if (name) updateData.name = name;
-    if (email) updateData.email = email;
-    if (age) updateData.age = age;
-    if (region) updateData.region = region;
-    if (language) updateData.language = language;
-    if (currency) updateData.currency = currency;
+    if (name !== undefined) updateData.name = name;
+    if (email !== undefined) updateData.email = email;
+    if (age !== undefined) updateData.age = age;
+    if (region !== undefined) updateData.region = region;
+    if (language !== undefined) updateData.language = language;
+    if (currency !== undefined) updateData.currency = currency;
+
+    console.log('🔄 Данные для обновления:', updateData);
 
     const user = await User.findByIdAndUpdate(
       req.user.userId,
@@ -359,19 +364,23 @@ app.put('/api/user/profile', authenticateToken, async (req, res) => {
     ).select('-password');
 
     if (!user) {
+      console.log('❌ Пользователь не найден:', req.user.userId);
       return res.status(404).json({ error: 'Пользователь не найден' });
     }
 
+    console.log('✅ Профиль успешно обновлен:', user.name);
     res.json({
       message: 'Профиль обновлен',
       user: user,
     });
   } catch (error) {
     if (error.code === 11000) {
+      console.log('❌ Email уже используется:', error);
       return res.status(400).json({ error: 'Email уже используется' });
     }
-    console.error('Ошибка обновления профиля:', error);
-    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    console.error('❌ Ошибка обновления профиля:', error);
+    console.error('Stack trace:', error.stack);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера', details: error.message });
   }
 });
 

@@ -30,12 +30,14 @@ export default function Navbar() {
 
   // Добавляем слушатель изменений localStorage для автообновления
   useEffect(() => {
-    const handleStorageChange = () => {
+    const handleStorageChange = (e) => {
+      console.log('🔄 Navbar: Storage изменение:', e.key);
       const token = localStorage.getItem('authToken');
       const savedUser = localStorage.getItem('user');
       if (token && savedUser) {
         try {
           const userData = JSON.parse(savedUser);
+          console.log('👤 Navbar: Обновляем пользователя:', userData.name);
           setUser(userData);
         } catch (error) {
           console.error('Ошибка парсинга пользователя:', error);
@@ -46,9 +48,29 @@ export default function Navbar() {
       }
     };
 
+    // Проверяем изменения каждые 100мс для надежности
+    const interval = setInterval(() => {
+      const token = localStorage.getItem('authToken');
+      const savedUser = localStorage.getItem('user');
+      if (token && savedUser) {
+        try {
+          const userData = JSON.parse(savedUser);
+          if (JSON.stringify(userData) !== JSON.stringify(user)) {
+            console.log('🔄 Navbar: Периодическое обновление пользователя:', userData.name);
+            setUser(userData);
+          }
+        } catch (error) {
+          console.error('Ошибка парсинга пользователя:', error);
+        }
+      }
+    }, 100);
+
     window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [user]);
 
   const handleAuth = (userData, token) => {
     setUser(userData);
