@@ -92,6 +92,7 @@ export default function StocksPage() {
   const [selectedStock, setSelectedStock] = useState('AAPL');
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isUsingRealAPI, setIsUsingRealAPI] = useState(false);
+  const [realDataStock, setRealDataStock] = useState('AAPL'); // Какую акцию загружать реально
   
   // Состояние для калькулятора сложного процента
   const [calculator, setCalculator] = useState({
@@ -127,75 +128,45 @@ export default function StocksPage() {
       const API_KEY = process.env.REACT_APP_ALPHA_VANTAGE_API_KEY || 'J753PYAH9OD50RBP';
       
       if (API_KEY && API_KEY !== 'demo') {
-        // Пытаемся получить реальные данные для всех акций
+        // Пытаемся получить реальные данные
         try {
-          console.log('Загружаем реальные данные от Alpha Vantage для всех акций...');
+          console.log('Загружаем реальные данные от Alpha Vantage...');
           const realData = {};
-          let successCount = 0;
-          let failCount = 0;
           
-          // Загружаем данные для всех акций с задержками
-          for (let i = 0; i < popularStocks.length; i++) {
-            const stock = popularStocks[i];
+          // Загружаем данные только для выбранной акции
+          const stockToFetch = popularStocks.find(s => s.symbol === realDataStock);
+          
+          if (stockToFetch) {
             try {
-              console.log(`Загружаем данные для ${stock.symbol} (${i + 1}/${popularStocks.length})...`);
-              
-              const data = await fetchRealStockData(stock.symbol);
-              realData[stock.symbol] = {
+              console.log(`Загружаем данные для ${stockToFetch.symbol}...`);
+              const data = await fetchRealStockData(stockToFetch.symbol);
+              realData[stockToFetch.symbol] = {
                 ...data,
-                marketCap: getMarketCap(stock.symbol),
-                pe: getPERatio(stock.symbol),
+                marketCap: getMarketCap(stockToFetch.symbol),
+                pe: getPERatio(stockToFetch.symbol),
                 high52w: data.high ? data.high * 1.2 : data.price * 1.2,
                 low52w: data.low ? data.low * 0.8 : data.price * 0.8
               };
               
-              successCount++;
-              console.log(`✅ Успешно загружено: ${stock.symbol}`);
-              
-              // Задержка между запросами для соблюдения лимитов API
-              // Alpha Vantage рекомендует не более 5 запросов в минуту для бесплатного плана
-              if (i < popularStocks.length - 1) {
-                console.log('Ожидание 12 секунд перед следующим запросом...');
-                await new Promise(resolve => setTimeout(resolve, 12000)); // 12 секунд между запросами
-              }
+              // Для остальных акций используем демо-данные
+              const demoData = generateRandomStockData();
+              Object.keys(demoData).forEach(symbol => {
+                if (symbol !== stockToFetch.symbol) {
+                  realData[symbol] = demoData[symbol];
+                }
+              });
               
             } catch (err) {
-              console.error(`❌ Ошибка загрузки ${stock.symbol}:`, err.message);
-              failCount++;
-              
-              // Если это ошибка лимита API, прерываем загрузку
-              if (err.message.includes('API limit') || err.message.includes('calls per minute')) {
-                console.log('🚫 Достигнут лимит API, прерываем загрузку');
-                break;
-              }
-              
-              // Для других ошибок продолжаем со следующей акцией
-              // Задержка даже при ошибке
-              if (i < popularStocks.length - 1) {
-                await new Promise(resolve => setTimeout(resolve, 2000));
-              }
+              console.error(`Failed to fetch ${stockToFetch.symbol}:`, err);
+              throw err; // Переходим к демо-данным
             }
           }
           
-          // Если получили хотя бы одну реальную акцию, дополняем остальные демо-данными
-          if (successCount > 0) {
-            const demoData = generateRandomStockData();
-            popularStocks.forEach(stock => {
-              if (!realData[stock.symbol]) {
-                realData[stock.symbol] = demoData[stock.symbol];
-              }
-            });
-            
+          if (Object.keys(realData).length > 0) {
             setStockData(realData);
             setIsUsingRealAPI(true);
-            
-            if (successCount === popularStocks.length) {
-              setError(null);
-              console.log('🎉 Все акции загружены с реальными данными!');
-            } else {
-              setError(`Смешанный режим: ${successCount} акций с реальными данными, ${failCount} с демо-данными`);
-              console.log(`📊 Смешанный режим: ${successCount} реальных, ${failCount} демо`);
-            }
+            setError(`Смешанный режим: ${realDataStock} - реальные данные, остальные - демо`);
+            console.log('Загружены смешанные данные:', realData);
           } else {
             throw new Error('No real data available');
           }
@@ -227,7 +198,7 @@ export default function StocksPage() {
     } finally {
       setLoading(false);
     }
-  }, [popularStocks]);
+  }, [popularStocks, realDataStock]);
 
   // Вспомогательные функции для статичных данных
   const getMarketCap = (symbol) => {
@@ -304,11 +275,7 @@ export default function StocksPage() {
         </div>
         <div className="card text-center">
           <div className="animate-spin text-4xl mb-4">⏳</div>
-          <p className="text-gray-600 dark:text-gray-400 mb-2">{t('gettingFreshQuotes')}</p>
-          <p className="text-sm text-gray-500 dark:text-gray-500">
-            Загружаем реальные котировки для всех акций.<br/>
-            Это может занять 1-2 минуты из-за лимитов API...
-          </p>
+          <p className="text-gray-600 dark:text-gray-400">{t('gettingFreshQuotes')}</p>
         </div>
       </div>
     );
@@ -323,24 +290,44 @@ export default function StocksPage() {
         <p className="text-lg text-gray-600 dark:text-gray-400">
           {t('stocksPageSubtitle')}
         </p>
-        <div className="mt-4 flex items-center justify-center space-x-4">
-          {lastUpdated && (
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              {t('lastUpdated')}: {formatTime(lastUpdated)}
-            </span>
-          )}
-          <button
-            onClick={() => fetchStockData(false)}
-            disabled={loading}
-            className="btn-secondary text-sm"
-          >
-            {loading ? '⏳' : '🔄'} {t('updateData')}
-          </button>
-          {isUsingRealAPI && (
-            <span className="text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded">
-              📡 Реальные данные
-            </span>
-          )}
+        <div className="mt-4 flex flex-col items-center space-y-3">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <label className="text-sm text-gray-600 dark:text-gray-400">
+                Реальные данные для:
+              </label>
+              <select
+                value={realDataStock}
+                onChange={(e) => setRealDataStock(e.target.value)}
+                className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+              >
+                {popularStocks.map(stock => (
+                  <option key={stock.symbol} value={stock.symbol}>
+                    {stock.symbol} - {stock.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button
+              onClick={() => fetchStockData(false)}
+              disabled={loading}
+              className="btn-secondary text-sm"
+            >
+              {loading ? '⏳' : '🔄'} {t('updateData')}
+            </button>
+          </div>
+          <div className="flex items-center space-x-4">
+            {lastUpdated && (
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                {t('lastUpdated')}: {formatTime(lastUpdated)}
+              </span>
+            )}
+            {isUsingRealAPI && (
+              <span className="text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded">
+                📡 Смешанный режим
+              </span>
+            )}
+          </div>
         </div>
         {error && (
           <div className={`mt-2 text-sm ${isUsingRealAPI ? 'text-orange-600 dark:text-orange-400' : 'text-orange-600 dark:text-orange-400'}`}>
@@ -372,7 +359,7 @@ export default function StocksPage() {
                       <h3 className="font-bold text-lg text-gray-900 dark:text-white">
                         {stock.symbol}
                       </h3>
-                      {isUsingRealAPI && (
+                      {stock.symbol === realDataStock && isUsingRealAPI && (
                         <span className="text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-1.5 py-0.5 rounded">
                           📡 Live
                         </span>
