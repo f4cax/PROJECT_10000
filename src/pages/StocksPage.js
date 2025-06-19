@@ -38,30 +38,44 @@ const generateRandomStockData = () => {
 const fetchRealStockData = async (symbol) => {
   const API_KEY = process.env.REACT_APP_ALPHA_VANTAGE_API_KEY || 'J753PYAH9OD50RBP';
   
+  console.log(`🔑 API Key: ${API_KEY.substring(0, 8)}...`); // Показываем первые 8 символов ключа
+  
   try {
-    const response = await fetch(
-      `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${API_KEY}`
-    );
+    const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${API_KEY}`;
+    console.log(`📡 Запрос к Alpha Vantage: ${url}`);
+    
+    const response = await fetch(url);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
     const data = await response.json();
+    console.log(`📊 Ответ от Alpha Vantage для ${symbol}:`, data);
     
     // Проверяем есть ли данные
     if (data['Error Message']) {
+      console.error(`❌ Ошибка API: ${data['Error Message']}`);
       throw new Error(data['Error Message']);
     }
     
     if (data['Note']) {
-      throw new Error('API limit exceeded');
+      console.error(`⚠️ Лимит API: ${data['Note']}`);
+      throw new Error('API limit exceeded - ' + data['Note']);
+    }
+    
+    if (data['Information']) {
+      console.error(`ℹ️ Информация от API: ${data['Information']}`);
+      throw new Error('API информация - ' + data['Information']);
     }
     
     const quote = data['Global Quote'];
-    if (!quote) {
-      throw new Error('No data received');
+    if (!quote || Object.keys(quote).length === 0) {
+      console.error(`❌ Пустой ответ от API для ${symbol}. Полный ответ:`, data);
+      throw new Error('No data received - empty response');
     }
+    
+    console.log(`✅ Получены данные для ${symbol}:`, quote);
     
     // Преобразуем данные Alpha Vantage в наш формат
     const price = parseFloat(quote['05. price']);
@@ -118,6 +132,34 @@ export default function StocksPage() {
     { symbol: 'QQQ', name: 'NASDAQ-100 ETF', description: 'Технологические компании' },
     { symbol: 'VTI', name: 'Total Stock Market ETF', description: 'Весь рынок США' }
   ];
+
+  // Тестирование соединения с API
+  const testAPIConnection = async () => {
+    console.log('🔧 Тестируем соединение с Alpha Vantage API...');
+    try {
+      // Используем demo ключ для тестирования
+      const testUrl = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey=demo';
+      console.log(`📡 Тест запрос: ${testUrl}`);
+      
+      const response = await fetch(testUrl);
+      const data = await response.json();
+      
+      console.log('📊 Тест ответ:', data);
+      
+      if (data['Global Quote']) {
+        alert('✅ API работает! Проблема может быть в вашем API ключе.');
+      } else if (data['Note']) {
+        alert('⚠️ API лимит исчерпан: ' + data['Note']);
+      } else if (data['Error Message']) {
+        alert('❌ Ошибка API: ' + data['Error Message']);
+      } else {
+        alert('❓ Неожиданный ответ от API. Проверьте консоль.');
+      }
+    } catch (error) {
+      console.error('❌ Ошибка тестирования:', error);
+      alert('❌ Ошибка подключения: ' + error.message);
+    }
+  };
 
   // Загрузка данных акций
   const fetchStockData = useCallback(async (showLoading = true) => {
@@ -315,6 +357,13 @@ export default function StocksPage() {
             >
               {loading ? '⏳' : '🔄'} {t('updateData')}
             </button>
+            <button
+              onClick={() => testAPIConnection()}
+              disabled={loading}
+              className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-md"
+            >
+              🔧 Тест API
+            </button>
           </div>
           <div className="flex items-center space-x-4">
             {lastUpdated && (
@@ -334,6 +383,9 @@ export default function StocksPage() {
             {error}
           </div>
         )}
+        <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+          API Key: {(process.env.REACT_APP_ALPHA_VANTAGE_API_KEY || 'J753PYAH9OD50RBP').substring(0, 8)}...
+        </div>
       </div>
 
       {/* Популярные акции */}
