@@ -5,7 +5,6 @@ export default function AssetsPage() {
   const { t } = useTranslation();
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [stockPrices, setStockPrices] = useState({});
   const [demoMode, setDemoMode] = useState(false);
   const [showAddAsset, setShowAddAsset] = useState(false);
   const [newAsset, setNewAsset] = useState({
@@ -49,7 +48,7 @@ export default function AssetsPage() {
   // Загрузка данных пользователя
   useEffect(() => {
     loadUserProfile();
-    loadStockPrices();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadUserProfile = async () => {
@@ -88,30 +87,7 @@ export default function AssetsPage() {
     }
   };
 
-  const loadStockPrices = async () => {
-    try {
-      const API_KEY = process.env.REACT_APP_EODHD_API_KEY || '68545cf3e0b555.23627356';
-      const symbols = ['AAPL.US', 'GOOGL.US', 'MSFT.US', 'TSLA.US', 'AMZN.US', 'NVDA.US'];
-      const url = `https://eodhd.com/api/real-time/${symbols[0]}?s=${symbols.slice(1).join(',')}&api_token=${API_KEY}&fmt=json`;
-      
-      const response = await fetch(url);
-      const data = await response.json();
-      
-      const prices = {};
-      const stocksData = Array.isArray(data) ? data : [data];
-      
-      stocksData.forEach(stock => {
-        if (stock && stock.code) {
-          const symbol = stock.code.replace('.US', '');
-          prices[symbol] = parseFloat(stock.close || stock.price || 0);
-        }
-      });
-      
-      setStockPrices(prices);
-    } catch (error) {
-      console.error('Error loading stock prices:', error);
-    }
-  };
+
 
   // Расчёт активов на основе данных профиля
   const assetsData = useMemo(() => {
@@ -206,10 +182,6 @@ export default function AssetsPage() {
       style: 'currency',
       currency: currency
     }).format(amount);
-  };
-
-  const formatNumber = (num) => {
-    return new Intl.NumberFormat('ru-RU').format(num);
   };
 
   // Добавление нового актива
