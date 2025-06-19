@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import BudgetChart from '../components/charts/BudgetChart';
 import BudgetRuleCard from '../components/forms/BudgetRuleCard';
 import IncomeForm from '../components/forms/IncomeForm';
@@ -20,6 +20,10 @@ export default function HomePage() {
   });
   const [notifications, setNotifications] = useState([]);
   const [selectedStrategy, setSelectedStrategy] = useState(null);
+  const [savingsGoal, setSavingsGoal] = useState(null);
+  
+  // Отслеживание была ли выполнена первоначальная загрузка
+  const hasLoadedInitialData = useRef(false);
   
   // Мемоизированная функция обновления стратегии для стабильности
   const handleStrategyChange = useCallback((newStrategy) => {
@@ -28,7 +32,6 @@ export default function HomePage() {
       setSelectedStrategy(newStrategy);
     }
   }, [selectedStrategy]);
-  const [savingsGoal, setSavingsGoal] = useState(null);
 
   // Правило 50-25-15-10 Mark Tilbury
   const calculateBudget = (income) => {
@@ -160,26 +163,45 @@ export default function HomePage() {
     return strategiesMap[strategyId] || null;
   }, [t]);
 
-  // Загрузка данных пользователя при авторизации
+  // Загрузка данных пользователя при авторизации (один раз)
   useEffect(() => {
-    if (isAuthenticated && user?.financialData) {
+    if (isAuthenticated && user?.financialData && !hasLoadedInitialData.current) {
       const data = user.financialData;
+      console.log('Первоначальная загрузка данных пользователя');
+      
       if (data.monthlyIncome) {
+        console.log('Загружаем месячный доход:', data.monthlyIncome);
         setMonthlyIncome(data.monthlyIncome);
       }
+      
       if (data.budgetDistribution) {
+        console.log('Загружаем распределение бюджета');
         setBudgetDistribution(data.budgetDistribution);
       }
-      if (data.selectedStrategy && (!selectedStrategy || selectedStrategy.id !== data.selectedStrategy)) {
-        // Создаем объект стратегии только если она не установлена или отличается
+      
+      if (data.selectedStrategy) {
+        console.log('Загружаем сохраненную стратегию:', data.selectedStrategy);
         const strategy = createStrategyById(data.selectedStrategy);
         setSelectedStrategy(strategy);
       }
+      
       if (data.savingsGoals && data.savingsGoals.length > 0) {
-        setSavingsGoal(data.savingsGoals[0]); // Пока поддерживаем одну цель
+        console.log('Загружаем цель накопления');
+        setSavingsGoal(data.savingsGoals[0]);
       }
+      
+      // Отмечаем что данные загружены
+      hasLoadedInitialData.current = true;
     }
-  }, [isAuthenticated, user, selectedStrategy, createStrategyById]); // Добавляем selectedStrategy для проверки
+  }, [isAuthenticated, user?.financialData, createStrategyById]);
+
+  // Сброс флага загрузки при смене пользователя
+  useEffect(() => {
+    if (!isAuthenticated) {
+      hasLoadedInitialData.current = false;
+      console.log('Сбросили флаг загрузки данных');
+    }
+  }, [isAuthenticated]);
 
   // Обновление стратегии при смене языка (только если стратегия уже выбрана)
   useEffect(() => {
@@ -207,12 +229,18 @@ export default function HomePage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monthlyIncome, selectedStrategy, savingsGoal, isAuthenticated, saveMonthlyIncome]);
 
-  // Автосохранение стратегии
+  // Автосохранение стратегии (только если изменилась)
   useEffect(() => {
-    if (selectedStrategy && isAuthenticated) {
-      saveStrategy(selectedStrategy);
+    if (selectedStrategy && isAuthenticated && user?.financialData) {
+      // Сохраняем только если стратегия действительно изменилась
+      const currentSavedStrategy = user.financialData.selectedStrategy;
+      if (currentSavedStrategy !== selectedStrategy.id) {
+        console.log('Сохраняем новую стратегию:', selectedStrategy.id);
+        saveStrategy(selectedStrategy);
+      }
     }
-  }, [selectedStrategy, isAuthenticated, saveStrategy]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedStrategy, isAuthenticated, saveStrategy, user?.financialData?.selectedStrategy]);
 
   return (
     <div className="space-y-8 fade-in">
