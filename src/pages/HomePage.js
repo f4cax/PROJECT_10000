@@ -20,6 +20,14 @@ export default function HomePage() {
   });
   const [notifications, setNotifications] = useState([]);
   const [selectedStrategy, setSelectedStrategy] = useState(null);
+  
+  // Мемоизированная функция обновления стратегии для стабильности
+  const handleStrategyChange = useCallback((newStrategy) => {
+    // Проверяем что стратегия действительно изменилась
+    if (!selectedStrategy || selectedStrategy.id !== newStrategy.id) {
+      setSelectedStrategy(newStrategy);
+    }
+  }, [selectedStrategy]);
   const [savingsGoal, setSavingsGoal] = useState(null);
 
   // Правило 50-25-15-10 Mark Tilbury
@@ -162,8 +170,8 @@ export default function HomePage() {
       if (data.budgetDistribution) {
         setBudgetDistribution(data.budgetDistribution);
       }
-      if (data.selectedStrategy) {
-        // Создаем объект стратегии с актуальными переводами
+      if (data.selectedStrategy && (!selectedStrategy || selectedStrategy.id !== data.selectedStrategy)) {
+        // Создаем объект стратегии только если она не установлена или отличается
         const strategy = createStrategyById(data.selectedStrategy);
         setSelectedStrategy(strategy);
       }
@@ -171,15 +179,19 @@ export default function HomePage() {
         setSavingsGoal(data.savingsGoals[0]); // Пока поддерживаем одну цель
       }
     }
-  }, [isAuthenticated, user, t, createStrategyById]); // Добавляем t и createStrategyById в зависимости
+  }, [isAuthenticated, user, selectedStrategy, createStrategyById]); // Добавляем selectedStrategy для проверки
 
-  // Обновление стратегии при смене языка
+  // Обновление стратегии при смене языка (только если стратегия уже выбрана)
   useEffect(() => {
-    if (selectedStrategy && selectedStrategy.id) {
+    if (selectedStrategy?.id) {
       const updatedStrategy = createStrategyById(selectedStrategy.id);
-      setSelectedStrategy(updatedStrategy);
+      // Обновляем только если заголовок действительно изменился (смена языка)
+      if (updatedStrategy && updatedStrategy.title !== selectedStrategy.title) {
+        setSelectedStrategy(updatedStrategy);
+      }
     }
-  }, [t, createStrategyById]); // eslint-disable-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t, createStrategyById]); // Намеренно НЕ включаем selectedStrategy - обновляем только при смене языка
 
   useEffect(() => {
     if (monthlyIncome > 0) {
@@ -263,7 +275,7 @@ export default function HomePage() {
           {/* Финансовая стратегия */}
           <FinancialStrategyCard
             selectedStrategy={selectedStrategy}
-            onStrategyChange={setSelectedStrategy}
+            onStrategyChange={handleStrategyChange}
           />
 
           {/* Цели накопления */}
