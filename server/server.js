@@ -722,7 +722,7 @@ app.put('/api/admin/settings', authenticateToken, requireAdmin, async (req, res)
 // 🏠 Главная страница API
 app.get('/api', (req, res) => {
   res.json({
-    message: 'ФинансГид API работает! 🚀',
+    message: 'Финансовый компас API работает! 🚀',
     version: '1.0.0',
     endpoints: {
       auth: '/api/auth/register, /api/auth/login',

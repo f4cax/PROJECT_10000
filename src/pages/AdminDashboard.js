@@ -74,7 +74,8 @@ const AdminDashboard = () => {
     console.log('API запрос:', url);
     console.log('Токен:', currentToken ? 'Есть' : 'Отсутствует');
 
-    const response = await fetch(`http://localhost:5000${url}`, {
+    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    const response = await fetch(`${apiUrl}${url}`, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
@@ -179,7 +180,8 @@ const AdminDashboard = () => {
 
   const createFirstAdmin = async (adminData) => {
     try {
-      await fetch('http://localhost:5000/api/admin/create-first-admin', {
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      await fetch(`${apiUrl}/api/admin/create-first-admin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(adminData),

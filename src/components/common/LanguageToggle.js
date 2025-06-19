@@ -16,7 +16,7 @@ export default function LanguageToggle() {
       title={language === 'ru' ? 'Switch to English' : 'Переключить на русский'}
     >
       <span className="text-sm font-medium">
-        {language === 'ru' ? '🇷🇺 RU' : '🇺🇸 EN'}
+        {language === 'ru' ? 'Ru' : 'En'}
       </span>
     </button>
   );

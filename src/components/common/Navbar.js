@@ -87,8 +87,8 @@ export default function Navbar() {
           {/* Левая часть: Логотип и бургер-меню */}
           <div className="flex items-center space-x-4">
             <Link to="/" className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-bold text-primary-400">💰</span>
-              <span className="ml-2 text-xl font-bold text-white">ФинансГид</span>
+              <span className="text-2xl font-bold text-primary-400">🧭</span>
+              <span className="ml-2 text-xl font-bold text-white">Финансовый компас</span>
             </Link>
             
             {/* Бургер-меню */}

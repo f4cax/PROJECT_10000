@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 const FINANCIAL_TEST_QUESTIONS = [
   {
@@ -155,12 +156,22 @@ const STRATEGIES = {
 };
 
 export default function FinancialTestPage() {
+  const { saveTestResults, isAuthenticated, user } = useAuth();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [totalScore, setTotalScore] = useState(0);
 
-  const handleAnswer = (selectedOption) => {
+  // Загружаем сохраненные результаты теста
+  useEffect(() => {
+    if (isAuthenticated && user?.financialData?.testResults?.score) {
+      const testData = user.financialData.testResults;
+      setTotalScore(testData.score);
+      setShowResult(true);
+    }
+  }, [isAuthenticated, user]);
+
+  const handleAnswer = async (selectedOption) => {
     const newAnswers = [...answers, selectedOption];
     setAnswers(newAnswers);
     
@@ -171,12 +182,26 @@ export default function FinancialTestPage() {
       const score = newAnswers.reduce((sum, answer) => sum + answer.points, 0);
       setTotalScore(score);
       setShowResult(true);
+
+      // Сохраняем результаты в БД если пользователь авторизован
+      const strategy = getRecommendedStrategyByScore(score);
+      if (isAuthenticated) {
+        await saveTestResults({
+          score,
+          strategy: strategy.title,
+          completedAt: new Date().toISOString(),
+        });
+      }
     }
   };
 
   const getRecommendedStrategy = () => {
-    if (totalScore <= 10) return STRATEGIES.beginner;
-    if (totalScore <= 20) return STRATEGIES.intermediate;
+    return getRecommendedStrategyByScore(totalScore);
+  };
+
+  const getRecommendedStrategyByScore = (score) => {
+    if (score <= 10) return STRATEGIES.beginner;
+    if (score <= 20) return STRATEGIES.intermediate;
     return STRATEGIES.advanced;
   };
 

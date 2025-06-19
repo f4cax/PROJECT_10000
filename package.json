@@ -1,8 +1,8 @@
 {
-  "name": "financial-manager",
+  "name": "financial-compass",
   "version": "1.0.0",
   "private": true,
-  "description": "Финансовый менеджер с правилом 50-25-15-10",
+  "description": "Финансовый компас - умный помощник для управления личными финансами",
   "main": "src/index.js",
   "scripts": {
     "start": "node server/server.js",

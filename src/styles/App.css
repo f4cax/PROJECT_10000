@@ -1,7 +1,36 @@
 /* Дополнительные стили для приложения */
 
+/* Принудительная инициализация темы */
+html {
+  --tw-bg-opacity: 1;
+  --tw-text-opacity: 1;
+  --tw-border-opacity: 1;
+}
+
+/* Базовые стили для светлой темы */
+html:not(.dark) {
+  background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+  color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+
+/* Базовые стили для темной темы */
+html.dark {
+  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+  color: rgb(249 250 251 / var(--tw-text-opacity));
+}
+
 .App {
   min-height: 100vh;
+}
+
+/* Дополнительные стили для темной темы */
+.dark body {
+  background-color: rgb(17 24 39) !important;
+  color: rgb(249 250 251) !important;
+}
+
+.dark main {
+  background-color: rgb(17 24 39) !important;
 }
 
 /* Стили для графиков */
