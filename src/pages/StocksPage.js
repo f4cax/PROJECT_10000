@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-// import { useTranslation } from '../utils/translations'; // TODO: добавить переводы позже
+import { useTranslation } from '../utils/translations';
 
 export default function StocksPage() {
-  // const { t } = useTranslation(); // TODO: добавить переводы позже
+  const { t } = useTranslation();
   const [stockData, setStockData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedStock, setSelectedStock] = useState('AAPL');
+  const [lastUpdated, setLastUpdated] = useState(null);
   
   // Состояние для калькулятора сложного процента
   const [calculator, setCalculator] = useState({
@@ -18,12 +19,12 @@ export default function StocksPage() {
 
   // Популярные акции для отслеживания
   const popularStocks = [
-    { symbol: 'AAPL', name: 'Apple Inc.', sector: 'Технологии' },
-    { symbol: 'GOOGL', name: 'Alphabet Inc.', sector: 'Технологии' },
-    { symbol: 'MSFT', name: 'Microsoft Corp.', sector: 'Технологии' },
-    { symbol: 'TSLA', name: 'Tesla Inc.', sector: 'Автомобили' },
-    { symbol: 'AMZN', name: 'Amazon.com Inc.', sector: 'E-commerce' },
-    { symbol: 'NVDA', name: 'NVIDIA Corp.', sector: 'Технологии' }
+    { symbol: 'AAPL', name: 'Apple Inc.', sector: t('technology') },
+    { symbol: 'GOOGL', name: 'Alphabet Inc.', sector: t('technology') },
+    { symbol: 'MSFT', name: 'Microsoft Corp.', sector: t('technology') },
+    { symbol: 'TSLA', name: 'Tesla Inc.', sector: t('automotive') },
+    { symbol: 'AMZN', name: 'Amazon.com Inc.', sector: t('ecommerce') },
+    { symbol: 'NVDA', name: 'NVIDIA Corp.', sector: t('technology') }
   ];
 
   // Индексы для мониторинга
@@ -33,87 +34,60 @@ export default function StocksPage() {
     { symbol: 'VTI', name: 'Total Stock Market ETF', description: 'Весь рынок США' }
   ];
 
-  // Загрузка данных акций (демо-данные, т.к. нужен API ключ)
-  useEffect(() => {
-    const fetchStockData = async () => {
-      try {
-        setLoading(true);
-        
-        // Для демонстрации используем статические данные
-        // В реальности здесь был бы запрос к Alpha Vantage API
-        const demoData = {
-          'AAPL': {
-            price: 175.43,
-            change: 2.15,
-            changePercent: 1.24,
-            volume: '45,123,456',
-            marketCap: '2.7T',
-            pe: 28.5,
-            high52w: 198.23,
-            low52w: 124.17
-          },
-          'GOOGL': {
-            price: 2456.78,
-            change: -12.34,
-            changePercent: -0.50,
-            volume: '1,234,567',
-            marketCap: '1.6T',
-            pe: 25.3,
-            high52w: 2800.12,
-            low52w: 2025.34
-          },
-          'MSFT': {
-            price: 345.67,
-            change: 5.23,
-            changePercent: 1.53,
-            volume: '23,456,789',
-            marketCap: '2.5T',
-            pe: 32.1,
-            high52w: 384.30,
-            low52w: 245.18
-          },
-          'TSLA': {
-            price: 234.56,
-            change: -8.90,
-            changePercent: -3.65,
-            volume: '67,890,123',
-            marketCap: '745B',
-            pe: 45.2,
-            high52w: 414.50,
-            low52w: 152.37
-          },
-          'AMZN': {
-            price: 3123.45,
-            change: 15.67,
-            changePercent: 0.50,
-            volume: '3,456,789',
-            marketCap: '1.3T',
-            pe: 58.7,
-            high52w: 3773.08,
-            low52w: 2671.45
-          },
-          'NVDA': {
-            price: 456.78,
-            change: 12.34,
-            changePercent: 2.78,
-            volume: '45,678,901',
-            marketCap: '1.1T',
-            pe: 65.4,
-            high52w: 502.66,
-            low52w: 180.68
-          }
-        };
-
-        setStockData(demoData);
-        setError(null);
-      } catch (err) {
-        console.error('Ошибка загрузки данных акций:', err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+  // Генерация случайных данных для демонстрации "обновления"
+  const generateRandomStockData = () => {
+    const baseData = {
+      'AAPL': { basePrice: 175, basePE: 28.5, marketCap: '2.7T' },
+      'GOOGL': { basePrice: 2450, basePE: 25.3, marketCap: '1.6T' },
+      'MSFT': { basePrice: 345, basePE: 32.1, marketCap: '2.5T' },
+      'TSLA': { basePrice: 235, basePE: 45.2, marketCap: '745B' },
+      'AMZN': { basePrice: 3120, basePE: 58.7, marketCap: '1.3T' },
+      'NVDA': { basePrice: 450, basePE: 65.4, marketCap: '1.1T' }
     };
 
+    const result = {};
+    Object.keys(baseData).forEach(symbol => {
+      const base = baseData[symbol];
+      const changePercent = (Math.random() - 0.5) * 8; // От -4% до +4%
+      const newPrice = base.basePrice * (1 + changePercent / 100);
+      const change = newPrice - base.basePrice;
+      
+      result[symbol] = {
+        price: Number(newPrice.toFixed(2)),
+        change: Number(change.toFixed(2)),
+        changePercent: Number(changePercent.toFixed(2)),
+        volume: Math.floor(Math.random() * 50000000 + 10000000).toLocaleString(),
+        marketCap: base.marketCap,
+        pe: base.basePE + (Math.random() - 0.5) * 5,
+        high52w: newPrice * (1 + Math.random() * 0.3),
+        low52w: newPrice * (1 - Math.random() * 0.3)
+      };
+    });
+
+    return result;
+  };
+
+  // Загрузка данных акций
+  const fetchStockData = async (showLoading = true) => {
+    try {
+      if (showLoading) setLoading(true);
+      
+      // Имитация загрузки данных
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const newData = generateRandomStockData();
+      setStockData(newData);
+      setLastUpdated(new Date());
+      setError(null);
+    } catch (err) {
+      console.error('Ошибка загрузки данных акций:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchStockData();
   }, []);
 
@@ -149,18 +123,29 @@ export default function StocksPage() {
     }).format(num);
   };
 
+  const formatTime = (date) => {
+    return date.toLocaleTimeString('ru-RU', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+  };
+
   const results = calculateCompoundInterest();
 
-  if (loading) {
+  if (loading && !lastUpdated) {
     return (
       <div className="max-w-6xl mx-auto space-y-8 fade-in">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">📈 Акции и Инвестиции</h1>
-          <div className="text-lg text-gray-600">Загрузка актуальных данных рынка...</div>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            📈 {t('stocksAndInvestments')}
+          </h1>
+          <div className="text-lg text-gray-600 dark:text-gray-400">
+            {t('loadingMarketData')}
+          </div>
         </div>
         <div className="card text-center">
           <div className="animate-spin text-4xl mb-4">⏳</div>
-          <p className="text-gray-600">Получаем свежие котировки</p>
+          <p className="text-gray-600 dark:text-gray-400">{t('gettingFreshQuotes')}</p>
         </div>
       </div>
     );
@@ -169,22 +154,38 @@ export default function StocksPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-8 fade-in">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          📈 Акции и Инвестиции
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          📈 {t('stocksAndInvestments')}
         </h1>
-        <p className="text-lg text-gray-600">
-          Актуальные котировки, анализ рынка и калькулятор сложного процента
+        <p className="text-lg text-gray-600 dark:text-gray-400">
+          {t('stocksPageSubtitle')}
         </p>
+        <div className="mt-4 flex items-center justify-center space-x-4">
+          {lastUpdated && (
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              {t('lastUpdated')}: {formatTime(lastUpdated)}
+            </span>
+          )}
+          <button
+            onClick={() => fetchStockData(false)}
+            disabled={loading}
+            className="btn-secondary text-sm"
+          >
+            {loading ? '⏳' : '🔄'} {t('updateData')}
+          </button>
+        </div>
         {error && (
-          <div className="mt-2 text-sm text-orange-600">
-            Демо-режим: используются тестовые данные
+          <div className="mt-2 text-sm text-orange-600 dark:text-orange-400">
+            {t('demoMode')}
           </div>
         )}
       </div>
 
       {/* Популярные акции */}
       <div className="space-y-4">
-        <h2 className="text-2xl font-semibold text-gray-900">🔥 Популярные акции</h2>
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          🔥 {t('popularStocks')}
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {popularStocks.map(stock => {
             const data = stockData[stock.symbol];
@@ -192,28 +193,35 @@ export default function StocksPage() {
 
             const isPositive = data.change > 0;
             return (
-              <div key={stock.symbol} className="card hover:shadow-lg transition-shadow cursor-pointer"
-                   onClick={() => setSelectedStock(stock.symbol)}>
+              <div 
+                key={stock.symbol} 
+                className="card hover:shadow-lg dark:hover:shadow-gray-900/20 transition-shadow cursor-pointer"
+                onClick={() => setSelectedStock(stock.symbol)}
+              >
                 <div className="flex justify-between items-start mb-3">
                   <div>
-                    <h3 className="font-bold text-lg">{stock.symbol}</h3>
-                    <p className="text-sm text-gray-600">{stock.name}</p>
-                    <span className="text-xs bg-gray-100 px-2 py-1 rounded">{stock.sector}</span>
+                    <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                      {stock.symbol}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{stock.name}</p>
+                    <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded">
+                      {stock.sector}
+                    </span>
                   </div>
-                  <div className={`text-sm font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                  <div className={`text-sm font-medium ${isPositive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                     {isPositive ? '↗' : '↘'} {Math.abs(data.changePercent).toFixed(2)}%
                   </div>
                 </div>
                 
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-gray-900">
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white">
                     {formatCurrency(data.price)}
                   </div>
-                  <div className={`text-sm ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                  <div className={`text-sm ${isPositive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                     {isPositive ? '+' : ''}{formatCurrency(data.change)}
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">
-                    Объем: {data.volume}
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    {t('volume')}: {data.volume}
                   </div>
                 </div>
               </div>
@@ -225,33 +233,33 @@ export default function StocksPage() {
       {/* Детальная информация о выбранной акции */}
       {selectedStock && stockData[selectedStock] && (
         <div className="card">
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">
-            📊 Детали: {selectedStock}
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+            📊 {t('stockDetails')}: {selectedStock}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-primary-600">
+              <div className="text-2xl font-bold text-primary-600 dark:text-primary-400">
                 {formatCurrency(stockData[selectedStock].price)}
               </div>
-              <p className="text-sm text-gray-600">Текущая цена</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('currentPrice')}</p>
             </div>
             <div className="text-center">
-              <div className="text-lg font-semibold">
+              <div className="text-lg font-semibold text-gray-900 dark:text-white">
                 {stockData[selectedStock].marketCap}
               </div>
-              <p className="text-sm text-gray-600">Капитализация</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('marketCap')}</p>
             </div>
             <div className="text-center">
-              <div className="text-lg font-semibold">
-                {stockData[selectedStock].pe}
+              <div className="text-lg font-semibold text-gray-900 dark:text-white">
+                {stockData[selectedStock].pe.toFixed(1)}
               </div>
-              <p className="text-sm text-gray-600">P/E коэффициент</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('peRatio')}</p>
             </div>
             <div className="text-center">
-              <div className="text-lg font-semibold">
+              <div className="text-lg font-semibold text-gray-900 dark:text-white">
                 {formatCurrency(stockData[selectedStock].high52w)}
               </div>
-              <p className="text-sm text-gray-600">Максимум за год</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('yearHigh')}</p>
             </div>
           </div>
         </div>
@@ -259,14 +267,20 @@ export default function StocksPage() {
 
       {/* Индексные фонды */}
       <div className="space-y-4">
-        <h2 className="text-2xl font-semibold text-gray-900">📊 Индексные фонды</h2>
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          📊 {t('indexFunds')}
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {majorIndices.map(index => (
             <div key={index.symbol} className="card text-center">
-              <h3 className="font-bold text-lg mb-2">{index.name}</h3>
-              <p className="text-sm text-gray-600 mb-3">{index.description}</p>
-              <div className="text-primary-600 font-semibold">
-                Отслеживать {index.symbol}
+              <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-white">
+                {index.name}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                {index.description}
+              </p>
+              <div className="text-primary-600 dark:text-primary-400 font-semibold">
+                {t('trackSymbol')} {index.symbol}
               </div>
             </div>
           ))}
@@ -275,15 +289,15 @@ export default function StocksPage() {
 
       {/* Калькулятор сложного процента */}
       <div className="card">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-6">
-          🧮 Калькулятор сложного процента
+        <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
+          🧮 {t('compoundCalculator')}
         </h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Ввод параметров */}
           <div className="space-y-4">
             <div>
-              <label className="label">Начальная сумма (₽)</label>
+              <label className="label">{t('initialAmount')} (₽)</label>
               <input
                 type="number"
                 value={calculator.initialAmount}
@@ -294,7 +308,7 @@ export default function StocksPage() {
             </div>
             
             <div>
-              <label className="label">Ежемесячное пополнение (₽)</label>
+              <label className="label">{t('monthlyContribution')} (₽)</label>
               <input
                 type="number"
                 value={calculator.monthlyContribution}
@@ -305,7 +319,7 @@ export default function StocksPage() {
             </div>
             
             <div>
-              <label className="label">Годовая доходность (%)</label>
+              <label className="label">{t('annualReturn')} (%)</label>
               <input
                 type="number"
                 step="0.1"
@@ -317,7 +331,7 @@ export default function StocksPage() {
             </div>
             
             <div>
-              <label className="label">Период инвестирования (лет)</label>
+              <label className="label">{t('investmentPeriod')} (лет)</label>
               <input
                 type="number"
                 value={calculator.years}
@@ -330,37 +344,38 @@ export default function StocksPage() {
 
           {/* Результаты */}
           <div className="space-y-4">
-            <div className="bg-green-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-green-900 mb-3">📈 Результаты инвестирования</h4>
+            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-200 dark:border-green-800">
+              <h4 className="font-semibold text-green-900 dark:text-green-300 mb-3">
+                📈 {t('investmentResults')}
+              </h4>
               
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-green-700">Итоговая сумма:</span>
-                  <span className="font-bold text-green-900">
+                  <span className="text-green-700 dark:text-green-400">{t('finalAmount')}:</span>
+                  <span className="font-bold text-green-900 dark:text-green-300">
                     {formatNumber(results.futureValue)} ₽
                   </span>
                 </div>
                 
                 <div className="flex justify-between">
-                  <span className="text-green-700">Всего вложено:</span>
-                  <span className="font-semibold text-green-800">
+                  <span className="text-green-700 dark:text-green-400">{t('totalInvested')}:</span>
+                  <span className="font-semibold text-green-800 dark:text-green-400">
                     {formatNumber(results.totalContributions)} ₽
                   </span>
                 </div>
                 
-                <div className="flex justify-between border-t pt-2">
-                  <span className="text-green-700">Чистая прибыль:</span>
-                  <span className="font-bold text-green-900 text-lg">
+                <div className="flex justify-between border-t border-green-200 dark:border-green-700 pt-2">
+                  <span className="text-green-700 dark:text-green-400">{t('netProfit')}:</span>
+                  <span className="font-bold text-green-900 dark:text-green-300 text-lg">
                     +{formatNumber(results.totalGain)} ₽
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-blue-50 p-3 rounded-lg">
-              <p className="text-blue-800 text-sm">
-                💡 <strong>Совет:</strong> Начните инвестировать как можно раньше. 
-                Сложный процент работает лучше всего при длительном горизонте инвестирования.
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+              <p className="text-blue-800 dark:text-blue-300 text-sm">
+                💡 <strong>Совет:</strong> {t('investmentTip')}
               </p>
             </div>
           </div>
@@ -369,9 +384,11 @@ export default function StocksPage() {
 
       {/* Рекомендации для начинающих */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="card bg-blue-50 border-blue-200">
-          <h4 className="font-semibold text-blue-900 mb-3">🎯 Для начинающих инвесторов</h4>
-          <ul className="text-sm text-blue-800 space-y-2">
+        <div className="card bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+          <h4 className="font-semibold text-blue-900 dark:text-blue-300 mb-3">
+            🎯 {t('forBeginnerInvestors')}
+          </h4>
+          <ul className="text-sm text-blue-800 dark:text-blue-300 space-y-2">
             <li>• Начните с индексных фондов (S&P 500, NASDAQ)</li>
             <li>• Инвестируйте регулярно, а не пытайтесь угадать время</li>
             <li>• Диверсифицируйте портфель по секторам</li>
@@ -380,9 +397,11 @@ export default function StocksPage() {
           </ul>
         </div>
         
-        <div className="card bg-orange-50 border-orange-200">
-          <h4 className="font-semibold text-orange-900 mb-3">⚠️ Важные предупреждения</h4>
-          <ul className="text-sm text-orange-800 space-y-2">
+        <div className="card bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800">
+          <h4 className="font-semibold text-orange-900 dark:text-orange-300 mb-3">
+            ⚠️ {t('importantWarnings')}
+          </h4>
+          <ul className="text-sm text-orange-800 dark:text-orange-300 space-y-2">
             <li>• Прошлая доходность не гарантирует будущие результаты</li>
             <li>• Инвестируйте только те деньги, которые готовы потерять</li>
             <li>• Высокая доходность всегда связана с высокими рисками</li>
@@ -393,21 +412,21 @@ export default function StocksPage() {
       </div>
 
       {/* Информация об API */}
-      <div className="card bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200">
+      <div className="card bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-purple-200 dark:border-purple-800">
         <div className="text-center">
-          <h3 className="text-lg font-semibold text-purple-900 mb-2">
+          <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-300 mb-2">
             🔌 Данные предоставлены Alpha Vantage API
           </h3>
-          <p className="text-purple-700 text-sm mb-3">
+          <p className="text-purple-700 dark:text-purple-400 text-sm mb-3">
             Профессиональные финансовые данные для трейдеров и инвесторов
           </p>
-          <div className="flex justify-center space-x-4 text-xs text-purple-600">
+          <div className="flex justify-center space-x-4 text-xs text-purple-600 dark:text-purple-400">
             <span>✅ Реальные котировки</span>
             <span>✅ Исторические данные</span>
             <span>✅ Технические индикаторы</span>
             <span>✅ Новости рынка</span>
           </div>
-          <p className="text-xs text-purple-500 mt-2">
+          <p className="text-xs text-purple-500 dark:text-purple-400 mt-2">
             Сейчас отображаются демо-данные. Для получения реальных котировок нужен API ключ.
           </p>
         </div>
