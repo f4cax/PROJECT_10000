@@ -119,7 +119,7 @@ const ProfilePage = () => {
     { value: 'jewish', label: 'Еврейская автономная область' }
   ];
 
-  const apiCall = async (url, options = {}) => {
+  const apiCall = useCallback(async (url, options = {}) => {
     const currentToken = token || localStorage.getItem('authToken');
     const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
     
@@ -143,7 +143,7 @@ const ProfilePage = () => {
     }
     
     return response.json();
-  };
+  }, [token]);
 
   // Загрузка свежих данных пользователя с сервера
   const loadUserData = useCallback(async () => {
@@ -185,7 +185,7 @@ const ProfilePage = () => {
     } finally {
       setInitialLoading(false);
     }
-  }, [updateUser, token]);
+  }, [updateUser, apiCall]);
 
   // Загрузка данных при инициализации
   useEffect(() => {
@@ -218,7 +218,7 @@ const ProfilePage = () => {
     }
   }, [user, token, loadUserData]);
 
-  const handleBasicInfoSave = async () => {
+  const handleBasicInfoSave = useCallback(async () => {
     try {
       setLoading(true);
       const response = await apiCall('/api/user/profile', {
@@ -242,9 +242,9 @@ const ProfilePage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [apiCall, basicInfo, updateUser]);
 
-  const handleFinancialDataSave = async () => {
+  const handleFinancialDataSave = useCallback(async () => {
     try {
       setLoading(true);
       const response = await apiCall('/api/user/financial-data', {
@@ -267,7 +267,7 @@ const ProfilePage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [apiCall, financialData, updateUser, user]);
 
   const calculateCompoundInterest = (principal, monthlyContribution, annualRate, years) => {
     const monthlyRate = annualRate / 12 / 100;
