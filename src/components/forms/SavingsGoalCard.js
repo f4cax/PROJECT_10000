@@ -128,8 +128,23 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
             <label className="label">{t('currentAmount')} ({t('rublesSymbol')})</label>
             <input
               type="number"
-              value={tempGoal.currentAmount}
-              onChange={(e) => setTempGoal({ ...tempGoal, currentAmount: parseFloat(e.target.value) || 0 })}
+              value={tempGoal.currentAmount === 0 ? '' : tempGoal.currentAmount}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === '') {
+                  // Если поле пустое, оставляем пустым
+                  setTempGoal({ ...tempGoal, currentAmount: '' });
+                } else {
+                  // Иначе парсим число
+                  setTempGoal({ ...tempGoal, currentAmount: parseFloat(value) || 0 });
+                }
+              }}
+              onBlur={(e) => {
+                // При потере фокуса, если поле пустое - ставим 0
+                if (e.target.value === '' || tempGoal.currentAmount === '') {
+                  setTempGoal({ ...tempGoal, currentAmount: 0 });
+                }
+              }}
               placeholder="0"
               className="input-field"
             />
