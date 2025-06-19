@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from '../utils/translations';
 
 const FINANCIAL_TEST_QUESTIONS = [
   {
@@ -157,6 +158,7 @@ const STRATEGIES = {
 
 export default function FinancialTestPage() {
   const { saveTestResults, isAuthenticated, user } = useAuth();
+  const { t } = useTranslation();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [showResult, setShowResult] = useState(false);
@@ -261,7 +263,7 @@ export default function FinancialTestPage() {
     return (
       <div className="max-w-3xl mx-auto text-center py-8">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto"></div>
-        <p className="mt-4 text-gray-600">Подготовка теста...</p>
+        <p className="mt-4 text-gray-600 dark:text-gray-400">{t('preparingTest')}</p>
       </div>
     );
   }
@@ -274,11 +276,11 @@ export default function FinancialTestPage() {
     return (
       <div className="max-w-4xl mx-auto space-y-8 fade-in">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            🎯 Результаты теста
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            🎯 {t('testResults')}
           </h1>
-          <p className="text-lg text-gray-600">
-            Ваш уровень финансовой грамотности и рекомендуемая стратегия
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            {t('yourLiteracyLevel')}
           </p>
         </div>
 
@@ -295,19 +297,19 @@ export default function FinancialTestPage() {
               <div className={`text-3xl font-bold ${getScoreColor()}`}>
                 {totalScore}/{maxScore}
               </div>
-              <p className="text-sm text-gray-600">Ваш результат</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('yourResult')}</p>
             </div>
             <div>
               <div className={`text-3xl font-bold ${getScoreColor()}`}>
                 {percentage}%
               </div>
-              <p className="text-sm text-gray-600">Процент правильных</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('percentCorrect')}</p>
             </div>
             <div>
-              <div className="text-3xl font-bold text-gray-900">
+              <div className="text-3xl font-bold text-gray-900 dark:text-white">
                 {strategy.riskLevel}
               </div>
-              <p className="text-sm text-gray-600">Уровень риска</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('riskLevel')}</p>
             </div>
           </div>
         </div>
@@ -315,8 +317,8 @@ export default function FinancialTestPage() {
         {/* Рекомендации */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="card">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              💡 Персональные рекомендации
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              💡 {t('personalRecommendations')}
             </h3>
             <ul className="space-y-2">
               {strategy.recommendations.map((rec, index) => (
@@ -329,20 +331,20 @@ export default function FinancialTestPage() {
           </div>
 
           <div className="card">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              📈 Рекомендуемые инструменты
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              📈 {t('recommendedInstruments')}
             </h3>
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Ожидаемая доходность:</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t('expectedReturn')}:</span>
                 <span className="font-semibold text-green-600">{strategy.expectedReturn}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Уровень риска:</span>
-                <span className="font-semibold">{strategy.riskLevel}</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t('riskLevel')}:</span>
+                <span className="font-semibold text-gray-900 dark:text-white">{strategy.riskLevel}</span>
               </div>
               <div className="border-t pt-3">
-                <p className="text-sm text-gray-600 mb-2">Подходящие инструменты:</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{t('suitableInstruments')}:</p>
                 <div className="flex flex-wrap gap-1">
                   {strategy.instruments.map((instrument, index) => (
                     <span key={index} className="text-xs bg-gray-100 px-2 py-1 rounded">
@@ -357,8 +359,8 @@ export default function FinancialTestPage() {
 
         {/* Правильные ответы */}
         <div className="card">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            📚 Правильные ответы
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            📚 {t('correctAnswers')}
           </h3>
           <div className="space-y-3">
             {shuffledQuestions.map((question, index) => {
@@ -373,10 +375,10 @@ export default function FinancialTestPage() {
                   </p>
                   <div className="text-xs space-y-1">
                     <p className={isCorrect ? 'text-green-700' : 'text-red-700'}>
-                      Ваш ответ: {userAnswer.text} ({userAnswer.points} баллов)
+                      {t('yourAnswer')}: {userAnswer.text} ({userAnswer.points} {t('points')})
                     </p>
                     <p className="text-green-700">
-                      Правильный ответ: {correctAnswer.text}
+                      {t('correctAnswer')}: {correctAnswer.text}
                     </p>
                   </div>
                 </div>
@@ -388,10 +390,10 @@ export default function FinancialTestPage() {
         {/* Кнопки */}
         <div className="text-center space-x-4">
           <button onClick={resetTest} className="btn-secondary">
-            🔄 Пройти тест заново
+            🔄 {t('retakeTest')}
           </button>
           <button onClick={() => window.location.href = '/'} className="btn-primary">
-            📊 Применить стратегию
+            📊 {t('applyStrategy')}
           </button>
         </div>
       </div>
@@ -403,19 +405,19 @@ export default function FinancialTestPage() {
   return (
     <div className="max-w-3xl mx-auto space-y-8 fade-in">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          🧠 Тест на финансовую грамотность
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          🧠 {t('financialLiteracyTest')}
         </h1>
-        <p className="text-lg text-gray-600">
-          Определите свой уровень знаний и получите персональную стратегию
+        <p className="text-lg text-gray-600 dark:text-gray-400">
+          {t('testPageSubtitle')}
         </p>
       </div>
 
       {/* Прогресс */}
       <div className="card">
         <div className="flex justify-between items-center mb-3">
-          <span className="text-sm text-gray-600">
-            Вопрос {currentQuestion + 1} из {shuffledQuestions.length}
+          <span className="text-sm text-gray-600 dark:text-gray-400">
+            {t('questionOf', { current: currentQuestion + 1, total: shuffledQuestions.length })}
           </span>
           <span className="text-sm font-semibold text-primary-600">
             {Math.round(getProgressPercentage())}%
@@ -452,10 +454,9 @@ export default function FinancialTestPage() {
       </div>
 
       {/* Подсказка */}
-      <div className="card bg-blue-50 border-blue-200">
-        <p className="text-sm text-blue-800 text-center">
-          💡 Выберите наиболее подходящий ответ. Нет правильных или неправильных ответов - 
-          тест поможет определить ваш текущий уровень знаний.
+      <div className="card bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+        <p className="text-sm text-blue-800 dark:text-blue-300 text-center">
+          💡 {t('testHint')}
         </p>
       </div>
     </div>
