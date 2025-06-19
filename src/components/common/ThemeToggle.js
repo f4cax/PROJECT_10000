@@ -41,13 +41,13 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+      className="p-1 md:p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors flex items-center justify-center min-w-[32px] md:min-w-[40px]"
       title={isDark ? 'Переключить на светлую тему' : 'Переключить на темную тему'}
     >
       {isDark ? (
-        <span className="text-yellow-500">☀️</span>
+        <span className="text-yellow-500 text-sm md:text-base">☀️</span>
       ) : (
-        <span className="text-gray-700">🌙</span>
+        <span className="text-gray-700 text-sm md:text-base">🌙</span>
       )}
     </button>
   );

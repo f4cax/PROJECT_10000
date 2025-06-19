@@ -167,16 +167,16 @@ export default function HomePage() {
     <div className="space-y-8 fade-in">
       {/* Заголовок */}
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">
           💰 {t('financialManagement')}
         </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-4">
           {t('budgetDistributionRule')} <span className="font-semibold text-primary-600">50-25-15-10</span> {t('fromMarkTilbury')}
         </p>
       </div>
 
       {/* Форма ввода дохода */}
-      <div className="max-w-md mx-auto">
+      <div className="max-w-md mx-auto px-4 md:px-0">
         <IncomeForm 
           monthlyIncome={monthlyIncome}
           setMonthlyIncome={setMonthlyIncome}
@@ -186,7 +186,7 @@ export default function HomePage() {
       {monthlyIncome > 0 && (
         <>
           {/* Карточки распределения бюджета */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 px-2 md:px-0">
             <BudgetRuleCard
               title={t('essentialExpenses')}
               subtitle={`50${t('percentFromIncome')}`}

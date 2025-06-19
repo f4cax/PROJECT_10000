@@ -95,6 +95,94 @@ html.dark {
   background-color: rgb(17 24 39) !important;
 }
 
+/* Мобильная оптимизация */
+@media (max-width: 768px) {
+  /* Основные отступы для мобильных */
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  /* Заголовки */
+  h1 {
+    font-size: 1.875rem !important; /* text-3xl вместо text-4xl */
+    line-height: 2.25rem !important;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important; /* text-2xl вместо text-3xl */
+    line-height: 2rem !important;
+  }
+  
+  h3 {
+    font-size: 1.25rem !important; /* text-xl вместо text-2xl */
+    line-height: 1.75rem !important;
+  }
+  
+  /* Карточки */
+  .card {
+    padding: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Кнопки */
+  .btn-primary, .btn-secondary {
+    padding: 0.75rem 1rem !important;
+    font-size: 0.875rem !important;
+  }
+  
+  /* Поля ввода */
+  .input-field {
+    padding: 0.75rem !important;
+    font-size: 1rem !important;
+  }
+  
+  /* Сетки */
+  .grid {
+    gap: 1rem !important;
+  }
+  
+  /* Пространство между элементами */
+  .space-y-8 > * + * {
+    margin-top: 1.5rem !important;
+  }
+  
+  .space-y-6 > * + * {
+    margin-top: 1rem !important;
+  }
+  
+  .space-y-4 > * + * {
+    margin-top: 0.75rem !important;
+  }
+}
+
+/* Очень маленькие экраны (до 480px) */
+@media (max-width: 480px) {
+  .container {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+  
+  h1 {
+    font-size: 1.5rem !important; /* text-2xl */
+    line-height: 2rem !important;
+  }
+  
+  .card {
+    padding: 0.75rem !important;
+  }
+  
+  /* Навбар */
+  .nav-title {
+    font-size: 1rem !important;
+  }
+  
+  /* Кнопки в навбаре */
+  .nav-buttons {
+    gap: 0.25rem !important;
+  }
+}
+
 /* Стили для графиков */
 .chart-container {
   position: relative;
@@ -106,10 +194,6 @@ html.dark {
 @media (max-width: 768px) {
   .chart-container {
     height: 250px;
-  }
-  
-  .card {
-    padding: 1rem;
   }
 }
 

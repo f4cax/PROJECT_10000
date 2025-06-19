@@ -76,8 +76,6 @@ export default function Navbar() {
     ...(user && user.role === 'admin' ? [{ name: t('admin'), href: '/admin', icon: '🛡️' }] : [])
   ];
 
-
-
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -85,44 +83,46 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Левая часть: Логотип и бургер-меню */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4">
             <Link to="/" className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-bold text-primary-400">🧭</span>
-              <span className="ml-2 text-xl font-bold text-white">Финансовый компас</span>
+              <span className="text-xl md:text-2xl font-bold text-primary-400">🧭</span>
+              <span className="ml-2 text-lg md:text-xl font-bold text-white nav-title">Финансовый компас</span>
             </Link>
             
             {/* Бургер-меню */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-400 hover:text-white hover:bg-gray-700 p-2 rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="text-gray-400 hover:text-white hover:bg-gray-700 p-1 md:p-2 rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500"
               aria-label="Открыть меню"
             >
-              <div className="w-6 h-6 flex flex-col justify-center items-center space-y-1">
-                <span className={`bg-current h-0.5 w-6 transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
-                <span className={`bg-current h-0.5 w-6 transition-all duration-300 ${isOpen ? 'opacity-0' : ''}`}></span>
-                <span className={`bg-current h-0.5 w-6 transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
+              <div className="w-5 h-5 md:w-6 md:h-6 flex flex-col justify-center items-center space-y-1">
+                <span className={`bg-current h-0.5 w-5 md:w-6 transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
+                <span className={`bg-current h-0.5 w-5 md:w-6 transition-all duration-300 ${isOpen ? 'opacity-0' : ''}`}></span>
+                <span className={`bg-current h-0.5 w-5 md:w-6 transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
               </div>
             </button>
           </div>
 
           {/* Правая часть: Управление */}
-          <div className="flex items-center space-x-3">
-            <LanguageToggle />
-            <ThemeToggle />
+          <div className="flex items-center space-x-2 md:space-x-3 nav-buttons">
+            <div className="flex items-center space-x-1 md:space-x-2">
+              <LanguageToggle />
+              <ThemeToggle />
+            </div>
             
             {/* Авторизация */}
             {user ? (
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-2 bg-gray-700 dark:bg-gray-800 px-3 py-1 rounded-lg">
-                  <span className="text-xl">{user.role === 'admin' ? '👑' : '👤'}</span>
-                  <span className="text-white text-sm font-medium">{user.name}</span>
+              <div className="flex items-center space-x-2 md:space-x-3">
+                <div className="flex items-center space-x-1 md:space-x-2 bg-gray-700 dark:bg-gray-800 px-2 md:px-3 py-1 rounded-lg">
+                  <span className="text-lg md:text-xl">{user.role === 'admin' ? '👑' : '👤'}</span>
+                  <span className="text-white text-xs md:text-sm font-medium hidden sm:block">{user.name}</span>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="text-gray-300 hover:text-white transition-colors duration-200 p-2 hover:bg-gray-700 rounded-md"
+                  className="text-gray-300 hover:text-white transition-colors duration-200 p-1 md:p-2 hover:bg-gray-700 rounded-md"
                   title="Выйти из аккаунта"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
                 </button>
@@ -130,7 +130,7 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={() => setShowAuthModal(true)}
-                className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                className="bg-primary-600 hover:bg-primary-700 text-white px-3 md:px-4 py-1 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors duration-200"
               >
                 {t('login')}
               </button>

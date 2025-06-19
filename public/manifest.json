@@ -1,19 +1,22 @@
 {
-  "short_name": "ФинансГид",
-  "name": "ФинансГид - Управление личными финансами",
-  "description": "Приложение для управления личными финансами с правилом 50-30-15-5",
+  "short_name": "Финансовый компас",
+  "name": "Финансовый компас - Умный помощник для управления деньгами",
+  "description": "Автоматическое распределение бюджета по правилу 50-25-15-10. Управляйте финансами легко и эффективно",
   "icons": [
     {
       "src": "favicon.svg",
-      "sizes": "32x32",
-      "type": "image/svg+xml"
+      "sizes": "32x32 64x64 128x128 256x256 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#3b82f6",
-  "background_color": "#ffffff",
+  "background_color": "#f9fafb",
   "orientation": "portrait-primary",
   "categories": ["finance", "productivity", "business"],
-  "lang": "ru"
+  "lang": "ru",
+  "scope": "/",
+  "prefer_related_applications": false
 } 
