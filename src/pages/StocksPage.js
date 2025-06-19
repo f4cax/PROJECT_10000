@@ -169,7 +169,8 @@ export default function StocksPage() {
       // Проверяем доступность API ключа
       const API_KEY = process.env.REACT_APP_ALPHA_VANTAGE_API_KEY || 'J753PYAH9OD50RBP';
       
-      if (API_KEY && API_KEY !== 'demo') {
+      // Временно принудительно используем демо-режим из-за исчерпанного лимита API
+      if (false && API_KEY && API_KEY !== 'demo') {
         // Пытаемся получить реальные данные
         try {
           console.log('Загружаем реальные данные от Alpha Vantage...');
@@ -228,7 +229,7 @@ export default function StocksPage() {
         const demoData = generateRandomStockData();
         setStockData(demoData);
         setIsUsingRealAPI(false);
-        setError('Демо-режим: настройте API ключ для реальных данных');
+        setError('Демо-режим: API лимит исчерпан (25 запросов/день). Лимит сбросится завтра в 00:00 UTC');
       }
       
       setLastUpdated(new Date());
