@@ -522,18 +522,18 @@ const AdminDashboard = () => {
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-800 dark:text-white text-sm"
               />
               <div className="flex space-x-2">
-                <button
-                  onClick={searchUsers}
+              <button
+                onClick={searchUsers}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm"
-                >
-                  🔍 Поиск
-                </button>
-                <button
-                  onClick={() => { setSearchQuery(''); loadUsers(); }}
+              >
+                🔍 Поиск
+              </button>
+              <button
+                onClick={() => { setSearchQuery(''); loadUsers(); }}
                   className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm"
-                >
-                  Сбросить
-                </button>
+              >
+                Сбросить
+              </button>
               </div>
             </div>
 
@@ -627,130 +627,130 @@ const AdminDashboard = () => {
 
               {/* Desktop версия (таблица) */}
               <div className="hidden md:block overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                  <thead className="bg-gray-50 dark:bg-gray-700">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        Пользователь
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        Роль
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        Статус
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        Доход
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        Действия
-                      </th>
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead className="bg-gray-50 dark:bg-gray-700">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      Пользователь
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      Роль
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      Статус
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      Доход
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      Действия
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                  {users.map((userItem) => (
+                    <tr key={userItem._id}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="text-2xl mr-3">
+                            {userItem.role === 'admin' ? '👑' : '👤'}
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium text-gray-900 dark:text-white">
+                              {userItem.name}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                              {userItem.email}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          userItem.role === 'admin' 
+                            ? 'bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-200'
+                            : 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200'
+                        }`}>
+                          {userItem.role === 'admin' ? 'Админ' : 'Пользователь'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          userItem.isActive 
+                            ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-200'
+                            : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200'
+                        }`}>
+                          {userItem.isActive ? 'Активен' : 'Заблокирован'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                        {userItem.financialData?.monthlyIncome > 0 
+                          ? `${userItem.financialData.monthlyIncome.toLocaleString('ru-RU')} ₽`
+                          : 'Не указан'
+                        }
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => setEditingUser(userItem)}
+                            className="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
+                            title="Редактировать пользователя"
+                          >
+                            <span>✏️</span>
+                            <span>Изменить</span>
+                          </button>
+                          {userItem.role !== 'admin' && (
+                            <button
+                              onClick={() => updateUser(userItem._id, { role: 'admin' })}
+                              className="bg-purple-100 hover:bg-purple-200 dark:bg-purple-900 dark:hover:bg-purple-800 text-purple-600 dark:text-purple-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
+                              title="Сделать администратором"
+                            >
+                              <span>👑</span>
+                              <span>Админ</span>
+                            </button>
+                          )}
+                          {userItem.role === 'admin' && userItem._id !== user?.id && (
+                            <button
+                              onClick={() => updateUser(userItem._id, { role: 'user' })}
+                              className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
+                              title="Снять права администратора"
+                            >
+                              <span>👤</span>
+                              <span>Юзер</span>
+                            </button>
+                          )}
+                          <button
+                            onClick={() => updateUser(userItem._id, { isActive: !userItem.isActive })}
+                            className={`px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1 ${
+                              userItem.isActive 
+                                ? 'bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400' 
+                                : 'bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-600 dark:text-green-400'
+                            }`}
+                            title={userItem.isActive ? 'Заблокировать' : 'Разблокировать'}
+                          >
+                            <span>{userItem.isActive ? '🔒' : '🔓'}</span>
+                            <span>{userItem.isActive ? 'Блок' : 'Актив'}</span>
+                          </button>
+                          {userItem._id !== user?.id && (
+                            <button
+                              onClick={() => {
+                                if (window.confirm(`⚠️ ВНИМАНИЕ! Вы уверены, что хотите НАВСЕГДА удалить пользователя "${userItem.name}"?\n\nЭто действие необратимо! Все данные пользователя будут потеряны.`)) {
+                                  deleteUser(userItem._id);
+                                }
+                              }}
+                              className="bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
+                              title="Удалить из базы данных навсегда"
+                            >
+                              <span>🗑️</span>
+                              <span>Удалить</span>
+                            </button>
+                          )}
+                        </div>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                    {users.map((userItem) => (
-                      <tr key={userItem._id}>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="text-2xl mr-3">
-                              {userItem.role === 'admin' ? '👑' : '👤'}
-                            </div>
-                            <div>
-                              <div className="text-sm font-medium text-gray-900 dark:text-white">
-                                {userItem.name}
-                              </div>
-                              <div className="text-sm text-gray-500 dark:text-gray-400">
-                                {userItem.email}
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            userItem.role === 'admin' 
-                              ? 'bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-200'
-                              : 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200'
-                          }`}>
-                            {userItem.role === 'admin' ? 'Админ' : 'Пользователь'}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            userItem.isActive 
-                              ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-200'
-                              : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200'
-                          }`}>
-                            {userItem.isActive ? 'Активен' : 'Заблокирован'}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                          {userItem.financialData?.monthlyIncome > 0 
-                            ? `${userItem.financialData.monthlyIncome.toLocaleString('ru-RU')} ₽`
-                            : 'Не указан'
-                          }
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex space-x-2">
-                            <button
-                              onClick={() => setEditingUser(userItem)}
-                              className="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
-                              title="Редактировать пользователя"
-                            >
-                              <span>✏️</span>
-                              <span>Изменить</span>
-                            </button>
-                            {userItem.role !== 'admin' && (
-                              <button
-                                onClick={() => updateUser(userItem._id, { role: 'admin' })}
-                                className="bg-purple-100 hover:bg-purple-200 dark:bg-purple-900 dark:hover:bg-purple-800 text-purple-600 dark:text-purple-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
-                                title="Сделать администратором"
-                              >
-                                <span>👑</span>
-                                <span>Админ</span>
-                              </button>
-                            )}
-                            {userItem.role === 'admin' && userItem._id !== user?.id && (
-                              <button
-                                onClick={() => updateUser(userItem._id, { role: 'user' })}
-                                className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
-                                title="Снять права администратора"
-                              >
-                                <span>👤</span>
-                                <span>Юзер</span>
-                              </button>
-                            )}
-                            <button
-                              onClick={() => updateUser(userItem._id, { isActive: !userItem.isActive })}
-                              className={`px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1 ${
-                                userItem.isActive 
-                                  ? 'bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400' 
-                                  : 'bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-600 dark:text-green-400'
-                              }`}
-                              title={userItem.isActive ? 'Заблокировать' : 'Разблокировать'}
-                            >
-                              <span>{userItem.isActive ? '🔒' : '🔓'}</span>
-                              <span>{userItem.isActive ? 'Блок' : 'Актив'}</span>
-                            </button>
-                            {userItem._id !== user?.id && (
-                              <button
-                                onClick={() => {
-                                  if (window.confirm(`⚠️ ВНИМАНИЕ! Вы уверены, что хотите НАВСЕГДА удалить пользователя "${userItem.name}"?\n\nЭто действие необратимо! Все данные пользователя будут потеряны.`)) {
-                                    deleteUser(userItem._id);
-                                  }
-                                }}
-                                className="bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-400 px-3 py-1 rounded-lg transition-colors duration-200 flex items-center space-x-1"
-                                title="Удалить из базы данных навсегда"
-                              >
-                                <span>🗑️</span>
-                                <span>Удалить</span>
-                              </button>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                  ))}
+                </tbody>
+              </table>
               </div>
             </div>
 

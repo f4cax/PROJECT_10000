@@ -472,6 +472,14 @@ export const translations = {
     remainingToSave: 'Осталось накопить:',
     loginRequired: 'Для просмотра активов необходимо авторизоваться и заполнить профиль',
     goToProfile: 'Перейти в профиль',
+    addAsset: 'Добавить актив',
+    addNewAsset: 'Добавить новый актив',
+    assetType: 'Тип актива',
+    assetName: 'Название актива',
+    assetNamePlaceholder: 'Например: Вклад в Сбербанке',
+    add: 'Добавить',
+    business: 'Бизнес',
+    other: 'Другое',
   },
 
   en: {
@@ -943,6 +951,14 @@ export const translations = {
     remainingToSave: 'Remaining to save:',
     loginRequired: 'Please login and fill your profile to view assets',
     goToProfile: 'Go to Profile',
+    addAsset: 'Add Asset',
+    addNewAsset: 'Add New Asset',
+    assetType: 'Asset Type',
+    assetName: 'Asset Name',
+    assetNamePlaceholder: 'E.g.: Sberbank deposit',
+    add: 'Add',
+    business: 'Business',
+    other: 'Other',
   }
 };
 

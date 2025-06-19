@@ -115,93 +115,93 @@ export default function FinancialStrategyCard({ selectedStrategy, onStrategyChan
           const isSelected = selectedStrategy?.id === strategy.id;
           
           return (
-            <div
-              key={strategy.id}
+          <div
+            key={strategy.id}
               onClick={() => handleStrategyClick(strategy)}
-              className={`card cursor-pointer transition-all duration-200 hover:shadow-xl ${
+            className={`card cursor-pointer transition-all duration-200 hover:shadow-xl ${
                 isSelected
                   ? `${strategy.borderColor} border-2 ${strategy.bgColor} dark:bg-opacity-20`
                   : 'border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600'
-              }`}
-            >
-              {/* Заголовок */}
-              <div className="text-center mb-4">
-                <div className={`w-16 h-16 ${strategy.color} rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-3`}>
-                  {strategy.icon}
-                </div>
+            }`}
+          >
+            {/* Заголовок */}
+            <div className="text-center mb-4">
+              <div className={`w-16 h-16 ${strategy.color} rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-3`}>
+                {strategy.icon}
+              </div>
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-                  {strategy.title}
-                </h4>
+                {strategy.title}
+              </h4>
                 <p className={`text-sm font-medium ${strategy.textColor} dark:text-opacity-90`}>
-                  {strategy.subtitle}
+                {strategy.subtitle}
+              </p>
+            </div>
+
+            {/* Основная информация */}
+            <div className="space-y-3 mb-4">
+              <div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('instruments')}:</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  {strategy.description}
                 </p>
               </div>
 
-              {/* Основная информация */}
-              <div className="space-y-3 mb-4">
+              <div className="grid grid-cols-2 gap-2 text-sm">
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('instruments')}:</p>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {strategy.description}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div>
                     <p className="text-gray-600 dark:text-gray-400">{t('expectedReturn')}:</p>
                     <p className="font-semibold text-green-600 dark:text-green-400">{strategy.expectedReturn}</p>
-                  </div>
-                  <div>
+                </div>
+                <div>
                     <p className="text-gray-600 dark:text-gray-400">{t('risk')}:</p>
                     <p className={`font-semibold ${strategy.textColor} dark:text-opacity-90`}>{strategy.riskLevel}</p>
-                  </div>
                 </div>
               </div>
+            </div>
 
-              {/* Распределение портфеля */}
-              <div className="mb-4">
+            {/* Распределение портфеля */}
+            <div className="mb-4">
                 <p className="text-sm font-medium text-gray-900 dark:text-white mb-2">{t('portfolioDistribution')}:</p>
-                <div className="space-y-1">
-                  {Object.entries(strategy.investmentSplit).map(([type, percentage]) => (
-                    <div key={type} className="flex justify-between text-xs">
+              <div className="space-y-1">
+                {Object.entries(strategy.investmentSplit).map(([type, percentage]) => (
+                  <div key={type} className="flex justify-between text-xs">
                       <span className="text-gray-600 dark:text-gray-400">
                         {getInvestmentTypeLabel(type)}:
-                      </span>
+                    </span>
                       <span className="font-medium text-gray-900 dark:text-white">{percentage}%</span>
-                    </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
+            </div>
 
-              {/* Плюсы и минусы */}
+            {/* Плюсы и минусы */}
               <div className="grid grid-cols-2 gap-3 mb-4">
-                <div>
+              <div>
                   <p className="font-medium text-green-700 dark:text-green-400 mb-1">✅ {t('pros')}:</p>
                   <ul className="space-y-0.5 text-green-600 dark:text-green-400">
-                    {strategy.pros.map((pro, index) => (
+                  {strategy.pros.map((pro, index) => (
                       <li key={index} className="text-xs">• {pro}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
+                  ))}
+                </ul>
+              </div>
+              <div>
                   <p className="font-medium text-red-700 dark:text-red-400 mb-1">⚠️ {t('risks')}:</p>
                   <ul className="space-y-0.5 text-red-600 dark:text-red-400">
-                    {strategy.cons.map((con, index) => (
+                  {strategy.cons.map((con, index) => (
                       <li key={index} className="text-xs">• {con}</li>
-                    ))}
-                  </ul>
-                </div>
+                  ))}
+                </ul>
               </div>
+            </div>
 
-              {/* Индикатор выбора */}
+            {/* Индикатор выбора */}
               {isSelected && (
-                <div className="mt-4 text-center">
+              <div className="mt-4 text-center">
                   <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${strategy.bgColor} ${strategy.textColor} dark:bg-opacity-30`}>
                     ✓ {t('selected')}
-                  </span>
-                </div>
-              )}
-            </div>
+                </span>
+              </div>
+            )}
+          </div>
           );
         })}
       </div>
