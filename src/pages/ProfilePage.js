@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
 const ProfilePage = () => {
-  const { user, token } = useAuth();
+  const { user, token, updateUser } = useAuth();
   const [activeTab, setActiveTab] = useState('basic');
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [message, setMessage] = useState('');
 
   // Состояния для форм
@@ -28,32 +29,95 @@ const ProfilePage = () => {
     goalDeadline: ''
   });
 
-  // Загрузка данных пользователя при инициализации
-  useEffect(() => {
-    if (user) {
-      setBasicInfo({
-        name: user.name || '',
-        email: user.email || '',
-        age: user.age || '',
-        region: user.region || '',
-        language: user.language || 'ru',
-        currency: user.currency || 'RUB'
-      });
-
-      if (user.financialData) {
-        setFinancialData({
-          monthlyIncome: user.financialData.monthlyIncome || 0,
-          totalAssets: user.financialData.totalAssets || 0,
-          monthlyExpenses: user.financialData.monthlyExpenses || 0,
-          investments: user.financialData.investments || 0,
-          investmentType: user.financialData.investmentType || 'index-funds',
-          financialGoal: user.financialData.financialGoal || '',
-          goalAmount: user.financialData.goalAmount || 0,
-          goalDeadline: user.financialData.goalDeadline || ''
-        });
-      }
-    }
-  }, [user]);
+  // Полный список регионов России
+  const russianRegions = [
+    { value: '', label: 'Выберите регион' },
+    { value: 'moscow', label: 'Москва' },
+    { value: 'spb', label: 'Санкт-Петербург' },
+    { value: 'adygea', label: 'Республика Адыгея' },
+    { value: 'altai', label: 'Республика Алтай' },
+    { value: 'bashkortostan', label: 'Республика Башкортостан' },
+    { value: 'buryatia', label: 'Республика Бурятия' },
+    { value: 'dagestan', label: 'Республика Дагестан' },
+    { value: 'ingushetia', label: 'Республика Ингушетия' },
+    { value: 'kabardino-balkaria', label: 'Кабардино-Балкарская Республика' },
+    { value: 'kalmykia', label: 'Республика Калмыкия' },
+    { value: 'karachay-cherkessia', label: 'Карачаево-Черкесская Республика' },
+    { value: 'karelia', label: 'Республика Карелия' },
+    { value: 'komi', label: 'Республика Коми' },
+    { value: 'crimea', label: 'Республика Крым' },
+    { value: 'mari-el', label: 'Республика Марий Эл' },
+    { value: 'mordovia', label: 'Республика Мордовия' },
+    { value: 'sakha', label: 'Республика Саха (Якутия)' },
+    { value: 'north-ossetia', label: 'Республика Северная Осетия — Алания' },
+    { value: 'tatarstan', label: 'Республика Татарстан' },
+    { value: 'tuva', label: 'Республика Тыва' },
+    { value: 'udmurtia', label: 'Удмуртская Республика' },
+    { value: 'khakassia', label: 'Республика Хакасия' },
+    { value: 'chechnya', label: 'Чеченская Республика' },
+    { value: 'chuvashia', label: 'Чувашская Республика' },
+    { value: 'altai-krai', label: 'Алтайский край' },
+    { value: 'krasnodar-krai', label: 'Краснодарский край' },
+    { value: 'krasnoyarsk-krai', label: 'Красноярский край' },
+    { value: 'primorsky-krai', label: 'Приморский край' },
+    { value: 'stavropol-krai', label: 'Ставропольский край' },
+    { value: 'khabarovsk-krai', label: 'Хабаровский край' },
+    { value: 'amur', label: 'Амурская область' },
+    { value: 'arkhangelsk', label: 'Архангельская область' },
+    { value: 'astrakhan', label: 'Астраханская область' },
+    { value: 'belgorod', label: 'Белгородская область' },
+    { value: 'bryansk', label: 'Брянская область' },
+    { value: 'vladimir', label: 'Владимирская область' },
+    { value: 'volgograd', label: 'Волгоградская область' },
+    { value: 'vologda', label: 'Вологодская область' },
+    { value: 'voronezh', label: 'Воронежская область' },
+    { value: 'ivanovo', label: 'Ивановская область' },
+    { value: 'irkutsk', label: 'Иркутская область' },
+    { value: 'kaliningrad', label: 'Калининградская область' },
+    { value: 'kaluga', label: 'Калужская область' },
+    { value: 'kamchatka', label: 'Камчатский край' },
+    { value: 'kemerovo', label: 'Кемеровская область' },
+    { value: 'kirov', label: 'Кировская область' },
+    { value: 'kostroma', label: 'Костромская область' },
+    { value: 'kurgan', label: 'Курганская область' },
+    { value: 'kursk', label: 'Курская область' },
+    { value: 'leningrad', label: 'Ленинградская область' },
+    { value: 'lipetsk', label: 'Липецкая область' },
+    { value: 'magadan', label: 'Магаданская область' },
+    { value: 'moscow-region', label: 'Московская область' },
+    { value: 'murmansk', label: 'Мурманская область' },
+    { value: 'nizhny-novgorod', label: 'Нижегородская область' },
+    { value: 'novgorod', label: 'Новгородская область' },
+    { value: 'novosibirsk', label: 'Новосибирская область' },
+    { value: 'omsk', label: 'Омская область' },
+    { value: 'orenburg', label: 'Оренбургская область' },
+    { value: 'oryol', label: 'Орловская область' },
+    { value: 'penza', label: 'Пензенская область' },
+    { value: 'perm', label: 'Пермский край' },
+    { value: 'pskov', label: 'Псковская область' },
+    { value: 'rostov', label: 'Ростовская область' },
+    { value: 'ryazan', label: 'Рязанская область' },
+    { value: 'samara', label: 'Самарская область' },
+    { value: 'saratov', label: 'Саратовская область' },
+    { value: 'sakhalin', label: 'Сахалинская область' },
+    { value: 'sverdlovsk', label: 'Свердловская область' },
+    { value: 'smolensk', label: 'Смоленская область' },
+    { value: 'tambov', label: 'Тамбовская область' },
+    { value: 'tver', label: 'Тверская область' },
+    { value: 'tomsk', label: 'Томская область' },
+    { value: 'tula', label: 'Тульская область' },
+    { value: 'tyumen', label: 'Тюменская область' },
+    { value: 'ulyanovsk', label: 'Ульяновская область' },
+    { value: 'chelyabinsk', label: 'Челябинская область' },
+    { value: 'zabaykalsky', label: 'Забайкальский край' },
+    { value: 'yaroslavl', label: 'Ярославская область' },
+    { value: 'nenetsky', label: 'Ненецкий автономный округ' },
+    { value: 'khanty-mansi', label: 'Ханты-Мансийский автономный округ — Югра' },
+    { value: 'chukotka', label: 'Чукотский автономный округ' },
+    { value: 'yamalo-nenets', label: 'Ямало-Ненецкий автономный округ' },
+    { value: 'sevastopol', label: 'Севастополь' },
+    { value: 'jewish', label: 'Еврейская автономная область' }
+  ];
 
   const apiCall = async (url, options = {}) => {
     const currentToken = token || localStorage.getItem('authToken');
@@ -81,13 +145,94 @@ const ProfilePage = () => {
     return response.json();
   };
 
+  // Загрузка свежих данных пользователя с сервера
+  const loadUserData = async () => {
+    try {
+      setInitialLoading(true);
+      const userData = await apiCall('/api/user/profile');
+      
+      // Обновляем локальные состояния
+      setBasicInfo({
+        name: userData.name || '',
+        email: userData.email || '',
+        age: userData.age || '',
+        region: userData.region || '',
+        language: userData.language || 'ru',
+        currency: userData.currency || 'RUB'
+      });
+
+      if (userData.financialData) {
+        setFinancialData({
+          monthlyIncome: userData.financialData.monthlyIncome || 0,
+          totalAssets: userData.financialData.totalAssets || 0,
+          monthlyExpenses: userData.financialData.monthlyExpenses || 0,
+          investments: userData.financialData.investments || 0,
+          investmentType: userData.financialData.investmentType || 'index-funds',
+          financialGoal: userData.financialData.financialGoal || '',
+          goalAmount: userData.financialData.goalAmount || 0,
+          goalDeadline: userData.financialData.goalDeadline || ''
+        });
+      }
+
+      // Обновляем контекст
+      if (updateUser) {
+        updateUser(userData);
+      }
+      
+    } catch (error) {
+      console.error('Ошибка загрузки данных пользователя:', error);
+      setMessage('Ошибка загрузки данных: ' + error.message);
+    } finally {
+      setInitialLoading(false);
+    }
+  };
+
+  // Загрузка данных при инициализации
+  useEffect(() => {
+    if (user && token) {
+      loadUserData();
+    } else if (user) {
+      // Если нет токена, используем данные из контекста
+      setBasicInfo({
+        name: user.name || '',
+        email: user.email || '',
+        age: user.age || '',
+        region: user.region || '',
+        language: user.language || 'ru',
+        currency: user.currency || 'RUB'
+      });
+
+      if (user.financialData) {
+        setFinancialData({
+          monthlyIncome: user.financialData.monthlyIncome || 0,
+          totalAssets: user.financialData.totalAssets || 0,
+          monthlyExpenses: user.financialData.monthlyExpenses || 0,
+          investments: user.financialData.investments || 0,
+          investmentType: user.financialData.investmentType || 'index-funds',
+          financialGoal: user.financialData.financialGoal || '',
+          goalAmount: user.financialData.goalAmount || 0,
+          goalDeadline: user.financialData.goalDeadline || ''
+        });
+      }
+      setInitialLoading(false);
+    }
+  }, [user, token]);
+
   const handleBasicInfoSave = async () => {
     try {
       setLoading(true);
-      await apiCall('/api/user/profile', {
+      const response = await apiCall('/api/user/profile', {
         method: 'PUT',
         body: JSON.stringify(basicInfo)
       });
+      
+      // Сервер возвращает { message: '...', user: userData }
+      const updatedUser = response.user || response;
+      
+      // Обновляем контекст с новыми данными
+      if (updateUser) {
+        updateUser(updatedUser);
+      }
       
       setMessage('Профиль обновлен');
       setTimeout(() => setMessage(''), 3000);
@@ -102,10 +247,17 @@ const ProfilePage = () => {
   const handleFinancialDataSave = async () => {
     try {
       setLoading(true);
-      await apiCall('/api/user/financial-data', {
+      const response = await apiCall('/api/user/financial-data', {
         method: 'PUT',
         body: JSON.stringify(financialData)
       });
+      
+      // Для финансовых данных возвращается только { message: '...', financialData: {...} }
+      // Нужно обновить пользователя с новыми финансовыми данными
+      if (updateUser && response.financialData) {
+        const updatedUser = { ...user, financialData: response.financialData };
+        updateUser(updatedUser);
+      }
       
       setMessage('Финансовые данные обновлены');
       setTimeout(() => setMessage(''), 3000);
@@ -158,6 +310,22 @@ const ProfilePage = () => {
     );
   }
 
+  if (initialLoading) {
+    return (
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-2">
+            Загрузка профиля...
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300">
+            Получаем актуальные данные с сервера
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="container mx-auto px-4 py-8">
@@ -169,6 +337,11 @@ const ProfilePage = () => {
           <p className="text-gray-600 dark:text-gray-300">
             Управляйте своими данными и настройками
           </p>
+          {basicInfo.name && (
+            <p className="text-lg text-blue-600 dark:text-blue-400 mt-2">
+              Добро пожаловать, {basicInfo.name}!
+            </p>
+          )}
         </div>
 
         {/* Сообщения */}
@@ -221,6 +394,7 @@ const ProfilePage = () => {
                     type="text"
                     value={basicInfo.name}
                     onChange={(e) => setBasicInfo({...basicInfo, name: e.target.value})}
+                    placeholder="Введите ваше имя"
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -243,6 +417,9 @@ const ProfilePage = () => {
                     type="number"
                     value={basicInfo.age}
                     onChange={(e) => setBasicInfo({...basicInfo, age: e.target.value})}
+                    min="16"
+                    max="100"
+                    placeholder="Ваш возраст"
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -255,21 +432,28 @@ const ProfilePage = () => {
                     onChange={(e) => setBasicInfo({...basicInfo, region: e.target.value})}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   >
-                    <option value="">Выберите регион</option>
-                    <option value="moscow">Москва</option>
-                    <option value="spb">Санкт-Петербург</option>
-                    <option value="central">Центральный ФО</option>
-                    <option value="northwest">Северо-Западный ФО</option>
+                    {russianRegions.map(region => (
+                      <option key={region.value} value={region.value}>
+                        {region.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
-              <div className="mt-6">
+              <div className="mt-6 flex space-x-4">
                 <button
                   onClick={handleBasicInfoSave}
                   disabled={loading}
                   className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-6 py-2 rounded-lg font-medium transition-colors"
                 >
                   {loading ? 'Сохранение...' : 'Сохранить'}
+                </button>
+                <button
+                  onClick={loadUserData}
+                  disabled={loading || initialLoading}
+                  className="bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                >
+                  🔄 Обновить данные
                 </button>
               </div>
             </div>
@@ -290,6 +474,9 @@ const ProfilePage = () => {
                     type="number"
                     value={financialData.monthlyIncome}
                     onChange={(e) => setFinancialData({...financialData, monthlyIncome: Number(e.target.value)})}
+                    min="0"
+                    step="1000"
+                    placeholder="0"
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -301,6 +488,9 @@ const ProfilePage = () => {
                     type="number"
                     value={financialData.totalAssets}
                     onChange={(e) => setFinancialData({...financialData, totalAssets: Number(e.target.value)})}
+                    min="0"
+                    step="10000"
+                    placeholder="0"
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -312,6 +502,9 @@ const ProfilePage = () => {
                     type="number"
                     value={financialData.investments}
                     onChange={(e) => setFinancialData({...financialData, investments: Number(e.target.value)})}
+                    min="0"
+                    step="5000"
+                    placeholder="0"
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -323,6 +516,9 @@ const ProfilePage = () => {
                     type="number"
                     value={financialData.goalAmount}
                     onChange={(e) => setFinancialData({...financialData, goalAmount: Number(e.target.value)})}
+                    min="0"
+                    step="10000"
+                    placeholder="0"
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>

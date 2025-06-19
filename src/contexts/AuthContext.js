@@ -135,6 +135,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Обновление данных пользователя в контексте
+  const updateUser = (userData) => {
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
+  };
+
   const value = {
     user,
     token,
@@ -147,6 +153,7 @@ export const AuthProvider = ({ children }) => {
     saveSavingsGoals,
     saveTestResults,
     fetchUserProfile,
+    updateUser,
     isAuthenticated: !!token,
   };
 
