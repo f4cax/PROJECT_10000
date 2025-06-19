@@ -100,6 +100,22 @@ export const translations = {
     yourResult: 'Ваш результат',
     percentCorrect: 'Процент правильных',
     riskLevel: 'Уровень риска',
+    // Дополнительные ключи для теста
+    financialLiteracyTest: 'Тест на финансовую грамотность',
+    testPageSubtitle: 'Определите свой уровень знаний и получите персональную стратегию',
+    preparingTest: 'Подготовка теста...',
+    yourLiteracyLevel: 'Ваш уровень финансовой грамотности и рекомендуемая стратегия',
+    recommendedInstruments: 'Рекомендуемые инструменты',
+    retakeTest: 'Пройти тест заново',
+    applyStrategy: 'Применить стратегию',
+    questionOf: 'Вопрос {current} из {total}',
+    testHint: 'Выберите наиболее подходящий ответ. Нет правильных или неправильных ответов - тест поможет определить ваш текущий уровень знаний.',
+    suitableInstruments: 'Подходящие инструменты',
+    points: 'баллов',
+    expectedReturn: 'Ожидаемая доходность',
+    correctAnswers: 'Правильные ответы',
+    yourAnswer: 'Ваш ответ',
+    correctAnswer: 'Правильный ответ',
     
     // Стратегии
     conservativeStrategy: 'Консервативная стратегия',
@@ -438,20 +454,6 @@ export const translations = {
     highReturnHighRisk: 'Высокая доходность всегда связана с высокими рисками',
     considerFinancialAdvisor: 'Рассмотрите консультацию с финансовым советником',
     studyTaxAspects: 'Изучите налоговые аспекты инвестирования',
-    
-    // Страница финансового теста (только новые ключи)
-    financialLiteracyTest: 'Тест на финансовую грамотность',
-    testPageSubtitle: 'Определите свой уровень знаний и получите персональную стратегию',
-    preparingTest: 'Подготовка теста...',
-    yourLiteracyLevel: 'Ваш уровень финансовой грамотности и рекомендуемая стратегия',
-    yourResult: 'Ваш результат',
-    recommendedInstruments: 'Рекомендуемые инструменты',
-    retakeTest: 'Пройти тест заново',
-    applyStrategy: 'Применить стратегию',
-    questionOf: 'Вопрос {current} из {total}',
-    testHint: 'Выберите наиболее подходящий ответ. Нет правильных или неправильных ответов - тест поможет определить ваш текущий уровень знаний.',
-    suitableInstruments: 'Подходящие инструменты',
-    points: 'баллов',
 
     // Профиль пользователя
     userProfile: 'Профиль пользователя',
@@ -710,6 +712,22 @@ export const translations = {
     yourResult: 'Your Result',
     percentCorrect: 'Percent Correct',
     riskLevel: 'Risk Level',
+    // Additional test page keys
+    financialLiteracyTest: 'Financial Literacy Test',
+    testPageSubtitle: 'Determine your knowledge level and get a personalized strategy',
+    preparingTest: 'Preparing test...',
+    yourLiteracyLevel: 'Your financial literacy level and recommended strategy',
+    recommendedInstruments: 'Recommended Instruments',
+    retakeTest: 'Retake Test',
+    applyStrategy: 'Apply Strategy',
+    questionOf: 'Question {current} of {total}',
+    testHint: 'Choose the most appropriate answer. There are no right or wrong answers - the test helps determine your current knowledge level.',
+    suitableInstruments: 'Suitable instruments',
+    points: 'points',
+    expectedReturn: 'Expected Return',
+    correctAnswers: 'Correct Answers',
+    yourAnswer: 'Your answer',
+    correctAnswer: 'Correct answer',
 
     // Strategies
     conservativeStrategy: 'Conservative Strategy',
@@ -1048,20 +1066,6 @@ export const translations = {
     highReturnHighRisk: 'High returns are always associated with high risks',
     considerFinancialAdvisor: 'Consider consulting with a financial advisor',
     studyTaxAspects: 'Study the tax aspects of investing',
-    
-    // Financial test page (only new keys)
-    financialLiteracyTest: 'Financial Literacy Test',
-    testPageSubtitle: 'Determine your knowledge level and get a personalized strategy',
-    preparingTest: 'Preparing test...',
-    yourLiteracyLevel: 'Your financial literacy level and recommended strategy',
-    yourResult: 'Your Result',
-    recommendedInstruments: 'Recommended Instruments',
-    retakeTest: 'Retake Test',
-    applyStrategy: 'Apply Strategy',
-    questionOf: 'Question {current} of {total}',
-    testHint: 'Choose the most appropriate answer. There are no right or wrong answers - the test helps determine your current knowledge level.',
-    suitableInstruments: 'Suitable instruments',
-    points: 'points',
 
     // User Profile
     userProfile: 'User Profile',
