@@ -74,8 +74,8 @@ export default function HomePage() {
       notifications.push({
         id: 4,
         type: 'info',
-        title: `Прогноз для ${strategy.title.toLowerCase()}`,
-        message: `При стратегии "${strategy.title}" ваши ${budget.investments.toLocaleString()} руб в месяц могут превратиться в ~${Math.round(yearlyProjection).toLocaleString()} руб через год (${strategy.expectedReturn}).`,
+        title: `${t('strategyForecastFor')} ${strategy.title.toLowerCase()}`,
+        message: `${t('strategyProjection')} "${strategy.title}" ${t('monthlyInvestment')} ${budget.investments.toLocaleString()} ${t('rubPerMonth')} ~${Math.round(yearlyProjection).toLocaleString()} ${t('rubThroughYear')} (${strategy.expectedReturn}).`,
         icon: strategy.icon
       });
 
@@ -84,8 +84,8 @@ export default function HomePage() {
         notifications.push({
           id: 5,
           type: 'warning',
-          title: 'Высокий риск при низком доходе',
-          message: 'Рискованная стратегия может быть слишком стрессовой при доходе менее 50,000 руб. Рассмотрите умеренную стратегию.',
+          title: t('highRiskLowIncome'),
+          message: t('aggressiveRiskWarning'),
           icon: '⚠️'
         });
       }
@@ -94,11 +94,12 @@ export default function HomePage() {
     // Уведомления по цели
     if (goal && budget.safety > 0) {
       const monthsToGoal = Math.ceil((goal.targetAmount - goal.currentAmount) / budget.safety);
+      const monthWord = monthsToGoal === 1 ? t('monthWord') : monthsToGoal < 5 ? t('monthsWord2') : t('monthsWord');
       notifications.push({
         id: 6,
         type: 'success',
-        title: `Прогресс по цели "${goal.title}"`,
-        message: `Откладывая ${budget.safety.toLocaleString()} руб в месяц, вы достигнете цели через ${monthsToGoal} ${monthsToGoal === 1 ? 'месяц' : monthsToGoal < 5 ? 'месяца' : 'месяцев'}!`,
+        title: `${t('savingsProgress')} "${goal.title}"`,
+        message: `${t('savingMonthly')} ${budget.safety.toLocaleString()} ${t('achieveGoalIn')} ${monthsToGoal} ${monthWord}!`,
         icon: '🎯'
       });
     }
@@ -116,6 +117,41 @@ export default function HomePage() {
     }
   };
 
+  // Функция для создания объекта стратегии по ID (синхронизировано с FinancialStrategyCard)
+  const createStrategyById = (strategyId) => {
+    const strategiesMap = {
+      'conservative': {
+        id: 'conservative',
+        title: t('conservativeTitle'),
+        subtitle: t('conservativeSubtitle'),
+        description: t('conservativeDescription'),
+        expectedReturn: t('conservativeReturn'),
+        riskLevel: t('conservativeRisk'),
+        icon: '🛡️'
+      },
+      'moderate': {
+        id: 'moderate',
+        title: t('moderateTitle'),
+        subtitle: t('moderateSubtitle'),
+        description: t('moderateDescription'),
+        expectedReturn: t('moderateReturn'),
+        riskLevel: t('moderateRisk'),
+        icon: '⚖️'
+      },
+      'aggressive': {
+        id: 'aggressive',
+        title: t('aggressiveTitle'),
+        subtitle: t('aggressiveSubtitle'),
+        description: t('aggressiveDescription'),
+        expectedReturn: t('aggressiveReturn'),
+        riskLevel: t('aggressiveRisk'),
+        icon: '🚀'
+      }
+    };
+    
+    return strategiesMap[strategyId] || null;
+  };
+
   // Загрузка данных пользователя при авторизации
   useEffect(() => {
     if (isAuthenticated && user?.financialData) {
@@ -127,20 +163,23 @@ export default function HomePage() {
         setBudgetDistribution(data.budgetDistribution);
       }
       if (data.selectedStrategy) {
-        // Найти стратегию по ID
-        const strategies = [
-          { id: 'conservative', title: 'Консервативная стратегия' },
-          { id: 'moderate', title: 'Умеренная стратегия' },
-          { id: 'aggressive', title: 'Агрессивная стратегия' }
-        ];
-        const strategy = strategies.find(s => s.id === data.selectedStrategy);
+        // Создаем объект стратегии с актуальными переводами
+        const strategy = createStrategyById(data.selectedStrategy);
         setSelectedStrategy(strategy);
       }
       if (data.savingsGoals && data.savingsGoals.length > 0) {
         setSavingsGoal(data.savingsGoals[0]); // Пока поддерживаем одну цель
       }
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, t]); // Добавляем t в зависимости для обновления при смене языка
+
+  // Обновление стратегии при смене языка
+  useEffect(() => {
+    if (selectedStrategy && selectedStrategy.id) {
+      const updatedStrategy = createStrategyById(selectedStrategy.id);
+      setSelectedStrategy(updatedStrategy);
+    }
+  }, [t]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (monthlyIncome > 0) {
