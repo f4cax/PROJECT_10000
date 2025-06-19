@@ -215,7 +215,6 @@ export const translations = {
     alternative: 'Альтернативы',
     cash: 'Наличные',
     instruments: 'Инструменты',
-    expectedReturn: 'Доходность',
     risk: 'Риск',
     
     // Плюсы и минусы
@@ -604,7 +603,6 @@ export const translations = {
     alternative: 'Alternatives',
     cash: 'Cash',
     instruments: 'Instruments',
-    expectedReturn: 'Return',
     risk: 'Risk',
     
     // Плюсы и минусы
