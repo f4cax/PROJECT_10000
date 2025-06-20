@@ -52,7 +52,7 @@ self.addEventListener('activate', (event) => {
 // Push уведомления (опционально)
 self.addEventListener('push', (event) => {
   const options = {
-    body: event.data ? event.data.text() : 'Новое уведомление от ФинансГид',
+    body: event.data ? event.data.text() : 'Новое уведомление от Финансового компаса',
     icon: '/logo192.png',
     badge: '/logo192.png',
     vibrate: [100, 50, 100],
@@ -75,7 +75,7 @@ self.addEventListener('push', (event) => {
   };
 
   event.waitUntil(
-    self.registration.showNotification('ФинансГид', options)
+    self.registration.showNotification('Финансовый компас', options)
   );
 });
 

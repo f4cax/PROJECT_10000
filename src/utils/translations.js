@@ -122,26 +122,72 @@ export const translations = {
     moderateStrategy: 'Умеренная стратегия', 
     aggressiveStrategy: 'Агрессивная стратегия',
 
-    // Страница "О нас"
-    aboutProject: 'О проекте ФинансГид',
-    ourMission: 'Наша миссия',
-    missionDescription: 'Мы создали ФинансГид для людей, которые не умеют распоряжаться финансами. Наша цель — сделать управление деньгами простым и понятным для каждого.',
-    financialHelper: 'ИИ-помощник',
-    helperDescription: 'Встроенный искусственный интеллект анализирует ваши финансовые привычки и даёт персональные рекомендации по улучшению бюджета.',
-    actualData: 'Актуальные данные',
-    actualDataDescription: 'Интеграция с ЦБ РФ для получения актуальных курсов валют, данных об инфляции и информации об индексных фондах в реальном времени.',
-    pwaApp: 'PWA приложение',
-    pwaDescription: 'Работает как обычное мобильное приложение. Можно установить на телефон и пользоваться даже без интернета.',
-    security: 'Безопасность',
-    securityDescription: 'Все данные хранятся локально на вашем устройстве. Мы не собираем и не передаём третьим лицам ваши финансовые данные.',
-    technologies: 'Технологии',
-    frontend: 'Frontend',
-    backend: 'Backend',
-    charts: 'Графики',
-    styles: 'Стили',
-    contactUs: 'Связаться с нами',
-    contactDescription: 'Есть вопросы или предложения? Мы всегда рады вашей обратной связи!',
-    writeUs: 'Написать нам',
+    // Страница "О нас" - обновленная
+    aboutProject: 'О проекте Финансовый компас',
+    aboutFinancialCompass: 'О проекте Финансовый компас',
+    
+    // Основные возможности проекта
+    budgetPlanningTitle: 'Планирование бюджета',
+    budgetPlanningDesc: 'Автоматический расчет распределения дохода по правилу 50-25-15-10 Mark Tilbury с интерактивными диаграммами Chart.js',
+    assetManagementTitle: 'Управление активами',
+    assetManagementDesc: 'Портфолио из 7 типов активов с автоматическим обновлением цен в реальном времени через API интеграции',
+    realTimeDataTitle: 'Данные в реальном времени',
+    realTimeDataDesc: 'Интеграция с API ЦБ РФ для актуальных курсов валют, инфляции и финансового калькулятора',
+    financialTestTitle: 'Тест финансовой грамотности',
+    financialTestDesc: '10 проработанных вопросов с алгоритмом определения финансового профиля и рекомендуемой стратегии',
+    adminPanelTitle: 'Админ-панель',
+    adminPanelDesc: 'Полная система управления пользователями, статистика платформы и управление базой данных',
+    userSystemTitle: 'Система пользователей',
+    userSystemDesc: 'JWT авторизация, bcrypt хэширование паролей, детальные профили с прогнозами инвестиций',
+    
+    // Технические решения
+    reactStackTitle: 'React + Node.js стек',
+    reactStackDesc: 'Современный фронтенд на React 18 с интерактивными диаграммами и бэкенд на Express с MongoDB',
+    apiIntegrationsTitle: 'API интеграции',
+    apiIntegrationsDesc: 'Живые данные от ЦБ РФ, EODHD (акции) и CoinGecko (криптовалюты) для актуальных цен',
+    databaseSchemaTitle: 'База данных MongoDB',
+    databaseSchemaDesc: 'Продуманная схема с финансовыми данными, активами пользователей и кэшем портфеля',
+    securityTitle: 'Безопасность',
+    securityDesc: 'JWT токены, bcrypt хэширование, middleware авторизации и валидация всех данных',
+    
+    // Методология
+    markTilburyMethodTitle: 'Правило 50-25-15-10',
+    markTilburyMethodDesc: 'Основано на проверенной методике финансового эксперта Mark Tilbury для оптимального распределения дохода',
+    algorithmicCalculationsTitle: 'Алгоритмические расчеты',
+    algorithmicCalculationsDesc: 'Автоматические вычисления бюджета, сложного процента, прибыли/убытка портфеля без ошибок',
+    recommendationSystemTitle: 'Система рекомендаций',
+    recommendationSystemDesc: 'Анализ дохода и риск-профиля для предоставления персональных финансовых советов',
+    
+    // Особенности проекта
+    scientificApproach: 'Научный подход',
+    scientificApproachDesc: 'Основан на проверенной методике Mark Tilbury, которая помогла тысячам людей улучшить финансовое положение',
+    fullAutomation: 'Полная автоматизация',
+    fullAutomationDesc: 'Исключает человеческий фактор в расчетах - все математические операции выполняются алгоритмически',
+    realDataTitle: 'Реальные данные',
+    realDataDesc: 'Интеграция с официальными API для получения актуальных финансовых данных в режиме реального времени',
+    securityFeature: 'Безопасность',
+    securityFeatureDesc: 'Enterprise-grade безопасность с JWT авторизацией и bcrypt хэшированием паролей',
+    accessibility: 'Доступность',
+    accessibilityDesc: 'Работает на всех устройствах как PWA приложение - можно установить на телефон',
+    openness: 'Открытость',
+    opennessDesc: 'Полностью бесплатен и развернут в облаке - доступен для всех желающих улучшить финансовую грамотность',
+    
+    // Технические особенности
+    technicalFeatures: 'Технические решения',
+    
+    // Контакты
+    contactUsNew: 'Связаться с разработчиками',
+    contactDescNew: 'Есть вопросы, предложения или хотите поддержать развитие проекта?',
+    emailUs: 'Написать нам',
+    supportProject: 'Поддержать проект',
+    responseTime: 'Отвечаем в течение 24 часов',
+    helpDevelopment: 'Помочь развитию функций',
+    projectCommunity: 'Проект развивается благодаря сообществу',
+    modernTech: 'Построен с использованием современных веб-технологий',
+    
+    // Разделы страницы
+    whatMakesSpecial: 'Что делает проект особенным',
+    techStack: 'Стек технологий',
 
     // Формы и кнопки
     monthlyIncomeLabel: 'Введите ваш месячный доход',
@@ -639,26 +685,72 @@ export const translations = {
     moderateStrategy: 'Moderate Strategy',
     aggressiveStrategy: 'Aggressive Strategy',
 
-    // About page
-    aboutProject: 'About FinanceGuide Project',
-    ourMission: 'Our Mission',
-    missionDescription: 'We created FinanceGuide for people who don\'t know how to manage their finances. Our goal is to make money management simple and understandable for everyone.',
-    financialHelper: 'AI Assistant',
-    helperDescription: 'Built-in artificial intelligence analyzes your financial habits and provides personalized recommendations to improve your budget.',
-    actualData: 'Real-time Data',
-    actualDataDescription: 'Integration with CBR to get current exchange rates, inflation data and information about index funds in real time.',
-    pwaApp: 'PWA Application',
-    pwaDescription: 'Works like a regular mobile application. Can be installed on your phone and used even without internet.',
-    security: 'Security',
-    securityDescription: 'All data is stored locally on your device. We don\'t collect or share your financial data with third parties.',
-    technologies: 'Technologies',
-    frontend: 'Frontend',
-    backend: 'Backend',
-    charts: 'Charts',
-    styles: 'Styles',
-    contactUs: 'Contact Us',
-    contactDescription: 'Have questions or suggestions? We always appreciate your feedback!',
-    writeUs: 'Write to Us',
+    // About page - updated
+    aboutProject: 'About Financial Compass Project',
+    aboutFinancialCompass: 'About Financial Compass Project',
+    
+    // Main project features
+    budgetPlanningTitle: 'Budget Planning',
+    budgetPlanningDesc: 'Automatic income distribution calculation using Mark Tilbury\'s 50-25-15-10 rule with interactive Chart.js diagrams',
+    assetManagementTitle: 'Asset Management',
+    assetManagementDesc: 'Portfolio of 7 asset types with real-time automatic price updates through API integrations',
+    realTimeDataTitle: 'Real-time Data',
+    realTimeDataDesc: 'Integration with CBR API for current exchange rates, inflation and financial calculator',
+    financialTestTitle: 'Financial Literacy Test',
+    financialTestDesc: '10 comprehensive questions with algorithm to determine financial profile and recommended strategy',
+    adminPanelTitle: 'Admin Panel',
+    adminPanelDesc: 'Complete user management system, platform statistics and database management',
+    userSystemTitle: 'User System',
+    userSystemDesc: 'JWT authorization, bcrypt password hashing, detailed profiles with investment forecasts',
+    
+    // Technical solutions
+    reactStackTitle: 'React + Node.js Stack',
+    reactStackDesc: 'Modern React 18 frontend with interactive charts and Express backend with MongoDB',
+    apiIntegrationsTitle: 'API Integrations',
+    apiIntegrationsDesc: 'Live data from CBR, EODHD (stocks) and CoinGecko (cryptocurrencies) for current prices',
+    databaseSchemaTitle: 'MongoDB Database',
+    databaseSchemaDesc: 'Well-designed schema with financial data, user assets and portfolio cache',
+    securityTitle: 'Security',
+    securityDesc: 'JWT tokens, bcrypt hashing, authorization middleware and data validation',
+    
+    // Methodology
+    markTilburyMethodTitle: '50-25-15-10 Rule',
+    markTilburyMethodDesc: 'Based on proven methodology by financial expert Mark Tilbury for optimal income distribution',
+    algorithmicCalculationsTitle: 'Algorithmic Calculations',
+    algorithmicCalculationsDesc: 'Automatic calculations of budget, compound interest, portfolio profit/loss without errors',
+    recommendationSystemTitle: 'Recommendation System',
+    recommendationSystemDesc: 'Income and risk profile analysis to provide personalized financial advice',
+    
+    // Project features
+    scientificApproach: 'Scientific Approach',
+    scientificApproachDesc: 'Based on proven Mark Tilbury methodology that helped thousands improve their financial situation',
+    fullAutomation: 'Full Automation',
+    fullAutomationDesc: 'Eliminates human factor in calculations - all mathematical operations are performed algorithmically',
+    realDataTitle: 'Real Data',
+    realDataDesc: 'Integration with official APIs to get current financial data in real-time',
+    securityFeature: 'Security',
+    securityFeatureDesc: 'Enterprise-grade security with JWT authorization and bcrypt password hashing',
+    accessibility: 'Accessibility',
+    accessibilityDesc: 'Works on all devices as PWA application - can be installed on phone',
+    openness: 'Openness',
+    opennessDesc: 'Completely free and deployed in cloud - available for everyone who wants to improve financial literacy',
+    
+    // Technical features
+    technicalFeatures: 'Technical Solutions',
+    
+    // Contacts  
+    contactUsNew: 'Contact Developers',
+    contactDescNew: 'Have questions, suggestions or want to support project development?',
+    emailUs: 'Write to us',
+    supportProject: 'Support Project',
+    responseTime: 'We respond within 24 hours',
+    helpDevelopment: 'Help develop features',
+    projectCommunity: 'Project grows thanks to community',
+    modernTech: 'Built with modern web technologies',
+    
+    // Page sections
+    whatMakesSpecial: 'What Makes Project Special',
+    techStack: 'Technology Stack',
 
     // Forms and buttons
     monthlyIncomeLabel: 'Enter your monthly income',

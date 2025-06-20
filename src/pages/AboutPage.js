@@ -132,7 +132,7 @@ export default function AboutPage() {
       platforms: ['Русский', 'English']
     }
   ];
-
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 transition-colors duration-300">
       
@@ -265,7 +265,7 @@ export default function AboutPage() {
         </section>
 
         {/* Mark Tilbury Rule Explanation */}
-        <section className="card bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200 dark:border-blue-800">
+        <section className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-3xl p-8 md:p-12 border border-blue-200 dark:border-blue-800">
           <div className="text-center">
             <div className="text-5xl mb-6">📊</div>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
@@ -294,7 +294,7 @@ export default function AboutPage() {
               </div>
             </div>
             <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-              Наше приложение автоматически рассчитывает распределение по этой проверенной методике,
+              Финансовый компас автоматически рассчитывает распределение по этой проверенной методике,
               исключая ошибки и помогая следовать финансовому плану.
             </p>
           </div>
@@ -303,7 +303,7 @@ export default function AboutPage() {
         {/* Technology Stack */}
         <section className="bg-gray-900 dark:bg-gray-800 rounded-3xl p-8 md:p-12 text-white">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            🛠️ {t('technologies')}
+            🛠️ {t('techStack')}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
@@ -322,6 +322,66 @@ export default function AboutPage() {
                 <div className="text-xs opacity-80">{tech.category}</div>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* What Makes It Special */}
+        <section className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-3xl p-8 md:p-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white">
+            🌟 {t('whatMakesSpecial')}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <div className="flex items-start space-x-4">
+                <div className="text-2xl">🎯</div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('scientificApproach')}</h3>
+                  <p className="text-gray-600 dark:text-gray-300">{t('scientificApproachDesc')}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-4">
+                <div className="text-2xl">🔬</div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('fullAutomation')}</h3>
+                  <p className="text-gray-600 dark:text-gray-300">{t('fullAutomationDesc')}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-4">
+                <div className="text-2xl">📊</div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('realDataTitle')}</h3>
+                  <p className="text-gray-600 dark:text-gray-300">{t('realDataDesc')}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="flex items-start space-x-4">
+                <div className="text-2xl">🛡️</div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('securityFeature')}</h3>
+                  <p className="text-gray-600 dark:text-gray-300">{t('securityFeatureDesc')}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-4">
+                <div className="text-2xl">📱</div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('accessibility')}</h3>
+                  <p className="text-gray-600 dark:text-gray-300">{t('accessibilityDesc')}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-4">
+                <div className="text-2xl">🌍</div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('openness')}</h3>
+                  <p className="text-gray-600 dark:text-gray-300">{t('opennessDesc')}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -355,13 +415,13 @@ export default function AboutPage() {
               <div className="text-3xl mb-3">💝</div>
               <h3 className="text-xl font-bold mb-2">{t('supportProject')}</h3>
               <p className="text-blue-100 mb-3">DonationAlerts</p>
-              <p className="text-sm text-blue-200">{t('globalCoverage')}</p>
+              <p className="text-sm text-blue-200">{t('helpDevelopment')}</p>
             </a>
           </div>
           
           <div className="mt-8 text-sm text-blue-200">
-            <p className="mb-2">🌐 {t('globalCoverage')}</p>
-            <p>⚡ Built with modern web technologies</p>
+            <p className="mb-2">🚀 {t('projectCommunity')}</p>
+            <p>⚡ {t('modernTech')}</p>
           </div>
         </section>
 
