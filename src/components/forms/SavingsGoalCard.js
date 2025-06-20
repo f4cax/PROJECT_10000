@@ -14,16 +14,18 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
     category: 'other',
     priority: 'medium',
     isFrozen: false,
-    completedAt: null
+    completedAt: null,
+    hasBeenCompleted: false
   });
 
   // Автоматическое поздравление и заморозка при достижении цели
   React.useEffect(() => {
-    if (goal && goal.targetAmount > 0 && !goal.isFrozen) {
+    if (goal && goal.targetAmount > 0 && !goal.isFrozen && !showCongratulations) {
       const progress = Math.min((goal.currentAmount / goal.targetAmount) * 100, 100);
       
-      // Если цель достигнута - показываем поздравление и замораживаем
-      if (progress >= 100 && !goal.completedAt) {
+      // Если цель достигнута ВПЕРВЫЕ - показываем поздравление и замораживаем
+      // Проверяем что цель не была ранее заморожена (completedAt отсутствует)
+      if (progress >= 100 && !goal.completedAt && !goal.hasBeenCompleted) {
         setShowCongratulations(true);
         
         // Автоматически замораживаем через 3 секунды
@@ -32,12 +34,13 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
           onGoalChange({
             ...goal,
             isFrozen: true,
-            completedAt: new Date().toISOString()
+            completedAt: new Date().toISOString(),
+            hasBeenCompleted: true // Помечаем что цель уже была выполнена
           });
         }, 3000);
       }
     }
-  }, [goal, onGoalChange]);
+  }, [goal, onGoalChange, showCongratulations]);
 
   const categories = [
     { id: 'emergency', name: t('emergencyCategory'), icon: '🛡️', color: 'bg-blue-500' },
@@ -78,6 +81,7 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
       ...goal,
       isFrozen: false,
       completedAt: null
+      // hasBeenCompleted остается true, чтобы не показывать поздравление повторно
     });
   };
 
@@ -386,6 +390,13 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
             🗑️
           </button>
         </div>
+        
+        {/* Информация о повторном достижении */}
+        {goal.hasBeenCompleted && (
+          <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 text-center">
+            ℹ️ {t('noCongratulationsOnUnfreeze')}
+          </div>
+        )}
       </div>
     );
   }

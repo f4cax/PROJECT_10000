@@ -161,6 +161,7 @@ const UserSchema = new mongoose.Schema({
       category: String,
       isFrozen: { type: Boolean, default: false },
       completedAt: { type: Date, default: null },
+      hasBeenCompleted: { type: Boolean, default: false },
       createdAt: { type: Date, default: Date.now },
     }],
     testResults: {

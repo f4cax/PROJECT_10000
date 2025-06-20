@@ -264,6 +264,7 @@ export const translations = {
     deleteCompletedGoal: 'Удалить выполненную цель',
     excellentWork: 'Отличная работа!',
     goalOverachieved: 'Цель перевыполнена!',
+    noCongratulationsOnUnfreeze: 'При размораживании поздравление больше не будет показываться',
     
     // Категории целей
     emergencyCategory: 'Подушка безопасности',
@@ -920,6 +921,7 @@ export const translations = {
     deleteCompletedGoal: 'Delete Completed Goal',
     excellentWork: 'Excellent Work!',
     goalOverachieved: 'Goal Exceeded!',
+    noCongratulationsOnUnfreeze: 'No congratulations will be shown when unfreezing',
     
     // Goal categories
     emergencyCategory: 'Emergency Fund',
