@@ -134,46 +134,46 @@ export default function AboutPage() {
   ];
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 transition-colors duration-300">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
       
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 py-20 sm:py-28">
+      <header className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-700 text-white shadow-2xl">
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
           <div className="text-center">
-            <div className="text-6xl mb-6">🧭</div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">
+            <div className="text-7xl mb-6 drop-shadow-lg">🧭</div>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-shadow">
               {t('aboutProject')}
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-4xl mx-auto">
+            <p className="text-lg sm:text-xl md:text-2xl mb-10 text-blue-100 max-w-4xl mx-auto text-shadow-sm">
               {t('projectSlogan')}
             </p>
-            <div className="flex flex-wrap justify-center gap-3 text-sm">
-              <span className="bg-white/20 px-3 py-2 rounded-full">React.js</span>
-              <span className="bg-white/20 px-3 py-2 rounded-full">Node.js + Express</span>
-              <span className="bg-white/20 px-3 py-2 rounded-full">MongoDB</span>
-              <span className="bg-white/20 px-3 py-2 rounded-full">Chart.js</span>
-              <span className="bg-white/20 px-3 py-2 rounded-full">JWT Auth</span>
-              <span className="bg-white/20 px-3 py-2 rounded-full">API Integrations</span>
+            <div className="flex flex-wrap justify-center gap-3 text-sm font-medium">
+              <span className="bg-white/10 hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-white/20">React.js</span>
+              <span className="bg-white/10 hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-white/20">Node.js + Express</span>
+              <span className="bg-white/10 hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-white/20">MongoDB</span>
+              <span className="bg-white/10 hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-white/20">Chart.js</span>
+              <span className="bg-white/10 hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-white/20">JWT Auth</span>
+              <span className="bg-white/10 hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-white/20">API Integrations</span>
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="max-w-7xl mx-auto px-4 py-16 space-y-20">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 space-y-24">
         
         {/* Core Features */}
         <section>
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white">
-            💼 {t('realFeatures')}
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 dark:text-white tracking-tight">
+            <span className="inline-block mr-3">💼</span>{t('realFeatures')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {coreFeatures.map((feature, index) => (
-              <div key={index} className="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 dark:border-gray-700">
-                <div className="text-4xl mb-4">{feature.icon}</div>
+              <div key={index} className="group bg-white dark:bg-gray-800/50 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200/50 dark:border-gray-700/50">
+                <div className="text-5xl mb-5">{feature.icon}</div>
                 <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">{feature.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">{feature.description}</p>
-                <div className="text-xs font-mono bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full inline-block">
+                <p className="text-gray-600 dark:text-gray-300 mb-5 leading-relaxed">{feature.description}</p>
+                <div className="text-xs font-mono bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-1.5 rounded-full inline-block group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 transition-colors">
                   {feature.tech}
                 </div>
               </div>
@@ -182,23 +182,23 @@ export default function AboutPage() {
         </section>
 
         {/* Technical Solutions */}
-        <section className="bg-gradient-to-r from-gray-900 to-indigo-900 rounded-3xl p-8 md:p-12 text-white">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            ⚙️ {t('technicalFeatures')}
+        <section className="bg-gradient-to-r from-gray-900 to-indigo-900 rounded-3xl p-8 md:p-16 text-white shadow-xl">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 tracking-tight">
+             <span className="inline-block mr-3">⚙️</span>{t('technicalFeatures')}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
             {technicalFeatures.map((feature, index) => (
-              <div key={index} className="bg-white/10 rounded-xl p-6 backdrop-blur-sm border border-white/20">
-                <div className="flex items-start space-x-4">
-                  <div className="text-3xl">{feature.icon}</div>
+              <div key={index} className="bg-white/5 rounded-xl p-6 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-colors">
+                <div className="flex items-start space-x-5">
+                  <div className="text-4xl pt-1">{feature.icon}</div>
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-3">
                       <h3 className="text-xl font-bold">{feature.title}</h3>
-                      <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-xs font-bold px-2 py-1 rounded-full">
+                      <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-xs font-bold px-2.5 py-1 rounded-full shadow-md">
                         {feature.badge}
                       </span>
                     </div>
-                    <p className="text-blue-100 leading-relaxed">{feature.description}</p>
+                    <p className="text-blue-100/80 leading-relaxed">{feature.description}</p>
                   </div>
                 </div>
               </div>
@@ -208,32 +208,32 @@ export default function AboutPage() {
 
         {/* Proven Methodology */}
         <section>
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white">
-            📊 {t('methodology')}
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 dark:text-white tracking-tight">
+            <span className="inline-block mr-3">📊</span>{t('methodology')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {methodologyFeatures.map((feature, index) => (
-              <div key={index} className={`group bg-gradient-to-r ${feature.color} rounded-2xl p-8 text-white hover:scale-105 transition-transform duration-300`}>
-                <div className="text-4xl mb-4">{feature.icon}</div>
+              <div key={index} className={`group bg-gradient-to-br ${feature.color} rounded-2xl p-8 text-white shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300`}>
+                <div className="text-5xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity">{feature.icon}</div>
                 <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
-                <p className="text-white/90 leading-relaxed">{feature.description}</p>
+                <p className="text-white/90 leading-relaxed group-hover:text-white transition-colors">{feature.description}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* Practical Value */}
-        <section className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-3xl p-8 md:p-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white">
-            💎 {t('practicalValue')}
+        <section className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/10 dark:to-emerald-900/10 rounded-3xl p-8 md:p-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 dark:text-white tracking-tight">
+            <span className="inline-block mr-3">💎</span>{t('practicalValue')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {practicalFeatures.map((feature, index) => (
-              <div key={index} className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 text-center">
-                <div className="text-4xl mb-4">{feature.icon}</div>
+              <div key={index} className="bg-white dark:bg-gray-800/50 rounded-xl p-6 shadow-lg border border-gray-200/50 dark:border-gray-700/50 text-center transform hover:-translate-y-1 transition-transform duration-300">
+                <div className="text-5xl mb-4 text-green-500">{feature.icon}</div>
                 <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">{feature.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">{feature.description}</p>
-                <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-sm font-semibold px-3 py-1 rounded-full">
+                <p className="text-gray-600 dark:text-gray-300 mb-5 leading-relaxed">{feature.description}</p>
+                <span className="bg-green-100 dark:bg-green-800/50 text-green-800 dark:text-green-200 text-sm font-semibold px-4 py-2 rounded-full transition-colors">
                   {feature.metric}
                 </span>
               </div>
@@ -242,19 +242,19 @@ export default function AboutPage() {
         </section>
 
         {/* Modern Architecture */}
-        <section className="bg-gradient-to-r from-purple-900 via-indigo-900 to-blue-900 rounded-3xl p-8 md:p-12 text-white">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            🏗️ {t('modernArchitecture')}
+        <section className="bg-gradient-to-r from-purple-900 via-indigo-900 to-blue-900 rounded-3xl p-8 md:p-16 text-white shadow-xl">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 tracking-tight">
+            <span className="inline-block mr-3">🏗️</span>{t('modernArchitecture')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {architectureFeatures.map((feature, index) => (
-              <div key={index} className="text-center bg-white/10 rounded-xl p-6 backdrop-blur-sm border border-white/20">
-                <div className="text-4xl mb-4">{feature.icon}</div>
+              <div key={index} className="text-center bg-white/5 rounded-xl p-6 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-colors">
+                <div className="text-5xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-blue-100 mb-4 leading-relaxed">{feature.description}</p>
+                <p className="text-blue-100/80 mb-5 leading-relaxed">{feature.description}</p>
                 <div className="flex flex-wrap justify-center gap-2">
                   {feature.platforms.map((platform, i) => (
-                    <span key={i} className="bg-white/20 text-white text-xs px-2 py-1 rounded">
+                    <span key={i} className="bg-white/10 text-white text-xs px-3 py-1.5 rounded-full">
                       {platform}
                     </span>
                   ))}
@@ -265,35 +265,35 @@ export default function AboutPage() {
         </section>
 
         {/* Mark Tilbury Rule Explanation */}
-        <section className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-3xl p-8 md:p-12 border border-blue-200 dark:border-blue-800">
-          <div className="text-center">
-            <div className="text-5xl mb-6">📊</div>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+        <section className="bg-white dark:bg-gray-800/30 rounded-3xl p-8 md:p-16 border border-gray-200 dark:border-gray-700/50">
+          <div className="text-center max-w-4xl mx-auto">
+            <div className="text-6xl mb-6 text-blue-500">📊</div>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-6">
               Правило 50-25-15-10 от Mark Tilbury
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-gray-600 mb-2">50%</div>
-                <div className="text-sm text-gray-700 dark:text-gray-300">🏠 Потребности</div>
-                <div className="text-xs text-gray-500">Еда, жилье, транспорт</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+              <div className="text-center p-4 rounded-lg bg-gray-50 dark:bg-gray-800">
+                <div className="text-4xl font-bold text-gray-700 dark:text-gray-200 mb-2">50%</div>
+                <div className="font-semibold text-gray-800 dark:text-gray-100">🏠 Потребности</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Еда, жилье, транспорт</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">25%</div>
-                <div className="text-sm text-gray-700 dark:text-gray-300">🛡️ Накопления</div>
-                <div className="text-xs text-gray-500">Подушка безопасности</div>
+              <div className="text-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+                <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">25%</div>
+                <div className="font-semibold text-blue-800 dark:text-blue-200">🛡️ Накопления</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Подушка безопасности</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-green-600 mb-2">15%</div>
-                <div className="text-sm text-gray-700 dark:text-gray-300">📈 Инвестиции</div>
-                <div className="text-xs text-gray-500">Рост капитала</div>
+              <div className="text-center p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
+                <div className="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">15%</div>
+                <div className="font-semibold text-green-800 dark:text-green-200">📈 Инвестиции</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Рост капитала</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600 mb-2">10%</div>
-                <div className="text-sm text-gray-700 dark:text-gray-300">🎉 Развлечения</div>
-                <div className="text-xs text-gray-500">Качество жизни</div>
+              <div className="text-center p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20">
+                <div className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">10%</div>
+                <div className="font-semibold text-purple-800 dark:text-purple-200">🎉 Развлечения</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Качество жизни</div>
               </div>
             </div>
-            <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
               Финансовый компас автоматически рассчитывает распределение по этой проверенной методике,
               исключая ошибки и помогая следовать финансовому плану.
             </p>
@@ -301,11 +301,11 @@ export default function AboutPage() {
         </section>
 
         {/* Technology Stack */}
-        <section className="bg-gray-900 dark:bg-gray-800 rounded-3xl p-8 md:p-12 text-white">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            🛠️ {t('techStack')}
+        <section className="bg-gray-900 dark:bg-gray-800/50 rounded-3xl p-8 md:p-16 text-white shadow-xl">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 tracking-tight">
+            <span className="inline-block mr-3">🛠️</span>{t('techStack')}
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
             {[
               { name: 'React.js', icon: '⚛️', category: 'Frontend', color: 'bg-blue-500' },
               { name: 'Node.js', icon: '🟢', category: 'Backend', color: 'bg-green-500' },
@@ -313,72 +313,69 @@ export default function AboutPage() {
               { name: 'Chart.js', icon: '📊', category: 'Charts', color: 'bg-orange-500' },
               { name: 'JWT', icon: '🔐', category: 'Auth', color: 'bg-purple-500' },
               { name: 'Tailwind', icon: '🎨', category: 'Styles', color: 'bg-cyan-500' },
-              { name: 'Vercel', icon: '▲', category: 'Hosting', color: 'bg-black' },
+              { name: 'Vercel', icon: '▲', category: 'Hosting', color: 'bg-gray-700' },
               { name: 'Railway', icon: '🚄', category: 'Deploy', color: 'bg-violet-500' }
             ].map((tech, index) => (
-              <div key={index} className={`text-center ${tech.color} rounded-lg p-4 hover:scale-105 transition-transform duration-300`}>
-                <div className="text-3xl mb-2">{tech.icon}</div>
-                <div className="font-bold text-sm">{tech.name}</div>
-                <div className="text-xs opacity-80">{tech.category}</div>
+              <div key={index} className="text-center group">
+                <div className={`flex items-center justify-center h-24 w-24 mx-auto rounded-full ${tech.color} group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                  <div className="text-4xl">{tech.icon}</div>
+                </div>
+                <div className="font-bold text-sm mt-4">{tech.name}</div>
+                <div className="text-xs opacity-70">{tech.category}</div>
               </div>
             ))}
           </div>
         </section>
 
         {/* What Makes It Special */}
-        <section className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-3xl p-8 md:p-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white">
-            🌟 {t('whatMakesSpecial')}
+        <section className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/10 dark:to-orange-900/10 rounded-3xl p-8 md:p-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 dark:text-white tracking-tight">
+             <span className="inline-block mr-3">🌟</span>{t('whatMakesSpecial')}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+            <div className="space-y-8">
               <div className="flex items-start space-x-4">
-                <div className="text-2xl">🎯</div>
+                <div className="text-3xl text-amber-500 pt-1">🎯</div>
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('scientificApproach')}</h3>
-                  <p className="text-gray-600 dark:text-gray-300">{t('scientificApproachDesc')}</p>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{t('scientificApproachDesc')}</p>
                 </div>
               </div>
-              
               <div className="flex items-start space-x-4">
-                <div className="text-2xl">🔬</div>
+                <div className="text-3xl text-amber-500 pt-1">🔬</div>
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('fullAutomation')}</h3>
-                  <p className="text-gray-600 dark:text-gray-300">{t('fullAutomationDesc')}</p>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{t('fullAutomationDesc')}</p>
                 </div>
               </div>
-              
               <div className="flex items-start space-x-4">
-                <div className="text-2xl">📊</div>
+                <div className="text-3xl text-amber-500 pt-1">📊</div>
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('realDataTitle')}</h3>
-                  <p className="text-gray-600 dark:text-gray-300">{t('realDataDesc')}</p>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('realTimeDataTitle')}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{t('realDataDesc')}</p>
                 </div>
               </div>
             </div>
-            
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div className="flex items-start space-x-4">
-                <div className="text-2xl">🛡️</div>
+                <div className="text-3xl text-amber-500 pt-1">🛡️</div>
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('securityFeature')}</h3>
-                  <p className="text-gray-600 dark:text-gray-300">{t('securityFeatureDesc')}</p>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{t('securityFeatureDesc')}</p>
                 </div>
               </div>
-              
               <div className="flex items-start space-x-4">
-                <div className="text-2xl">📱</div>
+                <div className="text-3xl text-amber-500 pt-1">📱</div>
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('accessibility')}</h3>
-                  <p className="text-gray-600 dark:text-gray-300">{t('accessibilityDesc')}</p>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{t('accessibilityDesc')}</p>
                 </div>
               </div>
-              
               <div className="flex items-start space-x-4">
-                <div className="text-2xl">🌍</div>
+                <div className="text-3xl text-amber-500 pt-1">🌍</div>
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('openness')}</h3>
-                  <p className="text-gray-600 dark:text-gray-300">{t('opennessDesc')}</p>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{t('opennessDesc')}</p>
                 </div>
               </div>
             </div>
@@ -386,23 +383,23 @@ export default function AboutPage() {
         </section>
 
         {/* Contact Section */}
-        <section className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-8 md:p-12 text-white text-center">
-          <div className="text-5xl mb-6">📧</div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+        <section className="bg-gradient-to-r from-blue-700 to-indigo-700 rounded-3xl p-8 md:p-16 text-white text-center shadow-xl">
+          <div className="text-6xl mb-6">📧</div>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
             {t('contactUsNew')}
           </h2>
-          <p className="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
+          <p className="text-xl mb-10 text-blue-100 max-w-2xl mx-auto">
             {t('contactDescNew')}
           </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <a 
               href="mailto:g53705046@gmail.com"
-              className="group bg-white/20 hover:bg-white/30 rounded-2xl p-6 transition-all duration-300 hover:scale-105 backdrop-blur-sm border border-white/30"
+              className="group bg-white/10 hover:bg-white/20 rounded-2xl p-8 transition-all duration-300 hover:scale-105 backdrop-blur-md border border-white/20 shadow-lg"
             >
-              <div className="text-3xl mb-3">✉️</div>
+              <div className="text-4xl mb-4">✉️</div>
               <h3 className="text-xl font-bold mb-2">{t('emailUs')}</h3>
-              <p className="text-blue-100 mb-3">g53705046@gmail.com</p>
+              <p className="text-blue-100 mb-3 group-hover:text-white transition-colors">g53705046@gmail.com</p>
               <p className="text-sm text-blue-200">{t('responseTime')}</p>
             </a>
             
@@ -410,22 +407,22 @@ export default function AboutPage() {
               href="https://www.donationalerts.com/r/xxarnixx"
               target="_blank"
               rel="noopener noreferrer"
-              className="group bg-white/20 hover:bg-white/30 rounded-2xl p-6 transition-all duration-300 hover:scale-105 backdrop-blur-sm border border-white/30"
+              className="group bg-white/10 hover:bg-white/20 rounded-2xl p-8 transition-all duration-300 hover:scale-105 backdrop-blur-md border border-white/20 shadow-lg"
             >
-              <div className="text-3xl mb-3">💝</div>
+              <div className="text-4xl mb-4">💝</div>
               <h3 className="text-xl font-bold mb-2">{t('supportProject')}</h3>
-              <p className="text-blue-100 mb-3">DonationAlerts</p>
+              <p className="text-blue-100 mb-3 group-hover:text-white transition-colors">DonationAlerts</p>
               <p className="text-sm text-blue-200">{t('helpDevelopment')}</p>
             </a>
           </div>
           
-          <div className="mt-8 text-sm text-blue-200">
-            <p className="mb-2">🚀 {t('projectCommunity')}</p>
+          <div className="mt-12 text-sm text-blue-200/80 space-y-2">
+            <p>🚀 {t('projectCommunity')}</p>
             <p>⚡ {t('modernTech')}</p>
           </div>
         </section>
 
-      </div>
+      </main>
     </div>
   );
 } 
