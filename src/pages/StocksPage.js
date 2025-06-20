@@ -34,8 +34,6 @@ const generateRandomStockData = () => {
   return result;
 };
 
-
-
 export default function StocksPage() {
   const { t } = useTranslation();
   const [stockData, setStockData] = useState({});
@@ -44,6 +42,9 @@ export default function StocksPage() {
   const [selectedStock, setSelectedStock] = useState('AAPL');
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isUsingRealAPI, setIsUsingRealAPI] = useState(false);
+  const [canUpdate, setCanUpdate] = useState(true);
+  const [nextUpdateTime, setNextUpdateTime] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(null);
   
   // Состояние для калькулятора сложного процента
   const [calculator, setCalculator] = useState({
@@ -70,159 +71,103 @@ export default function StocksPage() {
     { symbol: 'VTI', name: 'Total Stock Market ETF', description: 'Весь рынок США' }
   ];
 
-
-
-  // Загрузка данных акций
-  const fetchStockData = useCallback(async (showLoading = true) => {
+  // Загрузка данных акций через новый API
+  const fetchStockData = useCallback(async (forceUpdate = false, showLoading = true) => {
     try {
       if (showLoading) setLoading(true);
       
-      // Проверяем доступность API ключа
-      const API_KEY = process.env.REACT_APP_EODHD_API_KEY || '68545cf3e0b555.23627356';
+      console.log('📡 Загружаем данные акций через наш API...');
       
-      if (API_KEY && API_KEY !== 'demo') {
-        // Пытаемся получить реальные данные для всех акций
-        try {
-          console.log('📡 Загружаем реальные данные от EODHD для всех акций...');
-          const realData = {};
-          
-          // EODHD поддерживает множественные запросы одним вызовом API
-          // Формируем список всех акций в нужном формате
-          const symbols = popularStocks.map(stock => `${stock.symbol}.US`);
-          const symbolsString = symbols.slice(1).join(','); // Все кроме первой
-          const mainSymbol = symbols[0]; // Первая акция как основная
-          
-          try {
-            console.log(`📊 Загружаем данные для всех акций: ${symbols.join(', ')}...`);
-            
-            // Запрос всех акций одним вызовом
-            const url = `https://eodhd.com/api/real-time/${mainSymbol}?s=${symbolsString}&api_token=${API_KEY}&fmt=json`;
-            console.log(`🔗 API запрос: ${url}`);
-            
-            const response = await fetch(url);
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            console.log(`📈 Ответ от EODHD API:`, data);
-            
-            // EODHD возвращает массив данных для множественных запросов
-            const stocksData = Array.isArray(data) ? data : [data];
-            
-            // Обрабатываем полученные данные
-            stocksData.forEach((stockInfo, index) => {
-              if (stockInfo && stockInfo.code) {
-                // Получаем символ без .US
-                const symbol = stockInfo.code.replace('.US', '');
-                
-                const price = parseFloat(stockInfo.close || stockInfo.price || 0);
-                const previousClose = parseFloat(stockInfo.previousClose || 0);
-                const change = parseFloat(stockInfo.change || 0);
-                const changePercent = parseFloat(stockInfo.change_p || 0);
-                
-                realData[symbol] = {
-                  price: Number(price.toFixed(2)),
-                  change: Number(change.toFixed(2)),
-                  changePercent: Number(changePercent.toFixed(2)),
-                  volume: (stockInfo.volume || 0).toLocaleString(),
-                  high: parseFloat(stockInfo.high || price),
-                  low: parseFloat(stockInfo.low || price),
-                  previousClose: previousClose,
-                  marketCap: getMarketCap(symbol),
-                  pe: getPERatio(symbol),
-                  high52w: parseFloat(stockInfo.high || price) * 1.2,
-                  low52w: parseFloat(stockInfo.low || price) * 0.8
-                };
-                
-                console.log(`✅ Обработана акция ${symbol}:`, realData[symbol]);
-              }
-            });
-            
-            // Если получили данные не для всех акций, дополняем демо-данными
-            const demoData = generateRandomStockData();
-                          popularStocks.forEach(stock => {
-                if (!realData[stock.symbol]) {
-                  realData[stock.symbol] = demoData[stock.symbol];
-                }
-              });
-            
-          } catch (err) {
-            console.error(`Failed to fetch all stocks:`, err);
-            throw err; // Переходим к демо-данным
-          }
-          
-          if (Object.keys(realData).length > 0) {
-            setStockData(realData);
-            setIsUsingRealAPI(true);
-            
-            const realCount = Object.keys(realData).filter(symbol => 
-              popularStocks.some(stock => stock.symbol === symbol)
-            ).length;
-            
-            if (realCount === popularStocks.length) {
-              setError(`🎉 Все акции с реальными данными EODHD (15-20 мин. задержка)`);
-            } else {
-              setError(`Смешанный режим: ${realCount} акций с реальными данными EODHD, остальные - демо`);
-            }
-            
-            console.log('✅ Загружены реальные данные от EODHD для всех акций:', realData);
-          } else {
-            throw new Error('No real data available');
-          }
-          
-        } catch (apiError) {
-          console.warn('⚠️ Ошибка EODHD API, переключаемся на демо-данные:', apiError.message);
-          // Fallback на демо-данные
-          const demoData = generateRandomStockData();
-          setStockData(demoData);
-          setIsUsingRealAPI(false);
-          setError('EODHD API недоступен, показаны демо-данные');
-          console.log('🔄 Используем демо-данные:', demoData);
-        }
-      } else {
-        // Используем демо-данные
-        console.log('🔧 EODHD API ключ не настроен, используем демо-данные');
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Имитация загрузки
-        const demoData = generateRandomStockData();
-        setStockData(demoData);
-        setIsUsingRealAPI(false);
-        setError('Демо-режим: настройте EODHD API ключ для реальных данных всех акций (100,000 запросов/день)');
-        console.log('🎭 Демо-данные сгенерированы:', demoData);
+      const apiUrl = forceUpdate 
+        ? '/api/stocks/data?force=true'  
+        : '/api/stocks/data';
+      
+      const API_BASE_URL = process.env.REACT_APP_API_URL || 
+        (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000');
+      
+      const response = await fetch(`${API_BASE_URL}${apiUrl}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-      setLastUpdated(new Date());
+      const result = await response.json();
+      console.log('📈 Ответ от нашего API:', result);
+      
+      if (result.success) {
+        setStockData(result.data);
+        setLastUpdated(new Date(result.meta.lastUpdated));
+        setIsUsingRealAPI(result.meta.isUsingRealAPI);
+        setCanUpdate(result.meta.canUpdate);
+        setNextUpdateTime(result.meta.nextUpdateTime ? new Date(result.meta.nextUpdateTime) : null);
+        setError(result.meta.statusMessage);
+        
+        console.log('✅ Данные успешно загружены:', {
+          stocksCount: Object.keys(result.data).length,
+          isUsingRealAPI: result.meta.isUsingRealAPI,
+          canUpdate: result.meta.canUpdate,
+          statusMessage: result.meta.statusMessage
+        });
+      } else {
+        throw new Error(result.error || 'Неизвестная ошибка API');
+      }
       
     } catch (err) {
-      console.error('❌ Общая ошибка загрузки данных:', err);
-      setError(err.message);
+      console.error('❌ Ошибка загрузки данных через API:', err);
+      
+      // Fallback на локальные демо-данные
+      console.log('🔄 Переключаемся на локальные демо-данные...');
+      const demoData = generateRandomStockData();
+      setStockData(demoData);
       setIsUsingRealAPI(false);
+      setCanUpdate(true);
+      setError(`Ошибка API: ${err.message}. Показаны демо-данные.`);
+      setLastUpdated(new Date());
+      
+      console.log('🎭 Используем локальные демо-данные:', demoData);
     } finally {
       setLoading(false);
       console.log('🏁 Завершена загрузка данных акций');
     }
-  }, [popularStocks]);
+  }, []);
 
-  // Вспомогательные функции для статичных данных
-  const getMarketCap = (symbol) => {
-    const caps = {
-      'AAPL': '2.7T', 'GOOGL': '1.6T', 'MSFT': '2.5T',
-      'TSLA': '745B', 'AMZN': '1.3T', 'NVDA': '1.1T'
-    };
-    return caps[symbol] || 'N/A';
-  };
+  // Обновление таймера до следующего обновления
+  useEffect(() => {
+    if (!nextUpdateTime || canUpdate) {
+      setTimeLeft(null);
+      return;
+    }
 
-  const getPERatio = (symbol) => {
-    const ratios = {
-      'AAPL': 28.5, 'GOOGL': 25.3, 'MSFT': 32.1,
-      'TSLA': 45.2, 'AMZN': 58.7, 'NVDA': 65.4
+    const updateTimer = () => {
+      const now = new Date();
+      const diff = nextUpdateTime - now;
+      
+      if (diff <= 0) {
+        setTimeLeft(null);
+        setCanUpdate(true);
+        return;
+      }
+      
+      const minutes = Math.floor(diff / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+      setTimeLeft(`${minutes}:${seconds.toString().padStart(2, '0')}`);
     };
-    return ratios[symbol] || 0;
-  };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    
+    return () => clearInterval(interval);
+  }, [nextUpdateTime, canUpdate]);
 
   useEffect(() => {
     fetchStockData();
   }, [fetchStockData]);
+
+  // Обработчик обновления данных
+  const handleUpdateData = () => {
+    if (!canUpdate || loading) return;
+    fetchStockData(true, false); // forceUpdate = true, showLoading = false
+  };
 
   // Расчет сложного процента
   const calculateCompoundInterest = () => {
@@ -296,19 +241,32 @@ export default function StocksPage() {
         <p className="text-lg text-gray-600 dark:text-gray-400">
           {t('stocksPageSubtitle')}
         </p>
-        <div className="mt-4 flex items-center justify-center space-x-4">
+        <div className="mt-4 flex items-center justify-center space-x-4 flex-wrap">
           {lastUpdated && (
             <span className="text-sm text-gray-500 dark:text-gray-400">
               {t('lastUpdated')}: {formatTime(lastUpdated)}
             </span>
           )}
-          <button
-            onClick={() => fetchStockData(false)}
-            disabled={loading}
-            className="btn-secondary text-sm"
-          >
-            {loading ? '⏳' : '🔄'} {t('updateData')}
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={handleUpdateData}
+              disabled={loading || !canUpdate}
+              className={`btn-secondary text-sm ${(!canUpdate && !loading) ? 'opacity-50 cursor-not-allowed' : ''}`}
+              title={!canUpdate ? `Обновление доступно через ${timeLeft || 'скоро'}` : ''}
+            >
+              {loading ? '⏳' : '🔄'} {t('updateData')}
+              {timeLeft && !loading && (
+                <span className="ml-1 text-xs">
+                  ({timeLeft})
+                </span>
+              )}
+            </button>
+            {!canUpdate && timeLeft && (
+              <span className="text-xs text-orange-600 dark:text-orange-400">
+                ⏰ {timeLeft}
+              </span>
+            )}
+          </div>
           {isUsingRealAPI && (
             <span className="text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded">
               📡 Реальные данные
@@ -559,20 +517,39 @@ export default function StocksPage() {
         </div>
       </div>
 
-      {/* Информация об API */}
-      <div className="card bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-purple-200 dark:border-purple-800">
-        <div className="text-center">
-          <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-300 mb-2">
-            🔌 {isUsingRealAPI ? 'Реальные данные от EODHD API' : 'Демо-данные EODHD API'}
-          </h3>
-          <p className="text-purple-700 dark:text-purple-400 text-sm mb-3">
-            Профессиональные финансовые данные для трейдеров и инвесторов
-          </p>
-          <div className="flex justify-center space-x-4 text-xs text-purple-600 dark:text-purple-400">
-            <span>{isUsingRealAPI ? '✅ Реальные котировки (15-20 мин)' : '🔶 Демо котировки'}</span>
-            <span>✅ 100,000 запросов/день</span>
-            <span>✅ Исторические данные</span>
-            <span>✅ Глобальные биржи</span>
+      {/* Информация об API и кэшировании */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="card bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-purple-200 dark:border-purple-800">
+          <div className="text-center">
+            <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-300 mb-2">
+              🔌 {isUsingRealAPI ? 'Реальные данные от EODHD API' : 'Демо-данные EODHD API'}
+            </h3>
+            <p className="text-purple-700 dark:text-purple-400 text-sm mb-3">
+              Профессиональные финансовые данные для трейдеров и инвесторов
+            </p>
+            <div className="flex justify-center space-x-4 text-xs text-purple-600 dark:text-purple-400 flex-wrap">
+              <span>{isUsingRealAPI ? '✅ Реальные котировки (15-20 мин)' : '🔶 Демо котировки'}</span>
+              <span>✅ 100,000 запросов/день</span>
+              <span>✅ Исторические данные</span>
+              <span>✅ Глобальные биржи</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="card bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border-blue-200 dark:border-blue-800">
+          <div className="text-center">
+            <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-300 mb-2">
+              ⚡ Умное кэширование данных
+            </h3>
+            <p className="text-blue-700 dark:text-blue-400 text-sm mb-3">
+              Данные обновляются максимум раз в 2 часа для экономии API запросов
+            </p>
+            <div className="space-y-1 text-xs text-blue-600 dark:text-blue-400">
+              <div>🕐 Обновление: каждые 2 часа</div>
+              <div>💾 Кэш: в базе данных</div>
+              <div>🚀 Скорость: мгновенная загрузка</div>
+              <div>💰 Экономия: {isUsingRealAPI ? 'API запросов' : 'демо-режим'}</div>
+            </div>
           </div>
         </div>
       </div>

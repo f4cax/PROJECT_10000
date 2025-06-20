@@ -231,6 +231,59 @@ UserSchema.methods.comparePassword = async function (password) {
 
 const User = mongoose.model('User', UserSchema);
 
+// Схема для кэширования данных акций
+const StockDataSchema = new mongoose.Schema({
+  symbol: {
+    type: String,
+    required: true,
+    unique: true,
+    uppercase: true
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  },
+  change: {
+    type: Number,
+    default: 0
+  },
+  changePercent: {
+    type: Number,
+    default: 0
+  },
+  volume: {
+    type: String,
+    default: '0'
+  },
+  high: Number,
+  low: Number,
+  previousClose: Number,
+  marketCap: String,
+  pe: Number,
+  high52w: Number,
+  low52w: Number,
+  lastUpdated: {
+    type: Date,
+    default: Date.now
+  },
+  lastAPIUpdate: {
+    type: Date,
+    default: Date.now
+  },
+  isDemo: {
+    type: Boolean,
+    default: false
+  }
+}, {
+  timestamps: true
+});
+
+const StockData = mongoose.model('StockData', StockDataSchema);
+
 // Middleware для проверки авторизации
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -545,6 +598,316 @@ app.post('/api/user/savings-goals', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Ошибка добавления цели:', error);
     res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+  }
+});
+
+// ======================
+// 📈 УПРАВЛЕНИЕ ДАННЫМИ АКЦИЙ
+// ======================
+
+// Популярные акции для отслеживания
+const POPULAR_STOCKS = [
+  { symbol: 'AAPL', name: 'Apple Inc.', sector: 'Technology' },
+  { symbol: 'GOOGL', name: 'Alphabet Inc.', sector: 'Technology' },
+  { symbol: 'MSFT', name: 'Microsoft Corp.', sector: 'Technology' },
+  { symbol: 'TSLA', name: 'Tesla Inc.', sector: 'Automotive' },
+  { symbol: 'AMZN', name: 'Amazon.com Inc.', sector: 'E-commerce' },
+  { symbol: 'NVDA', name: 'NVIDIA Corp.', sector: 'Technology' }
+];
+
+// Генерация демо-данных для акций
+const generateDemoStockData = () => {
+  const baseData = {
+    'AAPL': { basePrice: 175, basePE: 28.5, marketCap: '2.7T' },
+    'GOOGL': { basePrice: 2450, basePE: 25.3, marketCap: '1.6T' },
+    'MSFT': { basePrice: 345, basePE: 32.1, marketCap: '2.5T' },
+    'TSLA': { basePrice: 235, basePE: 45.2, marketCap: '745B' },
+    'AMZN': { basePrice: 3120, basePE: 58.7, marketCap: '1.3T' },
+    'NVDA': { basePrice: 450, basePE: 65.4, marketCap: '1.1T' }
+  };
+
+  return POPULAR_STOCKS.map(stock => {
+    const base = baseData[stock.symbol];
+    const changePercent = (Math.random() - 0.5) * 8; // От -4% до +4%
+    const newPrice = base.basePrice * (1 + changePercent / 100);
+    const change = newPrice - base.basePrice;
+    
+    return {
+      symbol: stock.symbol,
+      name: stock.name,
+      price: Number(newPrice.toFixed(2)),
+      change: Number(change.toFixed(2)),
+      changePercent: Number(changePercent.toFixed(2)),
+      volume: Math.floor(Math.random() * 50000000 + 10000000).toLocaleString(),
+      high: newPrice * (1 + Math.random() * 0.02),
+      low: newPrice * (1 - Math.random() * 0.02),
+      previousClose: base.basePrice,
+      marketCap: base.marketCap,
+      pe: base.basePE + (Math.random() - 0.5) * 5,
+      high52w: newPrice * (1 + Math.random() * 0.3),
+      low52w: newPrice * (1 - Math.random() * 0.3),
+      isDemo: true
+    };
+  });
+};
+
+// Функция для получения реальных данных акций через EODHD API
+const fetchRealStockData = async () => {
+  const API_KEY = process.env.EODHD_API_KEY || '68545cf3e0b555.23627356';
+  const realData = [];
+
+  for (const stock of POPULAR_STOCKS) {
+    try {
+      const url = `https://eodhd.com/api/real-time/${stock.symbol}.US?api_token=${API_KEY}&fmt=json`;
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      const price = parseFloat(data.close || data.price || 0);
+      const previousClose = parseFloat(data.previousClose || 0);
+      const change = parseFloat(data.change || 0);
+      const changePercent = parseFloat(data.change_p || 0);
+      
+      realData.push({
+        symbol: stock.symbol,
+        name: stock.name,
+        price: Number(price.toFixed(2)),
+        change: Number(change.toFixed(2)),
+        changePercent: Number(changePercent.toFixed(2)),
+        volume: (data.volume || 0).toLocaleString(),
+        high: parseFloat(data.high || price),
+        low: parseFloat(data.low || price),
+        previousClose: previousClose,
+        marketCap: getMarketCap(stock.symbol),
+        pe: getPERatio(stock.symbol),
+        high52w: parseFloat(data.high || price) * 1.2,
+        low52w: parseFloat(data.low || price) * 0.8,
+        isDemo: false
+      });
+      
+      console.log(`✅ Получены реальные данные для ${stock.symbol}:`, price);
+    } catch (error) {
+      console.error(`❌ Ошибка получения данных для ${stock.symbol}:`, error.message);
+      // Если не удалось получить реальные данные, используем демо
+      const demoData = generateDemoStockData();
+      const demoStock = demoData.find(d => d.symbol === stock.symbol);
+      if (demoStock) {
+        realData.push(demoStock);
+      }
+    }
+  }
+
+  return realData;
+};
+
+// Вспомогательные функции для статичных данных
+const getMarketCap = (symbol) => {
+  const caps = {
+    'AAPL': '2.7T', 'GOOGL': '1.6T', 'MSFT': '2.5T',
+    'TSLA': '745B', 'AMZN': '1.3T', 'NVDA': '1.1T'
+  };
+  return caps[symbol] || 'N/A';
+};
+
+const getPERatio = (symbol) => {
+  const ratios = {
+    'AAPL': 28.5, 'GOOGL': 25.3, 'MSFT': 32.1,
+    'TSLA': 45.2, 'AMZN': 58.7, 'NVDA': 65.4
+  };
+  return ratios[symbol] || 0;
+};
+
+// Функция для обновления данных акций в БД
+const updateStockDataInDB = async (stocksData) => {
+  const bulkOps = stocksData.map(stock => ({
+    updateOne: {
+      filter: { symbol: stock.symbol },
+      update: {
+        $set: {
+          ...stock,
+          lastUpdated: new Date(),
+          lastAPIUpdate: new Date()
+        }
+      },
+      upsert: true
+    }
+  }));
+
+  try {
+    await StockData.bulkWrite(bulkOps);
+    console.log(`✅ Обновлены данные ${stocksData.length} акций в БД`);
+  } catch (error) {
+    console.error('❌ Ошибка обновления данных акций в БД:', error);
+    throw error;
+  }
+};
+
+// 📊 Получение данных акций с кэшированием
+app.get('/api/stocks/data', async (req, res) => {
+  try {
+    const forceUpdate = req.query.force === 'true';
+    const TWO_HOURS = 2 * 60 * 60 * 1000; // 2 часа в миллисекундах
+    
+    console.log('📈 Запрос данных акций, принудительное обновление:', forceUpdate);
+    
+    // Проверяем, есть ли данные в БД
+    const existingStocks = await StockData.find({
+      symbol: { $in: POPULAR_STOCKS.map(s => s.symbol) }
+    }).sort({ lastAPIUpdate: -1 });
+    
+    const now = new Date();
+    let shouldUpdate = forceUpdate;
+    let canUpdate = true;
+    let nextUpdateTime = null;
+    
+    if (existingStocks.length > 0) {
+      const lastUpdate = existingStocks[0].lastAPIUpdate;
+      const timeSinceLastUpdate = now - lastUpdate;
+      
+      console.log(`🕐 Последнее обновление: ${lastUpdate.toLocaleString()}`);
+      console.log(`⏱️ Время с последнего обновления: ${Math.round(timeSinceLastUpdate / 1000 / 60)} минут`);
+      
+      if (timeSinceLastUpdate < TWO_HOURS) {
+        canUpdate = false;
+        nextUpdateTime = new Date(lastUpdate.getTime() + TWO_HOURS);
+        console.log(`⏰ Следующее обновление возможно: ${nextUpdateTime.toLocaleString()}`);
+      } else {
+        shouldUpdate = true;
+        console.log('✅ Можно обновлять данные');
+      }
+    } else {
+      shouldUpdate = true;
+      console.log('🆕 Данных в БД нет, получаем первые данные');
+    }
+    
+    let stocksData = [];
+    let isUsingRealAPI = false;
+    let statusMessage = '';
+    
+    if (shouldUpdate && canUpdate) {
+      console.log('🔄 Обновляем данные акций...');
+      try {
+        // Пытаемся получить реальные данные
+        const realData = await fetchRealStockData();
+        
+        // Сохраняем в БД
+        await updateStockDataInDB(realData);
+        
+        stocksData = realData;
+        isUsingRealAPI = !realData.some(stock => stock.isDemo);
+        statusMessage = isUsingRealAPI 
+          ? '🎉 Все акции с реальными данными EODHD (15-20 мин. задержка)'
+          : 'Смешанный режим: часть данных реальная, часть демо';
+        
+        console.log('✅ Данные успешно обновлены');
+      } catch (error) {
+        console.error('❌ Ошибка обновления данных:', error);
+        
+        // Если есть кэшированные данные, используем их
+        if (existingStocks.length > 0) {
+          stocksData = existingStocks.map(stock => stock.toObject());
+          statusMessage = '⚠️ Ошибка API, используются кэшированные данные';
+        } else {
+          // Иначе генерируем демо-данные
+          stocksData = generateDemoStockData();
+          await updateStockDataInDB(stocksData);
+          statusMessage = 'EODHD API недоступен, показаны демо-данные';
+        }
+      }
+    } else if (!canUpdate) {
+      // Используем кэшированные данные
+      stocksData = existingStocks.map(stock => stock.toObject());
+      isUsingRealAPI = !stocksData.some(stock => stock.isDemo);
+      
+      const timeLeft = Math.ceil((TWO_HOURS - (now - existingStocks[0].lastAPIUpdate)) / 1000 / 60);
+      statusMessage = `⏱️ Данные актуальны. Следующее обновление через ${timeLeft} мин.`;
+      
+      console.log('📚 Используем кэшированные данные');
+    } else {
+      // Используем существующие данные
+      stocksData = existingStocks.map(stock => stock.toObject());
+      isUsingRealAPI = !stocksData.some(stock => stock.isDemo);
+      statusMessage = 'Данные из кэша';
+    }
+    
+    // Формируем ответ в формате, ожидаемом фронтендом
+    const response = {
+      success: true,
+      data: stocksData.reduce((acc, stock) => {
+        acc[stock.symbol] = {
+          price: stock.price,
+          change: stock.change,
+          changePercent: stock.changePercent,
+          volume: stock.volume,
+          high: stock.high,
+          low: stock.low,
+          previousClose: stock.previousClose,
+          marketCap: stock.marketCap,
+          pe: stock.pe,
+          high52w: stock.high52w,
+          low52w: stock.low52w
+        };
+        return acc;
+      }, {}),
+      meta: {
+        lastUpdated: existingStocks.length > 0 ? existingStocks[0].lastAPIUpdate : now,
+        isUsingRealAPI,
+        canUpdate,
+        nextUpdateTime,
+        statusMessage,
+        stocksCount: stocksData.length
+      }
+    };
+    
+    console.log('📤 Отправляем ответ:', { 
+      stocksCount: stocksData.length, 
+      isUsingRealAPI, 
+      canUpdate,
+      statusMessage: response.meta.statusMessage
+    });
+    
+    res.json(response);
+  } catch (error) {
+    console.error('❌ Общая ошибка API акций:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Ошибка получения данных акций',
+      details: error.message 
+    });
+  }
+});
+
+// 🔄 Принудительное обновление данных акций (только для тестирования)
+app.post('/api/stocks/force-update', async (req, res) => {
+  try {
+    console.log('🔄 Принудительное обновление данных акций...');
+    
+    const realData = await fetchRealStockData();
+    await updateStockDataInDB(realData);
+    
+    const isUsingRealAPI = !realData.some(stock => stock.isDemo);
+    
+    res.json({
+      success: true,
+      message: 'Данные акций принудительно обновлены',
+      data: realData,
+      meta: {
+        lastUpdated: new Date(),
+        isUsingRealAPI,
+        stocksCount: realData.length
+      }
+    });
+  } catch (error) {
+    console.error('❌ Ошибка принудительного обновления:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Ошибка принудительного обновления данных акций',
+      details: error.message 
+    });
   }
 });
 
