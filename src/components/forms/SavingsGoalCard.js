@@ -82,13 +82,16 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
   };
 
   const calculateProgress = () => {
-    if (!goal || !goal.targetAmount) return 0;
-    return Math.min((goal.currentAmount / goal.targetAmount) * 100, 100);
+    if (!goal || !goal.targetAmount || goal.targetAmount <= 0) return 0;
+    const current = Number(goal.currentAmount) || 0;
+    const target = Number(goal.targetAmount) || 1;
+    return Math.min((current / target) * 100, 100);
   };
 
   const calculateMonthsToGoal = () => {
-    if (!goal || !monthlyBudget) return 0;
-    const remaining = goal.targetAmount - goal.currentAmount;
+    if (!goal || !monthlyBudget || !monthlyBudget.safety) return 0;
+    const remaining = (Number(goal.targetAmount) || 0) - (Number(goal.currentAmount) || 0);
+    if (remaining <= 0) return 0;
     const monthsNeeded = Math.ceil(remaining / monthlyBudget.safety);
     
     // Если есть дедлайн, покажем разницу между расчетным временем и желаемым
@@ -115,7 +118,7 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
   const progress = calculateProgress();
   const monthsToGoal = calculateMonthsToGoal();
   const category = getCurrentCategory();
-  const remaining = goal ? goal.targetAmount - goal.currentAmount : 0;
+  const remaining = goal ? (Number(goal.targetAmount) || 0) - (Number(goal.currentAmount) || 0) : 0;
   
   const formatNumber = (num) => {
     return new Intl.NumberFormat('ru-RU').format(num);
@@ -181,9 +184,21 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
             <label className="label">{t('targetAmount')} ({t('rublesSymbol')})</label>
             <input
               type="number"
-              value={tempGoal.targetAmount}
-              onChange={(e) => setTempGoal({ ...tempGoal, targetAmount: parseFloat(e.target.value) || '' })}
+              value={tempGoal.targetAmount || ''}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === '' || value === null || value === undefined) {
+                  setTempGoal({ ...tempGoal, targetAmount: '' });
+                } else {
+                  const numValue = Number(value);
+                  if (!isNaN(numValue) && numValue > 0) {
+                    setTempGoal({ ...tempGoal, targetAmount: numValue });
+                  }
+                }
+              }}
               placeholder="100000"
+              min="1"
+              step="1"
               className="input-field"
             />
           </div>
@@ -193,24 +208,21 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
             <label className="label">{t('currentAmount')} ({t('rublesSymbol')})</label>
             <input
               type="number"
-              value={tempGoal.currentAmount === 0 ? '' : tempGoal.currentAmount}
+              value={tempGoal.currentAmount || ''}
               onChange={(e) => {
                 const value = e.target.value;
-                if (value === '') {
-                  // Если поле пустое, оставляем пустым
-                  setTempGoal({ ...tempGoal, currentAmount: '' });
-                } else {
-                  // Иначе парсим число
-                  setTempGoal({ ...tempGoal, currentAmount: parseFloat(value) || 0 });
-                }
-              }}
-              onBlur={(e) => {
-                // При потере фокуса, если поле пустое - ставим 0
-                if (e.target.value === '' || tempGoal.currentAmount === '') {
+                if (value === '' || value === null || value === undefined) {
                   setTempGoal({ ...tempGoal, currentAmount: 0 });
+                } else {
+                  const numValue = Number(value);
+                  if (!isNaN(numValue) && numValue >= 0) {
+                    setTempGoal({ ...tempGoal, currentAmount: numValue });
+                  }
                 }
               }}
               placeholder="0"
+              min="0"
+              step="1"
               className="input-field"
             />
           </div>
@@ -491,11 +503,16 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
         <button
           onClick={() => {
             const amount = prompt('Сколько хотите добавить к цели?');
-            if (amount) {
-              onGoalChange({
-                ...goal,
-                currentAmount: goal.currentAmount + parseFloat(amount)
-              });
+            if (amount && amount.trim() !== '') {
+              const numAmount = Number(amount);
+              if (!isNaN(numAmount) && numAmount > 0) {
+                onGoalChange({
+                  ...goal,
+                  currentAmount: (goal.currentAmount || 0) + numAmount
+                });
+              } else {
+                alert('Пожалуйста, введите корректную положительную сумму');
+              }
             }
           }}
           className="btn-primary flex-1 text-sm py-2"
