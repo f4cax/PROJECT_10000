@@ -124,6 +124,7 @@ export const translations = {
     // Страница "О нас" - обновленная
     aboutProject: 'О проекте Финансовый компас',
     aboutFinancialCompass: 'О проекте Финансовый компас',
+    projectSlogan: 'Автоматизируйте бюджет, управляйте активами и достигайте финансовых целей с помощью проверенных методик и данных в реальном времени.',
     
     // Основные возможности проекта
     budgetPlanningTitle: 'Планирование бюджета',
@@ -161,8 +162,6 @@ export const translations = {
     scientificApproachDesc: 'Основан на проверенной методике Mark Tilbury, которая помогла тысячам людей улучшить финансовое положение',
     fullAutomation: 'Полная автоматизация',
     fullAutomationDesc: 'Исключает человеческий фактор в расчетах - все математические операции выполняются алгоритмически',
-    realDataTitle: 'Реальные данные',
-    realDataDesc: 'Интеграция с официальными API для получения актуальных финансовых данных в режиме реального времени',
     securityFeature: 'Безопасность',
     securityFeatureDesc: 'Enterprise-grade безопасность с JWT авторизацией и bcrypt хэшированием паролей',
     accessibility: 'Доступность',
@@ -172,6 +171,7 @@ export const translations = {
     
     // Технические особенности
     technicalFeatures: 'Технические решения',
+    methodology: 'Проверенная методология',
     
     // Контакты
     contactUsNew: 'Связаться с разработчиками',
@@ -182,10 +182,40 @@ export const translations = {
     helpDevelopment: 'Помочь развитию функций',
     projectCommunity: 'Проект развивается благодаря сообществу',
     modernTech: 'Построен с использованием современных веб-технологий',
+
+    // Практическая ценность
+    practicalValue: 'Практическая ценность',
+    budgetAutomationDesc: 'Исключает ошибки в расчетах',
+    investmentTrackingDesc: 'Цены обновляются в реальном времени',
+    goalPlanningDesc: 'Рассчитывает время достижения',
+    zeroErrorsMetric: 'Ноль ошибок',
+    realTimeMetric: 'В реальном времени',
+    calculatedMetric: 'Рассчитано',
+
+    // Современная архитектура
+    modernArchitecture: 'Современная архитектура',
+    cloudHostingDesc: 'Развернут на Vercel, Railway и MongoDB Atlas',
+    pwaRealDesc: 'Устанавливается на любое устройство',
+    multiLanguageDesc: 'Поддержка русского и английского языков',
+    russianLang: 'Русский',
+    englishLang: 'English',
+
+    // Правило Марка Тилбери
+    markTilburyRuleTitle: 'Правило 50-25-15-10 от Mark Tilbury',
+    needsCategory: 'Потребности',
+    needsCategoryDesc: 'Еда, жилье, транспорт',
+    savingsCategory: 'Накопления',
+    savingsCategoryDesc: 'Подушка безопасности',
+    investmentsCategory: 'Инвестиции',
+    investmentsCategoryDesc: 'Рост капитала',
+    wantsCategory: 'Развлечения',
+    wantsCategoryDesc: 'Качество жизни',
+    markTilburyRuleDesc: 'Финансовый компас автоматически рассчитывает распределение по этой проверенной методике, исключая ошибки и помогая следовать финансовому плану.',
     
     // Разделы страницы
     whatMakesSpecial: 'Что делает проект особенным',
     techStack: 'Стек технологий',
+    realFeatures: 'Реальные возможности',
 
     // Формы и кнопки
     monthlyIncomeLabel: 'Введите ваш месячный доход',

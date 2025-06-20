@@ -96,19 +96,19 @@ export default function AboutPage() {
       icon: '🎯',
       title: t('budgetAutomationTitle'),
       description: t('budgetAutomationDesc'),
-      metric: 'Zero errors'
+      metric: t('zeroErrorsMetric')
     },
     {
       icon: '📊',
       title: t('investmentTrackingTitle'),
       description: t('investmentTrackingDesc'),
-      metric: 'Real-time'
+      metric: t('realTimeMetric')
     },
     {
       icon: '🏆',
       title: t('goalPlanningTitle'),
       description: t('goalPlanningDesc'),
-      metric: 'Calculated'
+      metric: t('calculatedMetric')
     }
   ];
 
@@ -129,7 +129,7 @@ export default function AboutPage() {
       icon: '🌐',
       title: t('multiLanguageTitle'),
       description: t('multiLanguageDesc'),
-      platforms: ['Русский', 'English']
+      platforms: [t('russianLang'), t('englishLang')]
     }
   ];
   
@@ -269,33 +269,32 @@ export default function AboutPage() {
           <div className="text-center max-w-4xl mx-auto">
             <div className="text-6xl mb-6 text-blue-500">📊</div>
             <h3 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-6">
-              Правило 50-25-15-10 от Mark Tilbury
+              {t('markTilburyRuleTitle')}
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
               <div className="text-center p-4 rounded-lg bg-gray-50 dark:bg-gray-800">
                 <div className="text-4xl font-bold text-gray-700 dark:text-gray-200 mb-2">50%</div>
-                <div className="font-semibold text-gray-800 dark:text-gray-100">🏠 Потребности</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Еда, жилье, транспорт</div>
+                <div className="font-semibold text-gray-800 dark:text-gray-100">🏠 {t('needsCategory')}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('needsCategoryDesc')}</div>
               </div>
               <div className="text-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20">
                 <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">25%</div>
-                <div className="font-semibold text-blue-800 dark:text-blue-200">🛡️ Накопления</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Подушка безопасности</div>
+                <div className="font-semibold text-blue-800 dark:text-blue-200">🛡️ {t('savingsCategory')}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('savingsCategoryDesc')}</div>
               </div>
               <div className="text-center p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
                 <div className="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">15%</div>
-                <div className="font-semibold text-green-800 dark:text-green-200">📈 Инвестиции</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Рост капитала</div>
+                <div className="font-semibold text-green-800 dark:text-green-200">📈 {t('investmentsCategory')}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('investmentsCategoryDesc')}</div>
               </div>
               <div className="text-center p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20">
                 <div className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">10%</div>
-                <div className="font-semibold text-purple-800 dark:text-purple-200">🎉 Развлечения</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Качество жизни</div>
+                <div className="font-semibold text-purple-800 dark:text-purple-200">🎉 {t('wantsCategory')}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('wantsCategoryDesc')}</div>
               </div>
             </div>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-              Финансовый компас автоматически рассчитывает распределение по этой проверенной методике,
-              исключая ошибки и помогая следовать финансовому плану.
+              {t('markTilburyRuleDesc')}
             </p>
           </div>
         </section>
