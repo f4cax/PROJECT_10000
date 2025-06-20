@@ -105,13 +105,13 @@ export default function BudgetChart({ budgetDistribution }) {
       
       {/* Сводка по распределению */}
       <div className="grid grid-cols-2 gap-4 mt-6">
-        <div className="text-center p-3 bg-gray-50 rounded-lg">
-          <p className="text-sm text-gray-600">{t('totalBudget') || 'Общий бюджет'}</p>
-          <p className="text-xl font-bold text-gray-900">{formatNumber(total)} {t('rublesSymbol')}</p>
+        <div className="text-center p-4 bg-gradient-to-br from-slate-700 to-slate-800 dark:from-slate-600 dark:to-slate-700 rounded-lg shadow-lg border border-slate-600">
+          <p className="text-sm text-slate-200 font-medium mb-1">{t('totalBudget') || 'Общий бюджет'}</p>
+          <p className="text-2xl font-bold text-white">{formatNumber(total)} {t('rublesSymbol')}</p>
         </div>
-        <div className="text-center p-3 bg-primary-50 rounded-lg">
-          <p className="text-sm text-primary-600">{t('investmentsPerYear') || 'Инвестиции в год'}</p>
-          <p className="text-xl font-bold text-primary-900">
+        <div className="text-center p-4 bg-gradient-to-br from-green-600 to-green-700 dark:from-green-500 dark:to-green-600 rounded-lg shadow-lg border border-green-500">
+          <p className="text-sm text-green-100 font-medium mb-1">{t('investmentsPerYear') || 'Инвестиции в год'}</p>
+          <p className="text-2xl font-bold text-white">
             {formatNumber(budgetDistribution.investments * 12)} {t('rublesSymbol')}
           </p>
         </div>
