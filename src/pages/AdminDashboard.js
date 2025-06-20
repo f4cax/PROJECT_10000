@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from '../utils/translations';
+import PWAStatus from '../components/common/PWAStatus';
 
 const AdminDashboard = () => {
   const { user, token } = useAuth();
   const { t } = useTranslation();
+  const { FullStatus } = PWAStatus();
   const [activeTab, setActiveTab] = useState('stats');
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
@@ -482,6 +484,11 @@ const AdminDashboard = () => {
                 <p className="text-gray-600 dark:text-gray-300">{t('statsLoadError')}</p>
               </div>
             )}
+
+            {/* PWA Статус */}
+            <div className="mt-6 md:mt-8">
+              <FullStatus showDetailed={true} />
+            </div>
           </div>
         )}
 

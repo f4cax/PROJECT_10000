@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 import LanguageToggle from './LanguageToggle';
 import AuthModal from '../auth/AuthModal';
+import PWAStatus from './PWAStatus';
 import { useTranslation } from '../../utils/translations';
 
 export default function Navbar() {
@@ -11,6 +12,7 @@ export default function Navbar() {
   const [user, setUser] = useState(null);
   const location = useLocation();
   const { t } = useTranslation();
+  const { MiniStatus, OfflineNotification } = PWAStatus();
 
   useEffect(() => {
     // Проверяем авторизацию при загрузке
@@ -130,6 +132,7 @@ export default function Navbar() {
           {/* Правая часть: Управление */}
           <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3 nav-buttons">
             <div className="flex items-center space-x-0.5 sm:space-x-1 lg:space-x-2">
+              <MiniStatus />
               <LanguageToggle />
               <ThemeToggle />
             </div>
@@ -272,6 +275,9 @@ export default function Navbar() {
         onClose={() => setShowAuthModal(false)}
         onAuth={handleAuth}
       />
+
+      {/* PWA Оффлайн уведомление */}
+      <OfflineNotification />
     </nav>
   );
 } 
