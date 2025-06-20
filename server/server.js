@@ -153,11 +153,14 @@ const UserSchema = new mongoose.Schema({
       default: null,
     },
     savingsGoals: [{
+      id: { type: String, default: () => Date.now().toString() },
       title: String,
       targetAmount: Number,
       currentAmount: { type: Number, default: 0 },
       deadline: Date,
       category: String,
+      isFrozen: { type: Boolean, default: false },
+      completedAt: { type: Date, default: null },
       createdAt: { type: Date, default: Date.now },
     }],
     testResults: {

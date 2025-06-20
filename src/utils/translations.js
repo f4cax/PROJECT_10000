@@ -252,6 +252,19 @@ export const translations = {
     achieveGoalIn: 'Достигнете цели через',
     months: 'месяцев',
     
+    // Поздравления и заморозка целей
+    goalCompleted: 'Цель достигнута!',
+    congratulations: 'Поздравляем!',
+    goalAchievedMessage: 'Вы успешно достигли своей финансовой цели!',
+    goalFrozen: 'Цель заморожена',
+    unfreezeGoal: 'Разморозить цель',
+    freezeGoal: 'Заморозить цель',
+    frozenGoalDescription: 'Цель выполнена и заморожена. Вы можете её разморозить для продолжения накоплений или удалить.',
+    keepSaving: 'Продолжить накопления',
+    deleteCompletedGoal: 'Удалить выполненную цель',
+    excellentWork: 'Отличная работа!',
+    goalOverachieved: 'Цель перевыполнена!',
+    
     // Категории целей
     emergencyCategory: 'Подушка безопасности',
     vacationCategory: 'Отпуск/Путешествие',
@@ -323,7 +336,7 @@ export const translations = {
     diversificationRecommendations: 'Рекомендации по диверсификации',
     topAssets: 'Топ активы',
     generalTips: 'Общие советы',
-    excellentWork: '🎉 Отличная работа! Ваш портфель сбалансирован.',
+    portfolioExcellent: '🎉 Отличная работа! Ваш портфель сбалансирован.',
     loadingPortfolio: 'Загружаем ваш портфель...',
     authRequired: 'Требуется авторизация',
     authRequiredDesc: 'Войдите в аккаунт, чтобы управлять своими активами',
@@ -895,6 +908,19 @@ export const translations = {
     achieveGoalIn: 'Achieve Goal In',
     months: 'months',
     
+    // Goal congratulations and freezing
+    goalCompleted: 'Goal Completed!',
+    congratulations: 'Congratulations!',
+    goalAchievedMessage: 'You have successfully achieved your financial goal!',
+    goalFrozen: 'Goal Frozen',
+    unfreezeGoal: 'Unfreeze Goal',
+    freezeGoal: 'Freeze Goal',
+    frozenGoalDescription: 'Goal completed and frozen. You can unfreeze it to continue saving or delete it.',
+    keepSaving: 'Keep Saving',
+    deleteCompletedGoal: 'Delete Completed Goal',
+    excellentWork: 'Excellent Work!',
+    goalOverachieved: 'Goal Exceeded!',
+    
     // Goal categories
     emergencyCategory: 'Emergency Fund',
     vacationCategory: 'Vacation/Travel',
@@ -1319,7 +1345,7 @@ export const translations = {
     topAssets: 'Top Assets',
     diversificationRecommendations: 'On diversification',
     generalTips: 'General tips',
-    excellentWork: 'Excellent work! Your portfolio is balanced.',
+    portfolioExcellent: 'Excellent work! Your portfolio is balanced.',
     assetTypeRequired: 'Asset Type *',
     assetNameRequired: 'Asset Name *',
     totalCostRequired: 'Total Cost *',

@@ -4,14 +4,40 @@ import { useTranslation } from '../../utils/translations';
 export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(!goal || !goal.title);
+  const [showCongratulations, setShowCongratulations] = useState(false);
   const [tempGoal, setTempGoal] = useState(goal || {
+    id: Date.now().toString(),
     title: '',
     targetAmount: '',
     currentAmount: 0,
     deadline: '',
     category: 'other',
-    priority: 'medium'
+    priority: 'medium',
+    isFrozen: false,
+    completedAt: null
   });
+
+  // Автоматическое поздравление и заморозка при достижении цели
+  React.useEffect(() => {
+    if (goal && goal.targetAmount > 0 && !goal.isFrozen) {
+      const progress = Math.min((goal.currentAmount / goal.targetAmount) * 100, 100);
+      
+      // Если цель достигнута - показываем поздравление и замораживаем
+      if (progress >= 100 && !goal.completedAt) {
+        setShowCongratulations(true);
+        
+        // Автоматически замораживаем через 3 секунды
+        setTimeout(() => {
+          setShowCongratulations(false);
+          onGoalChange({
+            ...goal,
+            isFrozen: true,
+            completedAt: new Date().toISOString()
+          });
+        }, 3000);
+      }
+    }
+  }, [goal, onGoalChange]);
 
   const categories = [
     { id: 'emergency', name: t('emergencyCategory'), icon: '🛡️', color: 'bg-blue-500' },
@@ -37,6 +63,22 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
       setTempGoal(goal);
       setIsEditing(false);
     }
+  };
+
+  const handleFreezeToggle = () => {
+    onGoalChange({
+      ...goal,
+      isFrozen: !goal.isFrozen,
+      completedAt: !goal.isFrozen ? new Date().toISOString() : null
+    });
+  };
+
+  const handleUnfreeze = () => {
+    onGoalChange({
+      ...goal,
+      isFrozen: false,
+      completedAt: null
+    });
   };
 
   const calculateProgress = () => {
@@ -65,15 +107,46 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
     return { calculated: monthsNeeded, toDeadline: null, isRealistic: true };
   };
 
-  const formatNumber = (num) => {
-    return new Intl.NumberFormat('ru-RU').format(num);
-  };
-
   const getCurrentCategory = () => {
     return categories.find(cat => cat.id === (goal?.category || tempGoal.category));
   };
 
-  if (isEditing) {
+  // Вычисления для отображения
+  const progress = calculateProgress();
+  const monthsToGoal = calculateMonthsToGoal();
+  const category = getCurrentCategory();
+  const remaining = goal ? goal.targetAmount - goal.currentAmount : 0;
+  
+  const formatNumber = (num) => {
+    return new Intl.NumberFormat('ru-RU').format(num);
+  };
+
+  // Поздравительное модальное окно
+  if (showCongratulations) {
+    return (
+      <div className="card bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-300 text-center animate-pulse">
+        <div className="text-6xl mb-4">🎉</div>
+        <h2 className="text-2xl font-bold text-yellow-800 mb-2">
+          {t('congratulations')}
+        </h2>
+        <h3 className="text-xl font-semibold text-yellow-700 mb-3">
+          {t('goalCompleted')}
+        </h3>
+        <p className="text-yellow-600 mb-4">
+          {t('goalAchievedMessage')}
+        </p>
+        <div className="text-4xl mb-2">✨ {goal.title} ✨</div>
+        <div className="text-lg font-semibold text-green-600">
+          {formatNumber(goal.currentAmount)} {t('rublesSymbol')} / {formatNumber(goal.targetAmount)} {t('rublesSymbol')}
+        </div>
+        <div className="mt-4 text-sm text-gray-600">
+          {t('excellentWork')} {progress > 100 ? t('goalOverachieved') : ''}  
+        </div>
+      </div>
+    );
+  }
+
+  if (isEditing && !goal?.isFrozen) {
     return (
       <div className="card">
         <div className="flex items-center justify-between mb-4">
@@ -201,10 +274,109 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
 
 
 
-  const progress = calculateProgress();
-  const monthsToGoal = calculateMonthsToGoal();
-  const category = getCurrentCategory();
-  const remaining = goal.targetAmount - goal.currentAmount;
+  // Замороженная цель - специальное отображение
+  if (goal?.isFrozen) {
+    return (
+      <div className="card bg-gradient-to-r from-gray-50 to-slate-50 border-gray-300 opacity-90">
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center">
+            <div className={`w-12 h-12 ${category.color} rounded-full flex items-center justify-center text-white text-xl mr-3 relative`}>
+              {category.icon}
+              <div className="absolute -top-1 -right-1 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs">
+                ❄️
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-700 flex items-center">
+                {goal.title}
+                <span className="ml-2 text-sm px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
+                  {t('goalFrozen')}
+                </span>
+              </h3>
+              <p className="text-sm text-gray-500">{category.name}</p>
+              {goal.completedAt && (
+                <p className="text-xs text-gray-400">
+                  {t('goalCompleted')} {new Date(goal.completedAt).toLocaleDateString('ru-RU')}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="flex space-x-2">
+            <button
+              onClick={handleUnfreeze}
+              className="text-blue-600 hover:text-blue-800 p-1 text-sm"
+              title={t('unfreezeGoal')}
+            >
+              🔓
+            </button>
+            <button
+              onClick={() => onGoalChange(null)}
+              className="text-red-500 hover:text-red-700 p-1"
+              title={t('deleteCompletedGoal')}
+            >
+              🗑️
+            </button>
+          </div>
+        </div>
+
+        {/* Прогресс бар - всегда 100% для замороженных */}
+        <div className="mb-4">
+          <div className="flex justify-between text-sm text-gray-600 mb-1">
+            <span>{t('progress')}</span>
+            <span className="text-green-600 font-semibold">✅ {progress.toFixed(1)}%</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-3">
+            <div 
+              className="bg-green-500 h-3 rounded-full"
+              style={{ width: `${Math.min(progress, 100)}%` }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Суммы */}
+        <div className="grid grid-cols-3 gap-4 mb-4 text-center">
+          <div>
+            <p className="text-xs text-gray-600">{t('accumulated')}</p>
+            <p className="font-semibold text-green-600">{formatNumber(goal.currentAmount)} {t('rublesSymbol')}</p>
+          </div>
+          <div>
+            <p className="text-xs text-gray-600">{remaining > 0 ? t('remaining') : t('goalOverachieved')}</p>
+            <p className={`font-semibold ${remaining > 0 ? 'text-orange-600' : 'text-purple-600'}`}>
+              {remaining > 0 ? `${formatNumber(remaining)} ${t('rublesSymbol')}` : `+${formatNumber(Math.abs(remaining))} ${t('rublesSymbol')}`}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs text-gray-600">{t('goal')}</p>
+            <p className="font-semibold text-gray-900">{formatNumber(goal.targetAmount)} {t('rublesSymbol')}</p>
+          </div>
+        </div>
+
+        {/* Информация о заморозке */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+          <p className="text-sm text-blue-700">
+            ❄️ {t('frozenGoalDescription')}
+          </p>
+        </div>
+
+        {/* Кнопки управления замороженной целью */}
+        <div className="flex space-x-2">
+          <button
+            onClick={handleUnfreeze}
+            className="btn-primary flex-1 text-sm py-2"
+          >
+            🔓 {t('keepSaving')}
+          </button>
+          <button
+            onClick={() => onGoalChange(null)}
+            className="btn-danger text-sm py-2 px-4"
+            title={t('deleteCompletedGoal')}
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="card bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
@@ -218,13 +390,24 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
             <p className="text-sm text-gray-600">{category.name}</p>
           </div>
         </div>
-        <button
-          onClick={() => setIsEditing(true)}
-          className="text-gray-500 hover:text-gray-700 p-1"
-          title={t('editGoal')}
-        >
-          ✏️
-        </button>
+        <div className="flex space-x-2">
+          {progress >= 100 && (
+            <button
+              onClick={handleFreezeToggle}
+              className="text-blue-600 hover:text-blue-800 p-1"
+              title={t('freezeGoal')}
+            >
+              ❄️
+            </button>
+          )}
+          <button
+            onClick={() => setIsEditing(true)}
+            className="text-gray-500 hover:text-gray-700 p-1"
+            title={t('editGoal')}
+          >
+            ✏️
+          </button>
+        </div>
       </div>
 
       {/* Прогресс бар */}

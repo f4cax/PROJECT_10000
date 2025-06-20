@@ -568,7 +568,7 @@ export default function AssetsPage() {
             
             {(!analytics.diversification?.recommendations?.length && !analytics.suggestions?.length) && (
               <p className="text-blue-700 dark:text-blue-300">
-                {t('excellentWork') || '🎉 Отличная работа! Ваш портфель сбалансирован.'}
+                {t('portfolioExcellent') || '🎉 Отличная работа! Ваш портфель сбалансирован.'}
               </p>
             )}
           </div>
