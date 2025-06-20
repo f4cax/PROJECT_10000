@@ -947,6 +947,7 @@ export const translations = {
     // Page sections
     whatMakesSpecial: 'What Makes Project Special',
     techStack: 'Technology Stack',
+    realFeatures: 'Real Features',
     methodology: 'Proven Methodology',
     practicalValue: 'Practical Value',
     modernArchitecture: 'Modern Architecture',
