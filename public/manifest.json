@@ -4,19 +4,19 @@
   "description": "Автоматическое распределение бюджета по правилу 50-25-15-10. Управляйте финансами легко и эффективно",
   "icons": [
     {
-      "src": "favicon.svg",
+      "src": "favicon.svg?v=2",
       "sizes": "32x32 48x48 64x64 96x96 128x128 192x192 256x256 384x384 512x512",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "favicon.svg",
+      "src": "favicon.svg?v=2",
       "sizes": "192x192 512x512",
       "type": "image/svg+xml",
       "purpose": "maskable"
     },
     {
-      "src": "apple-touch-icon.svg",
+      "src": "apple-touch-icon.svg?v=2",
       "sizes": "180x180",
       "type": "image/svg+xml",
       "purpose": "any"
