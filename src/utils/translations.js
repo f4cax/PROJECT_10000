@@ -185,8 +185,11 @@ export const translations = {
 
     // Практическая ценность
     practicalValue: 'Практическая ценность',
+    budgetAutomationTitle: 'Автоматизация бюджета',
     budgetAutomationDesc: 'Исключает ошибки в расчетах',
+    investmentTrackingTitle: 'Отслеживание инвестиций',
     investmentTrackingDesc: 'Цены обновляются в реальном времени',
+    goalPlanningTitle: 'Планирование целей',
     goalPlanningDesc: 'Рассчитывает время достижения',
     zeroErrorsMetric: 'Ноль ошибок',
     realTimeMetric: 'В реальном времени',
@@ -194,8 +197,11 @@ export const translations = {
 
     // Современная архитектура
     modernArchitecture: 'Современная архитектура',
+    cloudHostingTitle: 'Облачный хостинг',
     cloudHostingDesc: 'Развернут на Vercel, Railway и MongoDB Atlas',
+    pwaRealTitle: 'PWA приложение',
     pwaRealDesc: 'Устанавливается на любое устройство',
+    multiLanguageTitle: 'Мультиязычность',
     multiLanguageDesc: 'Поддержка русского и английского языков',
     russianLang: 'Русский',
     englishLang: 'English',
@@ -529,9 +535,6 @@ export const translations = {
     considerFinancialAdvisor: 'Рассмотрите консультацию с финансовым советником',
     studyTaxAspects: 'Изучите налоговые аспекты инвестирования',
 
-
-
-
   },
 
   en: {
@@ -719,8 +722,37 @@ export const translations = {
     // Page sections
     whatMakesSpecial: 'What Makes Project Special',
     techStack: 'Technology Stack',
+    methodology: 'Proven Methodology',
+    practicalValue: 'Practical Value',
+    modernArchitecture: 'Modern Architecture',
 
-
+    // Missing About page keys
+    budgetAutomationTitle: 'Budget Automation',
+    budgetAutomationDesc: 'Eliminates calculation errors',
+    investmentTrackingTitle: 'Investment Tracking',
+    investmentTrackingDesc: 'Prices update in real-time',
+    goalPlanningTitle: 'Goal Planning',
+    goalPlanningDesc: 'Calculates achievement time',
+    zeroErrorsMetric: 'Zero Errors',
+    realTimeMetric: 'Real-time',
+    calculatedMetric: 'Calculated',
+    cloudHostingTitle: 'Cloud Hosting',
+    cloudHostingDesc: 'Deployed on Vercel, Railway and MongoDB Atlas',
+    pwaRealTitle: 'PWA Application',
+    pwaRealDesc: 'Installs on any device',
+    multiLanguageTitle: 'Multi-language',
+    multiLanguageDesc: 'Supports Russian and English languages',
+    needsCategory: 'Needs',
+    needsCategoryDesc: 'Food, housing, transport',
+    savingsCategory: 'Savings',
+    savingsCategoryDesc: 'Emergency fund',
+    investmentsCategory: 'Investments',
+    investmentsCategoryDesc: 'Capital growth',
+    wantsCategory: 'Entertainment',
+    wantsCategoryDesc: 'Quality of life',
+    markTilburyRuleDesc: 'Financial Compass automatically calculates distribution according to this proven methodology, eliminating errors and helping follow financial plan.',
+    russianLang: 'Русский',
+    englishLang: 'English',
 
     // Forms and buttons
     monthlyIncomeLabel: 'Enter your monthly income',
