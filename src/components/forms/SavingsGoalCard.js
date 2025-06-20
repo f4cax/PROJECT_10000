@@ -224,7 +224,7 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
                   }
                 }
               }}
-              placeholder="0"
+              placeholder="Уже накоплено"
               min="0"
               step="1"
               className="input-field"

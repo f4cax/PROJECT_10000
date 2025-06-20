@@ -616,10 +616,14 @@ export default function AssetsPage() {
                 <label className="label">Общая стоимость *</label>
                 <input
                   type="number"
-                  value={newAsset.amount}
-                  onChange={(e) => setNewAsset({...newAsset, amount: parseFloat(e.target.value) || 0})}
+                  value={newAsset.amount || ''}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setNewAsset({...newAsset, amount: value === '' ? '' : parseFloat(value) || 0});
+                  }}
+                  onFocus={(e) => e.target.select()}
                   className="input-field"
-                  placeholder="0"
+                  placeholder="Введите стоимость актива"
                 />
               </div>
               

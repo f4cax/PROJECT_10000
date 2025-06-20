@@ -543,11 +543,12 @@ const ProfilePage = () => {
                   </label>
                   <input
                     type="number"
-                    value={financialData.monthlyIncome}
-                    onChange={(e) => setFinancialData({...financialData, monthlyIncome: Number(e.target.value)})}
+                    value={financialData.monthlyIncome || ''}
+                    onChange={(e) => setFinancialData({...financialData, monthlyIncome: e.target.value === '' ? 0 : Number(e.target.value)})}
+                    onFocus={(e) => e.target.select()}
                     min="0"
                     step="1000"
-                    placeholder="0"
+                    placeholder="Введите ваш доход"
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -557,11 +558,12 @@ const ProfilePage = () => {
                   </label>
                   <input
                     type="number"
-                    value={financialData.totalAssets}
-                    onChange={(e) => setFinancialData({...financialData, totalAssets: Number(e.target.value)})}
+                    value={financialData.totalAssets || ''}
+                    onChange={(e) => setFinancialData({...financialData, totalAssets: e.target.value === '' ? 0 : Number(e.target.value)})}
+                    onFocus={(e) => e.target.select()}
                     min="0"
                     step="10000"
-                    placeholder="0"
+                    placeholder="Введите общую сумму активов"
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -571,11 +573,12 @@ const ProfilePage = () => {
                   </label>
                   <input
                     type="number"
-                    value={financialData.investments}
-                    onChange={(e) => setFinancialData({...financialData, investments: Number(e.target.value)})}
+                    value={financialData.investments || ''}
+                    onChange={(e) => setFinancialData({...financialData, investments: e.target.value === '' ? 0 : Number(e.target.value)})}
+                    onFocus={(e) => e.target.select()}
                     min="0"
                     step="5000"
-                    placeholder="0"
+                    placeholder="Текущая сумма инвестиций"
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -585,11 +588,12 @@ const ProfilePage = () => {
                   </label>
                   <input
                     type="number"
-                    value={financialData.goalAmount}
-                    onChange={(e) => setFinancialData({...financialData, goalAmount: Number(e.target.value)})}
+                    value={financialData.goalAmount || ''}
+                    onChange={(e) => setFinancialData({...financialData, goalAmount: e.target.value === '' ? 0 : Number(e.target.value)})}
+                    onFocus={(e) => e.target.select()}
                     min="0"
                     step="10000"
-                    placeholder="0"
+                    placeholder="Целевая сумма для достижения"
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>

@@ -48,10 +48,10 @@ export default function StocksPage() {
   
   // Состояние для калькулятора сложного процента
   const [calculator, setCalculator] = useState({
-    initialAmount: 100000,
-    monthlyContribution: 10000,
-    annualReturn: 10,
-    years: 10
+    initialAmount: '',
+    monthlyContribution: '',
+    annualReturn: '',
+    years: ''
   });
 
   // Популярные акции для отслеживания - мемоизируем для стабильности
@@ -172,14 +172,29 @@ export default function StocksPage() {
   // Расчет сложного процента
   const calculateCompoundInterest = () => {
     const { initialAmount, monthlyContribution, annualReturn, years } = calculator;
-    const monthlyRate = annualReturn / 100 / 12;
-    const totalMonths = years * 12;
+    
+    // Проверяем, что все поля заполнены
+    const initial = parseFloat(initialAmount) || 0;
+    const monthly = parseFloat(monthlyContribution) || 0;
+    const returnRate = parseFloat(annualReturn) || 0;
+    const period = parseFloat(years) || 0;
+    
+    if (initial <= 0 && monthly <= 0) {
+      return { futureValue: 0, totalContributions: 0, totalGain: 0 };
+    }
+    
+    if (returnRate <= 0 || period <= 0) {
+      return { futureValue: 0, totalContributions: 0, totalGain: 0 };
+    }
+    
+    const monthlyRate = returnRate / 100 / 12;
+    const totalMonths = period * 12;
     
     // Формула для сложного процента с ежемесячными взносами
-    const futureValue = initialAmount * Math.pow(1 + monthlyRate, totalMonths) +
-      monthlyContribution * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate);
+    const futureValue = initial * Math.pow(1 + monthlyRate, totalMonths) +
+      monthly * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate);
     
-    const totalContributions = initialAmount + (monthlyContribution * totalMonths);
+    const totalContributions = initial + (monthly * totalMonths);
     const totalGain = futureValue - totalContributions;
     
     return {
@@ -407,7 +422,8 @@ export default function StocksPage() {
               <input
                 type="number"
                 value={calculator.initialAmount}
-                onChange={(e) => setCalculator({...calculator, initialAmount: Number(e.target.value)})}
+                onChange={(e) => setCalculator({...calculator, initialAmount: e.target.value})}
+                onFocus={(e) => e.target.select()}
                 className="input-field"
                 placeholder="100000"
               />
@@ -418,7 +434,8 @@ export default function StocksPage() {
               <input
                 type="number"
                 value={calculator.monthlyContribution}
-                onChange={(e) => setCalculator({...calculator, monthlyContribution: Number(e.target.value)})}
+                onChange={(e) => setCalculator({...calculator, monthlyContribution: e.target.value})}
+                onFocus={(e) => e.target.select()}
                 className="input-field"
                 placeholder="10000"
               />
@@ -430,7 +447,8 @@ export default function StocksPage() {
                 type="number"
                 step="0.1"
                 value={calculator.annualReturn}
-                onChange={(e) => setCalculator({...calculator, annualReturn: Number(e.target.value)})}
+                onChange={(e) => setCalculator({...calculator, annualReturn: e.target.value})}
+                onFocus={(e) => e.target.select()}
                 className="input-field"
                 placeholder="10"
               />
@@ -441,7 +459,8 @@ export default function StocksPage() {
               <input
                 type="number"
                 value={calculator.years}
-                onChange={(e) => setCalculator({...calculator, years: Number(e.target.value)})}
+                onChange={(e) => setCalculator({...calculator, years: e.target.value})}
+                onFocus={(e) => e.target.select()}
                 className="input-field"
                 placeholder="10"
               />

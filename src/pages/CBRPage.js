@@ -8,7 +8,7 @@ export default function CBRPage() {
   const [error, setError] = useState(null);
   const [calculatorFrom, setCalculatorFrom] = useState('USD');
   const [calculatorTo, setCalculatorTo] = useState('RUB');
-  const [calculatorAmount, setCalculatorAmount] = useState(100);
+  const [calculatorAmount, setCalculatorAmount] = useState('');
   const [inflationData] = useState({
     currentRate: 5.9,
     yearRate: 7.4,
@@ -57,7 +57,10 @@ export default function CBRPage() {
 
   // Расчет курса для калькулятора
   const calculateExchange = () => {
-    if (!exchangeRates) return 0;
+    if (!exchangeRates || !calculatorAmount || calculatorAmount === '') return '0';
+    
+    const amount = parseFloat(calculatorAmount);
+    if (isNaN(amount) || amount <= 0) return '0';
     
     let fromRate = 1;
     let toRate = 1;
@@ -71,14 +74,14 @@ export default function CBRPage() {
     }
     
     if (calculatorFrom === 'RUB' && calculatorTo !== 'RUB') {
-      return (calculatorAmount / toRate).toFixed(4);
+      return (amount / toRate).toFixed(4);
     } else if (calculatorFrom !== 'RUB' && calculatorTo === 'RUB') {
-      return (calculatorAmount * fromRate).toFixed(2);
+      return (amount * fromRate).toFixed(2);
     } else if (calculatorFrom !== 'RUB' && calculatorTo !== 'RUB') {
-      return ((calculatorAmount * fromRate) / toRate).toFixed(4);
+      return ((amount * fromRate) / toRate).toFixed(4);
     }
     
-    return calculatorAmount;
+    return amount.toString();
   };
 
   // Получение изменения курса
@@ -237,10 +240,18 @@ export default function CBRPage() {
             <label className="label">{t('amount')}</label>
             <input
               type="number"
-              value={calculatorAmount}
-              onChange={(e) => setCalculatorAmount(parseFloat(e.target.value) || 0)}
+              value={calculatorAmount || ''}
+              onChange={(e) => {
+                const value = e.target.value;
+                setCalculatorAmount(value === '' ? '' : parseFloat(value) || 0);
+              }}
+              onFocus={(e) => {
+                if (e.target.value === '0' || e.target.value === '') {
+                  e.target.select();
+                }
+              }}
               className="input-field"
-              placeholder="100"
+              placeholder="Введите сумму"
             />
           </div>
           <div>
