@@ -137,24 +137,24 @@ export default function AboutPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
       
       {/* Hero Section */}
-      <header className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-700 text-white shadow-2xl">
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+      <header className="relative overflow-hidden bg-gradient-to-r from-blue-100 to-indigo-200 dark:from-blue-600 dark:via-indigo-700 dark:to-purple-700 text-gray-800 dark:text-white shadow-xl">
+        <div className="absolute inset-0 bg-black/5 dark:bg-black/30 backdrop-blur-sm"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
           <div className="text-center">
             <div className="text-7xl mb-6 drop-shadow-lg">🧭</div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-shadow">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-gray-900 dark:text-white text-shadow">
               {t('aboutProject')}
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl mb-10 text-blue-100 max-w-4xl mx-auto text-shadow-sm">
+            <p className="text-lg sm:text-xl md:text-2xl mb-10 text-indigo-700 dark:text-blue-100 max-w-4xl mx-auto text-shadow-sm">
               {t('projectSlogan')}
             </p>
             <div className="flex flex-wrap justify-center gap-3 text-sm font-medium">
-              <span className="bg-white/10 hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-white/20">React.js</span>
-              <span className="bg-white/10 hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-white/20">Node.js + Express</span>
-              <span className="bg-white/10 hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-white/20">MongoDB</span>
-              <span className="bg-white/10 hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-white/20">Chart.js</span>
-              <span className="bg-white/10 hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-white/20">JWT Auth</span>
-              <span className="bg-white/10 hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-white/20">API Integrations</span>
+              <span className="bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-black/10 dark:border-white/20 text-gray-800 dark:text-white">React.js</span>
+              <span className="bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-black/10 dark:border-white/20 text-gray-800 dark:text-white">Node.js + Express</span>
+              <span className="bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-black/10 dark:border-white/20 text-gray-800 dark:text-white">MongoDB</span>
+              <span className="bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-black/10 dark:border-white/20 text-gray-800 dark:text-white">Chart.js</span>
+              <span className="bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-black/10 dark:border-white/20 text-gray-800 dark:text-white">JWT Auth</span>
+              <span className="bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 transition-colors cursor-pointer px-4 py-2 rounded-full backdrop-blur-lg border border-black/10 dark:border-white/20 text-gray-800 dark:text-white">API Integrations</span>
             </div>
           </div>
         </div>
