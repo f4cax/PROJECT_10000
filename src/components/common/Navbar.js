@@ -179,7 +179,7 @@ export default function Navbar() {
         ></div>
         
                 {/* Само меню */}
-        <div className={`absolute left-0 top-16 w-80 max-w-sm bg-gray-800 dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} max-h-screen overflow-hidden flex flex-col`}>
+        <div className={`absolute left-0 top-16 w-80 max-w-sm bg-gray-800 dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} h-[calc(100vh-4rem)] flex flex-col`}>
           <div className="px-6 py-4 border-b border-gray-700">
             <h3 className="text-lg font-semibold text-white mb-0 flex items-center">
               <span className="text-2xl mr-2">🧭</span>
@@ -213,59 +213,35 @@ export default function Navbar() {
             </div>
           </div>
           
-          {/* Информация о пользователе и быстрые действия - зафиксированы внизу */}
-          <div className="border-t border-gray-700 px-6 py-4">
-            {/* Дополнительная информация */}
-            {user && (
-              <div className="mb-4">
-                <Link
-                  to="/profile"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center space-x-3 px-4 py-3 user-card rounded-lg hover:bg-gray-700 transition-colors duration-200"
-                >
-                  <div className="relative">
-                    <span className="text-2xl">{user.role === 'admin' ? '👑' : '👤'}</span>
-                    {user.role === 'admin' && (
-                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-pulse"></div>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-white text-sm font-medium truncate">{user.name}</div>
-                    <div className="text-gray-400 text-xs truncate">{user.email}</div>
-                    <div className="text-primary-400 text-xs font-medium">
-                      {user.role === 'admin' ? `👑 ${t('administrator') || 'Администратор'}` : `👤 ${t('user') || 'Пользователь'}`}
-                    </div>
-                  </div>
-                  <div className="text-gray-400 hover:text-white">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </Link>
-              </div>
-            )}
-            
-            {/* Быстрые действия */}
-            <div className="flex space-x-2">
-              <button
+                    {/* Информация о пользователе - зафиксирована внизу */}
+          {user && (
+            <div className="border-t border-gray-700 px-6 py-4">
+              <Link
+                to="/profile"
                 onClick={() => setIsOpen(false)}
-                className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg text-sm transition-colors duration-200"
+                className="flex items-center space-x-3 px-4 py-3 user-card rounded-lg hover:bg-gray-700 transition-colors duration-200"
               >
-                {t('close') || 'Закрыть'}
-              </button>
-              {!user && (
-                <button
-                  onClick={() => {
-                    setShowAuthModal(true);
-                    setIsOpen(false);
-                  }}
-                  className="flex-1 bg-primary-600 hover:bg-primary-700 text-white py-2 px-4 rounded-lg text-sm transition-colors duration-200"
-                >
-                  {t('login')}
-                </button>
-              )}
+                <div className="relative">
+                  <span className="text-2xl">{user.role === 'admin' ? '👑' : '👤'}</span>
+                  {user.role === 'admin' && (
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-pulse"></div>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-white text-sm font-medium truncate">{user.name}</div>
+                  <div className="text-gray-400 text-xs truncate">{user.email}</div>
+                  <div className="text-primary-400 text-xs font-medium">
+                    {user.role === 'admin' ? `👑 ${t('administrator') || 'Администратор'}` : `👤 ${t('user') || 'Пользователь'}`}
+                  </div>
+                </div>
+                <div className="text-gray-400 hover:text-white">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </Link>
             </div>
-          </div>
+          )}
         </div>
       </div>
       
