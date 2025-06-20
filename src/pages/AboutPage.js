@@ -182,13 +182,13 @@ export default function AboutPage() {
         </section>
 
         {/* Technical Solutions */}
-        <section className="bg-gradient-to-r from-gray-900 to-indigo-900 rounded-3xl p-8 md:p-16 text-white shadow-xl">
+        <section className="bg-gray-100 dark:bg-gradient-to-r dark:from-gray-900 dark:to-indigo-900 rounded-3xl p-8 md:p-16 text-gray-800 dark:text-white shadow-xl">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 tracking-tight">
              <span className="inline-block mr-3">⚙️</span>{t('technicalFeatures')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
             {technicalFeatures.map((feature, index) => (
-              <div key={index} className="bg-white/5 rounded-xl p-6 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-colors">
+              <div key={index} className="bg-white/50 dark:bg-white/5 rounded-xl p-6 backdrop-blur-md border border-gray-200/80 dark:border-white/10 hover:bg-white dark:hover:bg-white/10 transition-colors">
                 <div className="flex items-start space-x-5">
                   <div className="text-4xl pt-1">{feature.icon}</div>
                   <div className="flex-1">
@@ -198,7 +198,7 @@ export default function AboutPage() {
                         {feature.badge}
                       </span>
                     </div>
-                    <p className="text-blue-100/80 leading-relaxed">{feature.description}</p>
+                    <p className="text-gray-600 dark:text-blue-100/80 leading-relaxed">{feature.description}</p>
                   </div>
                 </div>
               </div>
@@ -242,19 +242,19 @@ export default function AboutPage() {
         </section>
 
         {/* Modern Architecture */}
-        <section className="bg-gradient-to-r from-purple-900 via-indigo-900 to-blue-900 rounded-3xl p-8 md:p-16 text-white shadow-xl">
+        <section className="bg-gray-100 dark:bg-gradient-to-r dark:from-purple-900 dark:via-indigo-900 dark:to-blue-900 rounded-3xl p-8 md:p-16 text-gray-800 dark:text-white shadow-xl">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 tracking-tight">
             <span className="inline-block mr-3">🏗️</span>{t('modernArchitecture')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {architectureFeatures.map((feature, index) => (
-              <div key={index} className="text-center bg-white/5 rounded-xl p-6 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-colors">
+              <div key={index} className="text-center bg-white/50 dark:bg-white/5 rounded-xl p-6 backdrop-blur-md border border-gray-200/80 dark:border-white/10 hover:bg-white dark:hover:bg-white/10 transition-colors">
                 <div className="text-5xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-blue-100/80 mb-5 leading-relaxed">{feature.description}</p>
+                <p className="text-gray-600 dark:text-blue-100/80 mb-5 leading-relaxed">{feature.description}</p>
                 <div className="flex flex-wrap justify-center gap-2">
                   {feature.platforms.map((platform, i) => (
-                    <span key={i} className="bg-white/10 text-white text-xs px-3 py-1.5 rounded-full">
+                    <span key={i} className="bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-white text-xs px-3 py-1.5 rounded-full">
                       {platform}
                     </span>
                   ))}
@@ -301,8 +301,8 @@ export default function AboutPage() {
         </section>
 
         {/* Technology Stack */}
-        <section className="bg-gray-900 dark:bg-gray-800/50 rounded-3xl p-8 md:p-16 text-white shadow-xl">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 tracking-tight">
+        <section className="bg-gray-100 dark:bg-gray-900 rounded-3xl p-8 md:p-16 shadow-xl">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 dark:text-white tracking-tight">
             <span className="inline-block mr-3">🛠️</span>{t('techStack')}
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
@@ -320,8 +320,8 @@ export default function AboutPage() {
                 <div className={`flex items-center justify-center h-24 w-24 mx-auto rounded-full ${tech.color} group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                   <div className="text-4xl">{tech.icon}</div>
                 </div>
-                <div className="font-bold text-sm mt-4">{tech.name}</div>
-                <div className="text-xs opacity-70">{tech.category}</div>
+                <div className="font-bold text-sm mt-4 text-gray-800 dark:text-white">{tech.name}</div>
+                <div className="text-xs opacity-70 text-gray-600 dark:text-gray-400">{tech.category}</div>
               </div>
             ))}
           </div>
@@ -383,40 +383,40 @@ export default function AboutPage() {
         </section>
 
         {/* Contact Section */}
-        <section className="bg-gradient-to-r from-blue-700 to-indigo-700 rounded-3xl p-8 md:p-16 text-white text-center shadow-xl">
+        <section className="bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-700 dark:to-indigo-700 rounded-3xl p-8 md:p-16 text-center shadow-xl">
           <div className="text-6xl mb-6">📧</div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800 dark:text-white tracking-tight">
             {t('contactUsNew')}
           </h2>
-          <p className="text-xl mb-10 text-blue-100 max-w-2xl mx-auto">
+          <p className="text-xl mb-10 text-gray-600 dark:text-blue-100 max-w-2xl mx-auto">
             {t('contactDescNew')}
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <a 
               href="mailto:g53705046@gmail.com"
-              className="group bg-white/10 hover:bg-white/20 rounded-2xl p-8 transition-all duration-300 hover:scale-105 backdrop-blur-md border border-white/20 shadow-lg"
+              className="group bg-white/50 dark:bg-white/10 hover:bg-white dark:hover:bg-white/20 rounded-2xl p-8 transition-all duration-300 hover:scale-105 backdrop-blur-md border border-gray-200/80 dark:border-white/20 shadow-lg"
             >
               <div className="text-4xl mb-4">✉️</div>
-              <h3 className="text-xl font-bold mb-2">{t('emailUs')}</h3>
-              <p className="text-blue-100 mb-3 group-hover:text-white transition-colors">g53705046@gmail.com</p>
-              <p className="text-sm text-blue-200">{t('responseTime')}</p>
+              <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">{t('emailUs')}</h3>
+              <p className="text-gray-600 dark:text-blue-100 mb-3 group-hover:text-gray-800 dark:group-hover:text-white transition-colors">g53705046@gmail.com</p>
+              <p className="text-sm text-gray-500 dark:text-blue-200">{t('responseTime')}</p>
             </a>
             
             <a 
               href="https://www.donationalerts.com/r/xxarnixx"
               target="_blank"
               rel="noopener noreferrer"
-              className="group bg-white/10 hover:bg-white/20 rounded-2xl p-8 transition-all duration-300 hover:scale-105 backdrop-blur-md border border-white/20 shadow-lg"
+              className="group bg-white/50 dark:bg-white/10 hover:bg-white dark:hover:bg-white/20 rounded-2xl p-8 transition-all duration-300 hover:scale-105 backdrop-blur-md border border-gray-200/80 dark:border-white/20 shadow-lg"
             >
               <div className="text-4xl mb-4">💝</div>
-              <h3 className="text-xl font-bold mb-2">{t('supportProject')}</h3>
-              <p className="text-blue-100 mb-3 group-hover:text-white transition-colors">DonationAlerts</p>
-              <p className="text-sm text-blue-200">{t('helpDevelopment')}</p>
+              <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">{t('supportProject')}</h3>
+              <p className="text-gray-600 dark:text-blue-100 mb-3 group-hover:text-gray-800 dark:group-hover:text-white transition-colors">DonationAlerts</p>
+              <p className="text-sm text-gray-500 dark:text-blue-200">{t('helpDevelopment')}</p>
             </a>
           </div>
           
-          <div className="mt-12 text-sm text-blue-200/80 space-y-2">
+          <div className="mt-12 text-sm text-gray-500 dark:text-blue-200/80 space-y-2">
             <p>🚀 {t('projectCommunity')}</p>
             <p>⚡ {t('modernTech')}</p>
           </div>
