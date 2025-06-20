@@ -119,21 +119,21 @@ export default function BudgetChart({ budgetDistribution }) {
 
       {/* Процентное соотношение */}
       <div className="grid grid-cols-4 gap-2 text-center text-xs">
-        <div className="p-2 bg-gray-100 rounded">
-          <div className="w-3 h-3 bg-gray-500 rounded-full mx-auto mb-1"></div>
-          <span className="font-medium">50%</span>
+        <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600">
+          <div className="w-4 h-4 bg-gray-500 rounded-full mx-auto mb-2"></div>
+          <span className="font-semibold text-gray-800 dark:text-gray-200">50%</span>
         </div>
-        <div className="p-2 bg-primary-50 rounded">
-          <div className="w-3 h-3 bg-primary-500 rounded-full mx-auto mb-1"></div>
-          <span className="font-medium">30%</span>
+        <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg border border-primary-300 dark:border-primary-700">
+          <div className="w-4 h-4 bg-primary-500 rounded-full mx-auto mb-2"></div>
+          <span className="font-semibold text-primary-800 dark:text-primary-200">25%</span>
         </div>
-        <div className="p-2 bg-green-50 rounded">
-          <div className="w-3 h-3 bg-green-500 rounded-full mx-auto mb-1"></div>
-          <span className="font-medium">15%</span>
+        <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg border border-green-300 dark:border-green-700">
+          <div className="w-4 h-4 bg-green-500 rounded-full mx-auto mb-2"></div>
+          <span className="font-semibold text-green-800 dark:text-green-200">15%</span>
         </div>
-        <div className="p-2 bg-red-50 rounded">
-          <div className="w-3 h-3 bg-red-500 rounded-full mx-auto mb-1"></div>
-          <span className="font-medium">5%</span>
+        <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-lg border border-red-300 dark:border-red-700">
+          <div className="w-4 h-4 bg-red-500 rounded-full mx-auto mb-2"></div>
+          <span className="font-semibold text-red-800 dark:text-red-200">10%</span>
         </div>
       </div>
     </div>
