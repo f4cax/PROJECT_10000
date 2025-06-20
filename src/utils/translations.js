@@ -233,9 +233,12 @@ export const translations = {
     calculationCompleted: 'Расчёт выполнен для дохода:',
     
     // Уведомления и рекомендации
+    lowIncomeTitle: 'Низкий доход',
+    greatIncomeTitle: 'Отличный доход!',
+    highSpendingTitle: 'Превышение бюджета на развлечения',
     lowIncomeWarning: 'При доходе менее 30,000 руб сосредоточьтесь на создании подушки безопасности перед инвестициями.',
     highIncomeAdvice: 'У вас хороший доход. Рассмотрите увеличение процента на инвестиции до 20-25%.',
-    highSpendingWarning: 'Вы тратите более 10,000 руб на развлечения. Подумайте о перераспределении в пользу инвестиций.',
+    highSpendingWarning: 'Вы тратите на развлечения больше рекомендованных 10% от дохода. Подумайте о перераспределении в пользу инвестиций.',
     
     // Цели накопления
     setSavingsGoal: 'Поставить финансовую цель',
@@ -992,9 +995,12 @@ export const translations = {
     calculationCompleted: 'Calculation completed for income:',
     
     // Notifications and recommendations
+    lowIncomeTitle: 'Low Income',
+    greatIncomeTitle: 'Great Income!',
+    highSpendingTitle: 'Entertainment Budget Exceeded',
     lowIncomeWarning: 'With income less than 30,000 RUB, focus on creating an emergency fund before investing.',
     highIncomeAdvice: 'You have good income. Consider increasing investment percentage to 20-25%.',
-    highSpendingWarning: 'You spend more than 10,000 RUB on entertainment. Consider redistributing towards investments.',
+    highSpendingWarning: 'You spend more than the recommended 10% of income on entertainment. Consider redistributing towards investments.',
     
     // Savings goals
     setSavingsGoal: 'Set Financial Goal',

@@ -51,7 +51,7 @@ export default function HomePage() {
       notifications.push({
         id: 1,
         type: 'warning',
-        title: t('language') === 'ru' ? 'Низкий доход' : 'Low Income',
+        title: t('lowIncomeTitle'),
         message: t('lowIncomeWarning'),
         icon: '⚠️'
       });
@@ -61,19 +61,21 @@ export default function HomePage() {
       notifications.push({
         id: 2,
         type: 'success',
-        title: t('language') === 'ru' ? 'Отличный доход!' : 'Great Income!',
+        title: t('greatIncomeTitle'),
         message: t('highIncomeAdvice'),
         icon: '💪'
       });
     }
 
-    if (budget.wants > 10000) {
+    // Проверяем процент трат на развлечения, а не абсолютную сумму
+    const entertainmentPercentage = (budget.wants / income) * 100;
+    if (entertainmentPercentage > 12) { // Если тратят больше 12% вместо рекомендованных 10%
       notifications.push({
         id: 3,
-        type: 'danger',
-        title: t('language') === 'ru' ? 'Много трат на желания' : 'High Entertainment Spending',
+        type: 'warning', // Изменено с 'danger' на 'warning'
+        title: t('highSpendingTitle'),
         message: t('highSpendingWarning'),
-        icon: '🚨'
+        icon: '⚠️' // Изменено с '🚨' на '⚠️'
       });
     }
 
