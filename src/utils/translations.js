@@ -94,7 +94,6 @@ export const translations = {
     bestDay: 'Самый лучший день для начала инвестирования был 20 лет назад. Второй лучший день — сегодня.',
 
     // Страница "Тест"
-    financialTestTitle: 'Тест на финансовую грамотность',
     testSubtitle: 'Определите свой уровень знаний и получите персональную стратегию',
     testResults: 'Результаты теста',
     yourResult: 'Ваш результат',
@@ -135,7 +134,6 @@ export const translations = {
     realTimeDataDesc: 'Интеграция с API ЦБ РФ для актуальных курсов валют, инфляции и финансового калькулятора',
     financialTestTitle: 'Тест финансовой грамотности',
     financialTestDesc: '10 проработанных вопросов с алгоритмом определения финансового профиля и рекомендуемой стратегии',
-    adminPanelTitle: 'Админ-панель',
     adminPanelDesc: 'Полная система управления пользователями, статистика платформы и управление базой данных',
     userSystemTitle: 'Система пользователей',
     userSystemDesc: 'JWT авторизация, bcrypt хэширование паролей, детальные профили с прогнозами инвестиций',
@@ -501,69 +499,7 @@ export const translations = {
     considerFinancialAdvisor: 'Рассмотрите консультацию с финансовым советником',
     studyTaxAspects: 'Изучите налоговые аспекты инвестирования',
 
-    // Новая страница "О нас" - реальные возможности проекта
-    projectSlogan: 'Автоматизация финансового планирования по проверенной методике',
-    realFeatures: 'Реальные возможности',
-    
-    // Основные функции
-    budgetPlanningTitle: 'Планирование бюджета',
-    budgetPlanningDesc: 'Автоматический расчет распределения дохода по правилу 50-25-15-10 Mark Tilbury с интерактивными диаграммами',
-    assetManagementTitle: 'Управление активами',
-    assetManagementDesc: 'Система портфеля из 7 типов активов с автоматическим обновлением цен через EODHD и CoinGecko API',
-    realTimeDataTitle: 'Данные в реальном времени',
-    realTimeDataDesc: 'Интеграция с API ЦБ РФ для актуальных курсов валют, инфляции и калькулятора валют',
-    financialTestDescLong: 'Тест финансовой грамотности',
-    financialTestDesc: '10 проработанных вопросов с алгоритмом определения финансового профиля и стратегии',
-    adminPanelDescLong: 'Административная панель',
-    adminPanelDesc: 'Полный CRUD функционал управления пользователями, статистика платформы и управление БД',
-    userSystemTitle: 'Система пользователей',
-    userSystemDesc: 'JWT авторизация, bcrypt хэширование, детальные профили с прогнозами инвестиций',
-    
-    // Технические особенности
-    technicalFeatures: 'Технические решения',
-    reactStackTitle: 'React + Node.js стек',
-    reactStackDesc: 'Современный фронтенд на React 18 с Chart.js диаграммами и бэкенд на Express с MongoDB',
-    apiIntegrationsTitle: 'API интеграции',
-    apiIntegrationsDesc: 'Живые данные от ЦБ РФ, EODHD (акции), CoinGecko (криптовалюты) для актуальных цен активов',
-    databaseSchemaTitle: 'Схема базы данных',
-    databaseSchemaDesc: 'Продуманная MongoDB схема с финансовыми данными, активами и кэшем портфеля',
-    securityTitle: 'Безопасность',
-    securityDesc: 'JWT токены, bcrypt хэширование паролей, middleware авторизации и валидация данных',
-    
-    // Методология
-    methodology: 'Проверенная методология',
-    markTilburyMethodTitle: 'Правило 50-25-15-10',
-    markTilburyMethodDesc: 'Основано на методике финансового эксперта Mark Tilbury для оптимального распределения дохода',
-    algorithmicCalculationsTitle: 'Алгоритмические расчеты',
-    algorithmicCalculationsDesc: 'Автоматические вычисления бюджета, сложного процента, прибыли/убытка портфеля',
-    recommendationSystemTitle: 'Система рекомендаций',
-    recommendationSystemDesc: 'Анализ дохода и риск-профиля для предоставления персональных финансовых советов',
-    
-    // Практическое применение
-    practicalValue: 'Практическая ценность',
-    budgetAutomationTitle: 'Автоматизация бюджета',
-    budgetAutomationDesc: 'Исключает ошибки в расчетах и помогает следовать проверенному финансовому плану',
-    investmentTrackingTitle: 'Отслеживание инвестиций',
-    investmentTrackingDesc: 'Реальное отслеживание стоимости портфеля с расчетом доходности и рекомендациями',
-    goalPlanningTitle: 'Планирование целей',
-    goalPlanningDesc: 'Система накопительных целей с расчетом времени достижения на основе текущего бюджета',
-    
-    // Архитектура
-    modernArchitecture: 'Современная архитектура',
-    cloudHostingTitle: 'Облачный хостинг',
-    cloudHostingDesc: 'Vercel для фронтенда, Railway для API, MongoDB Atlas для данных - готово к масштабированию',
-    pwaRealTitle: 'PWA приложение',
-    pwaRealDesc: 'Progressive Web App с возможностью установки на устройства и работы в качестве нативного приложения',
-    multiLanguageTitle: 'Мультиязычность',
-    multiLanguageDesc: 'Полная локализация интерфейса на русский и английский языки с системой переводов',
-    
-    // Контакты обновленные
-    contactUsNew: 'Свяжитесь с нами',
-    contactDescNew: 'Есть вопросы о функциональности или предложения по улучшению?',
-    emailUs: 'Написать на email',
-    supportProject: 'Поддержать проект',
-    responseTime: 'Отвечаем в течение 24 часов',
-    globalCoverage: 'Проект с открытым исходным кодом',
+
   },
 
   en: {
@@ -881,7 +817,6 @@ export const translations = {
     monthsWord: 'months',
 
     // Admin Panel
-    adminPanelTitle: 'Financial Compass Admin Panel',
     welcomeAdmin: 'Welcome,',
     manageUsersStats: 'Manage users and monitor system statistics.',
     connectedMongoDB: 'Connected to MongoDB Atlas',
@@ -1223,69 +1158,7 @@ export const translations = {
           perPiece: 'per piece',
       recommendations: 'Recommendations',
 
-      // New About page - real project features  
-      projectSlogan: 'Financial planning automation based on proven methodology',
-      realFeatures: 'Real Features',
-      
-      // Core functions
-      budgetPlanningTitle: 'Budget Planning',
-      budgetPlanningDesc: 'Automatic income distribution calculation based on Mark Tilbury 50-25-15-10 rule with interactive charts',
-      assetManagementTitle: 'Asset Management',
-      assetManagementDesc: 'Portfolio system with 7 asset types and automatic price updates via EODHD and CoinGecko APIs',
-      realTimeDataTitle: 'Real-time Data',
-      realTimeDataDesc: 'Integration with Central Bank of Russia API for current exchange rates, inflation data and currency calculator',
-      financialTestDescLongEn: 'Financial Literacy Test',
-      financialTestDesc: '10 carefully crafted questions with algorithm for determining financial profile and strategy',
-      adminPanelDescLongEn: 'Administrative Panel',
-      adminPanelDesc: 'Full CRUD functionality for user management, platform statistics and database management',
-      userSystemTitle: 'User System',
-      userSystemDesc: 'JWT authorization, bcrypt hashing, detailed profiles with investment projections',
-      
-      // Technical features
-      technicalFeatures: 'Technical Solutions',
-      reactStackTitle: 'React + Node.js Stack',
-      reactStackDesc: 'Modern React 18 frontend with Chart.js diagrams and Express backend with MongoDB',
-      apiIntegrationsTitle: 'API Integrations',
-      apiIntegrationsDesc: 'Live data from Central Bank of Russia, EODHD (stocks), CoinGecko (crypto) for current asset prices',
-      databaseSchemaTitle: 'Database Schema',
-      databaseSchemaDesc: 'Well-designed MongoDB schema with financial data, assets and portfolio cache',
-      securityTitle: 'Security',
-      securityDesc: 'JWT tokens, bcrypt password hashing, authorization middleware and data validation',
-      
-      // Methodology
-      methodology: 'Proven Methodology',
-      markTilburyMethodTitle: '50-25-15-10 Rule',
-      markTilburyMethodDesc: 'Based on financial expert Mark Tilbury methodology for optimal income distribution',
-      algorithmicCalculationsTitle: 'Algorithmic Calculations',
-      algorithmicCalculationsDesc: 'Automatic budget calculations, compound interest, portfolio profit/loss calculations',
-      recommendationSystemTitle: 'Recommendation System',
-      recommendationSystemDesc: 'Income and risk profile analysis to provide personalized financial advice',
-      
-      // Practical value
-      practicalValue: 'Practical Value',
-      budgetAutomationTitle: 'Budget Automation',
-      budgetAutomationDesc: 'Eliminates calculation errors and helps follow proven financial plan',
-      investmentTrackingTitle: 'Investment Tracking',
-      investmentTrackingDesc: 'Real portfolio value tracking with profitability calculations and recommendations',
-      goalPlanningTitle: 'Goal Planning',
-      goalPlanningDesc: 'Savings goal system with achievement timeline calculation based on current budget',
-      
-      // Architecture
-      modernArchitecture: 'Modern Architecture',
-      cloudHostingTitle: 'Cloud Hosting',
-      cloudHostingDesc: 'Vercel for frontend, Railway for API, MongoDB Atlas for data - ready for scaling',
-      pwaRealTitle: 'PWA Application',
-      pwaRealDesc: 'Progressive Web App with device installation capability and native app-like functionality',
-      multiLanguageTitle: 'Multi-language Support',
-      multiLanguageDesc: 'Full interface localization in Russian and English with translation system',
-      
-      // Updated contacts
-      contactUsNew: 'Contact Us',
-      contactDescNew: 'Have questions about functionality or improvement suggestions?',
-      emailUs: 'Email us',
-      supportProject: 'Support Project',
-      responseTime: 'We respond within 24 hours',
-      globalCoverage: 'Open source project',
+
   }
   };
 
