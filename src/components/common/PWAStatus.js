@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from '../../utils/translations';
 
 const PWAStatus = () => {
-  // const { t } = useTranslation(); // Пока не используется, но оставляем для будущего
   const [pwaStatus, setPwaStatus] = useState({
     isInstalled: false,
     isOnline: navigator.onLine,
