@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { TranslationProvider } from './utils/translations';
 import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/common/Navbar';
+import ScrollToTop from './components/common/ScrollToTop';
 import HomePage from './pages/HomePage';
 import StocksPage from './pages/StocksPage';
 import CBRPage from './pages/CBRPage';
@@ -31,6 +32,7 @@ function App() {
     <AuthProvider>
       <TranslationProvider>
         <Router>
+          <ScrollToTop />
           <div className="App min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
             <Navbar />
             <main className="container mx-auto px-4 md:px-6 lg:px-8 py-4 md:py-8">
