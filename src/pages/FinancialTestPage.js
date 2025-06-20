@@ -1,160 +1,162 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from '../utils/translations';
 
-const FINANCIAL_TEST_QUESTIONS = [
+// Функция для получения вопросов на основе выбранного языка
+const getFinancialTestQuestions = (t) => [
   {
     id: 1,
-    question: "Что такое инфляция?",
+    question: t('testQuestion1'),
     options: [
-      { text: "Рост цен на товары и услуги", points: 3, correct: true },
-      { text: "Снижение стоимости денег", points: 2 },
-      { text: "Экономический кризис", points: 1 },
-      { text: "Не знаю", points: 0 }
+      { text: t('testQ1Option1'), points: 3, correct: true },
+      { text: t('testQ1Option2'), points: 2 },
+      { text: t('testQ1Option3'), points: 1 },
+      { text: t('testQ1Option4'), points: 0 }
     ]
   },
   {
     id: 2,
-    question: "Какой процент от дохода рекомендуется откладывать на чёрный день?",
+    question: t('testQuestion2'),
     options: [
-      { text: "5-10%", points: 1 },
-      { text: "15-25%", points: 3, correct: true },
-      { text: "30-40%", points: 2 },
-      { text: "Не нужно откладывать", points: 0 }
+      { text: t('testQ2Option1'), points: 1 },
+      { text: t('testQ2Option2'), points: 3, correct: true },
+      { text: t('testQ2Option3'), points: 2 },
+      { text: t('testQ2Option4'), points: 0 }
     ]
   },
   {
     id: 3,
-    question: "Что такое диверсификация инвестиций?",
+    question: t('testQuestion3'),
     options: [
-      { text: "Инвестирование в разные активы для снижения рисков", points: 3, correct: true },
-      { text: "Покупка только акций", points: 1 },
-      { text: "Хранение денег в банке", points: 1 },
-      { text: "Не знаю", points: 0 }
+      { text: t('testQ3Option1'), points: 3, correct: true },
+      { text: t('testQ3Option2'), points: 1 },
+      { text: t('testQ3Option3'), points: 1 },
+      { text: t('testQ3Option4'), points: 0 }
     ]
   },
   {
     id: 4,
-    question: "Что лучше: гасить долги или инвестировать?",
+    question: t('testQuestion4'),
     options: [
-      { text: "Сначала гасить долги, потом инвестировать", points: 3, correct: true },
-      { text: "Сначала инвестировать", points: 1 },
-      { text: "Делать одновременно", points: 2 },
-      { text: "Не знаю", points: 0 }
+      { text: t('testQ4Option1'), points: 3, correct: true },
+      { text: t('testQ4Option2'), points: 1 },
+      { text: t('testQ4Option3'), points: 2 },
+      { text: t('testQ4Option4'), points: 0 }
     ]
   },
   {
     id: 5,
-    question: "Что такое сложный процент?",
+    question: t('testQuestion5'),
     options: [
-      { text: "Процент на процент - реинвестирование доходов", points: 3, correct: true },
-      { text: "Высокий процент по кредиту", points: 1 },
-      { text: "Сложные расчеты", points: 0 },
-      { text: "Не знаю", points: 0 }
+      { text: t('testQ5Option1'), points: 3, correct: true },
+      { text: t('testQ5Option2'), points: 1 },
+      { text: t('testQ5Option3'), points: 0 },
+      { text: t('testQ5Option4'), points: 0 }
     ]
   },
   {
     id: 6,
-    question: "Размер финансовой подушки безопасности должен составлять:",
+    question: t('testQuestion6'),
     options: [
-      { text: "3-6 месячных расходов", points: 3, correct: true },
-      { text: "1 месячный расход", points: 1 },
-      { text: "12 месячных расходов", points: 2 },
-      { text: "Не нужна подушка", points: 0 }
+      { text: t('testQ6Option1'), points: 3, correct: true },
+      { text: t('testQ6Option2'), points: 1 },
+      { text: t('testQ6Option3'), points: 2 },
+      { text: t('testQ6Option4'), points: 0 }
     ]
   },
   {
     id: 7,
-    question: "Что такое ИИС (Индивидуальный инвестиционный счёт)?",
+    question: t('testQuestion7'),
     options: [
-      { text: "Счёт с налоговыми льготами для инвестиций", points: 3, correct: true },
-      { text: "Обычный банковский счёт", points: 0 },
-      { text: "Кредитная карта", points: 0 },
-      { text: "Не знаю", points: 0 }
+      { text: t('testQ7Option1'), points: 3, correct: true },
+      { text: t('testQ7Option2'), points: 0 },
+      { text: t('testQ7Option3'), points: 0 },
+      { text: t('testQ7Option4'), points: 0 }
     ]
   },
   {
     id: 8,
-    question: "При какой доходности облигаций стоит их покупать?",
+    question: t('testQuestion8'),
     options: [
-      { text: "Выше уровня инфляции", points: 3, correct: true },
-      { text: "Любой доходности", points: 1 },
-      { text: "Только самой высокой", points: 1 },
-      { text: "Не знаю", points: 0 }
+      { text: t('testQ8Option1'), points: 3, correct: true },
+      { text: t('testQ8Option2'), points: 1 },
+      { text: t('testQ8Option3'), points: 1 },
+      { text: t('testQ8Option4'), points: 0 }
     ]
   },
   {
     id: 9,
-    question: "Что делать с деньгами во время экономического кризиса?",
+    question: t('testQuestion9'),
     options: [
-      { text: "Диверсифицировать вложения и не паниковать", points: 3, correct: true },
-      { text: "Снять все деньги и держать наличными", points: 1 },
-      { text: "Вложить всё в золото", points: 2 },
-      { text: "Не знаю", points: 0 }
+      { text: t('testQ9Option1'), points: 3, correct: true },
+      { text: t('testQ9Option2'), points: 1 },
+      { text: t('testQ9Option3'), points: 2 },
+      { text: t('testQ9Option4'), points: 0 }
     ]
   },
   {
     id: 10,
-    question: "Какой принцип Mark Tilbury для распределения дохода?",
+    question: t('testQuestion10'),
     options: [
-      { text: "50-25-15-10 (потребности-сбережения-инвестиции-развлечения)", points: 3, correct: true },
-      { text: "60-20-20 (потребности-сбережения-развлечения)", points: 2 },
-      { text: "100% тратить на потребности", points: 0 },
-      { text: "Не знаю", points: 0 }
+      { text: t('testQ10Option1'), points: 3, correct: true },
+      { text: t('testQ10Option2'), points: 2 },
+      { text: t('testQ10Option3'), points: 0 },
+      { text: t('testQ10Option4'), points: 0 }
     ]
   }
 ];
 
-const STRATEGIES = {
+// Функция для получения стратегий на основе выбранного языка
+const getStrategies = (t) => ({
   beginner: {
-    title: "Консервативная стратегия",
-    description: "Вам подходит осторожный подход к финансам",
+    title: t('conservativeStrategyTitle'),
+    description: t('conservativeStrategyDesc'),
     icon: "🛡️",
     color: "bg-blue-500",
     recommendations: [
-      "Создайте подушку безопасности на 6 месяцев расходов",
-      "Изучите основы инвестирования",
-      "Начните с банковских депозитов и ОФЗ",
-      "Откройте ИИС с налоговым вычетом",
-      "Читайте книги по финансовой грамотности"
+      t('conservativeRec1'),
+      t('conservativeRec2'),
+      t('conservativeRec3'),
+      t('conservativeRec4'),
+      t('conservativeRec5')
     ],
-    instruments: ["Банковские депозиты", "ОФЗ", "Стабильные дивиденды", "ИИС"],
-    expectedReturn: "5-8% годовых",
-    riskLevel: "Низкий"
+    instruments: [t('conservativeInstrument1'), t('conservativeInstrument2'), t('conservativeInstrument3'), t('conservativeInstrument4')],
+    expectedReturn: t('conservativeReturn'),
+    riskLevel: t('conservativeRisk')
   },
   intermediate: {
-    title: "Умеренная стратегия", 
-    description: "У вас хорошие базовые знания",
+    title: t('moderateStrategyTitle'), 
+    description: t('moderateStrategyDesc'),
     icon: "⚖️",
     color: "bg-green-500",
     recommendations: [
-      "Диверсифицируйте портфель: 60% облигации, 40% акции",
-      "Инвестируйте в индексные фонды",
-      "Регулярно пересматривайте портфель",
-      "Увеличьте долю акций со временем",
-      "Изучите международные рынки"
+      t('moderateRec1'),
+      t('moderateRec2'),
+      t('moderateRec3'),
+      t('moderateRec4'),
+      t('moderateRec5')
     ],
-    instruments: ["Индексные фонды", "ETF", "Корпоративные облигации", "Акции голубых фишек"],
-    expectedReturn: "8-12% годовых",
-    riskLevel: "Средний"
+    instruments: [t('moderateInstrument1'), t('moderateInstrument2'), t('moderateInstrument3'), t('moderateInstrument4')],
+    expectedReturn: t('moderateReturn'),
+    riskLevel: t('moderateRisk')
   },
   advanced: {
-    title: "Агрессивная стратегия",
-    description: "Вы готовы к высоким рискам ради высокой доходности",
+    title: t('aggressiveStrategyTitle'),
+    description: t('aggressiveStrategyDesc'),
     icon: "🚀",
     color: "bg-red-500", 
     recommendations: [
-      "Формируйте портфель: 20% облигации, 70% акции, 10% альтернативы",
-      "Инвестируйте в акции роста и стартапы",
-      "Рассмотрите международную диверсификацию",
-      "Используйте сложные инструменты осторожно",
-      "Регулярно фиксируйте прибыль"
+      t('aggressiveRec1'),
+      t('aggressiveRec2'),
+      t('aggressiveRec3'),
+      t('aggressiveRec4'),
+      t('aggressiveRec5')
     ],
-    instruments: ["Акции роста", "Венчурные фонды", "Международные ETF", "Сырьевые активы"],
-    expectedReturn: "12-25% годовых",
-    riskLevel: "Высокий"
+    instruments: [t('aggressiveInstrument1'), t('aggressiveInstrument2'), t('aggressiveInstrument3'), t('aggressiveInstrument4')],
+    expectedReturn: t('aggressiveReturn'),
+    riskLevel: t('aggressiveRisk')
   }
-};
+});
 
 export default function FinancialTestPage() {
   const { saveTestResults, isAuthenticated, user } = useAuth();
@@ -164,6 +166,10 @@ export default function FinancialTestPage() {
   const [showResult, setShowResult] = useState(false);
   const [totalScore, setTotalScore] = useState(0);
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
+
+  // Мемоизируем вопросы и стратегии для текущего языка
+  const testQuestions = useMemo(() => getFinancialTestQuestions(t), [t]);
+  const strategies = useMemo(() => getStrategies(t), [t]);
 
   // Функция для перемешивания вопросов (алгоритм Fisher-Yates)
   const shuffleQuestions = (questions) => {
@@ -192,9 +198,9 @@ export default function FinancialTestPage() {
 
   // Инициализация перемешанных вопросов при загрузке компонента
   useEffect(() => {
-    setShuffledQuestions(shuffleQuestions(FINANCIAL_TEST_QUESTIONS));
+    setShuffledQuestions(shuffleQuestions(testQuestions));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [testQuestions]);
 
   // Загружаем сохраненные результаты теста
   useEffect(() => {
@@ -234,9 +240,9 @@ export default function FinancialTestPage() {
   };
 
   const getRecommendedStrategyByScore = (score) => {
-    if (score <= 10) return STRATEGIES.beginner;
-    if (score <= 20) return STRATEGIES.intermediate;
-    return STRATEGIES.advanced;
+    if (score <= 10) return strategies.beginner;
+    if (score <= 20) return strategies.intermediate;
+    return strategies.advanced;
   };
 
   const resetTest = () => {
@@ -245,7 +251,7 @@ export default function FinancialTestPage() {
     setShowResult(false);
     setTotalScore(0);
     // Перемешиваем вопросы заново при сбросе теста
-    setShuffledQuestions(shuffleQuestions(FINANCIAL_TEST_QUESTIONS));
+    setShuffledQuestions(shuffleQuestions(testQuestions));
   };
 
   const getScoreColor = () => {
