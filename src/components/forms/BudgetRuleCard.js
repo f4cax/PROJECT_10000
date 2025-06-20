@@ -1,6 +1,8 @@
 import React from 'react';
+import { useTranslation } from '../../utils/translations';
 
 export default function BudgetRuleCard({ title, subtitle, amount, color, description, icon }) {
+  const { t } = useTranslation();
   const formatNumber = (num) => {
     return new Intl.NumberFormat('ru-RU').format(num);
   };
@@ -25,7 +27,7 @@ export default function BudgetRuleCard({ title, subtitle, amount, color, descrip
           {formatNumber(amount)} ₽
         </p>
         <p className="text-xs md:text-sm text-gray-600">
-          в месяц
+          {t('perMonth')}
         </p>
       </div>
       

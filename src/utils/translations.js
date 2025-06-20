@@ -43,6 +43,8 @@ export const translations = {
     // Уведомления
     personalRecommendations: 'Персональные рекомендации',
     budgetVisualization: 'Визуализация вашего бюджета',
+    totalBudget: 'Общий бюджет',
+    investmentsPerYear: 'Инвестиции в год',
 
     // Страница "Данные ЦБ"
     cbrPageTitle: 'Данные ЦБ РФ',
@@ -800,6 +802,8 @@ export const translations = {
     // Notifications  
     personalRecommendations: 'Personal Recommendations',
     budgetVisualization: 'Budget Visualization',
+    totalBudget: 'Total Budget',
+    investmentsPerYear: 'Investments per Year',
 
     // CBR Data page
     cbrPageTitle: 'Central Bank of Russia Data',

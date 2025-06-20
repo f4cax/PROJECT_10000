@@ -399,17 +399,16 @@ export default function HomePage() {
           <div className="card bg-gradient-to-r from-primary-50 to-blue-50 border-primary-200">
             <div className="text-center">
               <h3 className="text-lg font-semibold text-primary-900 mb-2">
-                🎯 Правило 50-25-15-10 от Mark Tilbury
+                🎯 {t('markTilburyRuleTitle')}
               </h3>
               <p className="text-primary-700 text-sm">
-                Это проверенная временем формула финансового успеха. Следуя этому правилу, 
-                вы обеспечите себе финансовую стабильность и создадите капитал для будущего.
+                {t('markTilburyRuleDesc')}
               </p>
               <div className="mt-4 flex justify-center space-x-4 text-xs text-primary-600">
-                <span>✅ Покрытие всех нужд</span>
-                <span>✅ Финансовая подушка</span>
-                <span>✅ Рост капитала</span>
-                <span>✅ Качество жизни</span>
+                <span>✅ {t('needsCategoryDesc')}</span>
+                <span>✅ {t('savingsCategoryDesc')}</span>
+                <span>✅ {t('investmentsCategoryDesc')}</span>
+                <span>✅ {t('wantsCategoryDesc')}</span>
               </div>
             </div>
           </div>

@@ -6,21 +6,23 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+import { useTranslation } from '../../utils/translations';
 
 // Регистрируем компоненты Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function BudgetChart({ budgetDistribution }) {
+  const { t } = useTranslation();
   const formatNumber = (num) => {
     return new Intl.NumberFormat('ru-RU').format(num);
   };
 
   const data = {
     labels: [
-      'Обязательные расходы (50%)',
-      'Подушка безопасности (30%)',
-      'Инвестиции (15%)',
-      'Развлечения (5%)'
+      `${t('essentialExpenses')} (50%)`,
+      `${t('emergencyFund')} (25%)`,
+      `${t('investments')} (15%)`,
+      `${t('entertainment')} (10%)`
     ],
     datasets: [
       {
@@ -104,13 +106,13 @@ export default function BudgetChart({ budgetDistribution }) {
       {/* Сводка по распределению */}
       <div className="grid grid-cols-2 gap-4 mt-6">
         <div className="text-center p-3 bg-gray-50 rounded-lg">
-          <p className="text-sm text-gray-600">Общий бюджет</p>
-          <p className="text-xl font-bold text-gray-900">{formatNumber(total)} ₽</p>
+          <p className="text-sm text-gray-600">{t('totalBudget') || 'Общий бюджет'}</p>
+          <p className="text-xl font-bold text-gray-900">{formatNumber(total)} {t('rublesSymbol')}</p>
         </div>
         <div className="text-center p-3 bg-primary-50 rounded-lg">
-          <p className="text-sm text-primary-600">Инвестиции в год</p>
+          <p className="text-sm text-primary-600">{t('investmentsPerYear') || 'Инвестиции в год'}</p>
           <p className="text-xl font-bold text-primary-900">
-            {formatNumber(budgetDistribution.investments * 12)} ₽
+            {formatNumber(budgetDistribution.investments * 12)} {t('rublesSymbol')}
           </p>
         </div>
       </div>
