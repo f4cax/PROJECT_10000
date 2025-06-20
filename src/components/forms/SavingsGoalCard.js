@@ -277,7 +277,7 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
   // Замороженная цель - специальное отображение
   if (goal?.isFrozen) {
     return (
-      <div className="card bg-gradient-to-r from-gray-800 to-slate-800 border-gray-600 dark:from-gray-800 dark:to-slate-800 dark:border-gray-600">
+      <div className="card bg-gradient-to-r from-gray-50 to-slate-50 border-gray-300 dark:from-gray-800 dark:to-slate-800 dark:border-gray-600">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center">
             <div className={`w-12 h-12 ${category.color} rounded-full flex items-center justify-center text-white text-xl mr-3 relative`}>
@@ -287,15 +287,15 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
               </div>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-200 dark:text-gray-200 flex items-center">
+              <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 flex items-center">
                 {goal.title}
-                <span className="ml-2 text-sm px-2 py-1 bg-blue-900 dark:bg-blue-900 text-blue-200 dark:text-blue-200 rounded-full">
+                <span className="ml-2 text-sm px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">
                   {t('goalFrozen')}
                 </span>
               </h3>
-              <p className="text-sm text-gray-400 dark:text-gray-400">{category.name}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{category.name}</p>
               {goal.completedAt && (
-                <p className="text-xs text-gray-500 dark:text-gray-500">
+                <p className="text-xs text-gray-400 dark:text-gray-500">
                   {t('goalCompleted')} {new Date(goal.completedAt).toLocaleDateString('ru-RU')}
                 </p>
               )}
@@ -304,14 +304,14 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
           <div className="flex space-x-2">
             <button
               onClick={handleUnfreeze}
-              className="text-blue-400 hover:text-blue-300 dark:text-blue-400 dark:hover:text-blue-300 p-1 text-sm"
+              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 p-1 text-sm"
               title={t('unfreezeGoal')}
             >
               🔓
             </button>
             <button
               onClick={() => onGoalChange(null)}
-              className="text-red-400 hover:text-red-300 dark:text-red-400 dark:hover:text-red-300 p-1"
+              className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-1"
               title={t('deleteCompletedGoal')}
             >
               🗑️
@@ -321,13 +321,13 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
 
         {/* Прогресс бар - всегда 100% для замороженных */}
         <div className="mb-4">
-          <div className="flex justify-between text-sm text-gray-400 dark:text-gray-400 mb-1">
+          <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-1">
             <span>{t('progress')}</span>
-            <span className="text-green-400 dark:text-green-400 font-semibold">✅ {progress.toFixed(1)}%</span>
+            <span className="text-green-600 dark:text-green-400 font-semibold">✅ {progress.toFixed(1)}%</span>
           </div>
-          <div className="w-full bg-gray-700 dark:bg-gray-700 rounded-full h-3">
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
             <div 
-              className="bg-green-500 dark:bg-green-500 h-3 rounded-full"
+              className="bg-green-500 h-3 rounded-full"
               style={{ width: `${Math.min(progress, 100)}%` }}
             ></div>
           </div>
@@ -336,24 +336,24 @@ export default function SavingsGoalCard({ goal, onGoalChange, monthlyBudget }) {
         {/* Суммы */}
         <div className="grid grid-cols-3 gap-4 mb-4 text-center">
           <div>
-            <p className="text-xs text-gray-400 dark:text-gray-400">{t('accumulated')}</p>
-            <p className="font-semibold text-green-400 dark:text-green-400">{formatNumber(goal.currentAmount)} {t('rublesSymbol')}</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">{t('accumulated')}</p>
+            <p className="font-semibold text-green-600 dark:text-green-400">{formatNumber(goal.currentAmount)} {t('rublesSymbol')}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-400 dark:text-gray-400">{remaining > 0 ? t('remaining') : t('goalOverachieved')}</p>
-            <p className={`font-semibold ${remaining > 0 ? 'text-orange-400 dark:text-orange-400' : 'text-purple-400 dark:text-purple-400'}`}>
+            <p className="text-xs text-gray-600 dark:text-gray-400">{remaining > 0 ? t('remaining') : t('goalOverachieved')}</p>
+            <p className={`font-semibold ${remaining > 0 ? 'text-orange-600 dark:text-orange-400' : 'text-purple-600 dark:text-purple-400'}`}>
               {remaining > 0 ? `${formatNumber(remaining)} ${t('rublesSymbol')}` : `+${formatNumber(Math.abs(remaining))} ${t('rublesSymbol')}`}
             </p>
           </div>
           <div>
-            <p className="text-xs text-gray-400 dark:text-gray-400">{t('goal')}</p>
-            <p className="font-semibold text-gray-200 dark:text-gray-200">{formatNumber(goal.targetAmount)} {t('rublesSymbol')}</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">{t('goal')}</p>
+            <p className="font-semibold text-gray-900 dark:text-gray-200">{formatNumber(goal.targetAmount)} {t('rublesSymbol')}</p>
           </div>
         </div>
 
         {/* Информация о заморозке */}
-        <div className="bg-blue-900/20 dark:bg-blue-900/20 border border-blue-800/30 dark:border-blue-800/30 rounded-lg p-3 mb-4">
-          <p className="text-sm text-blue-300 dark:text-blue-300">
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/30 rounded-lg p-3 mb-4">
+          <p className="text-sm text-blue-700 dark:text-blue-300">
             ❄️ {t('frozenGoalDescription')}
           </p>
         </div>
