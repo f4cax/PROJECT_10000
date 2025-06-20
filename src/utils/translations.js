@@ -659,6 +659,7 @@ export const translations = {
     // About page - updated
     aboutProject: 'About Financial Compass Project',
     aboutFinancialCompass: 'About Financial Compass Project',
+    projectSlogan: 'Automate budget, manage assets and achieve financial goals with proven methodologies and real-time data.',
     
     // Main project features
     budgetPlanningTitle: 'Budget Planning',
@@ -687,6 +688,7 @@ export const translations = {
     // Methodology
     markTilburyMethodTitle: '50-25-15-10 Rule',
     markTilburyMethodDesc: 'Based on proven methodology by financial expert Mark Tilbury for optimal income distribution',
+    markTilburyRuleTitle: '50-25-15-10 Rule by Mark Tilbury',
     algorithmicCalculationsTitle: 'Algorithmic Calculations',
     algorithmicCalculationsDesc: 'Automatic calculations of budget, compound interest, portfolio profit/loss without errors',
     recommendationSystemTitle: 'Recommendation System',
