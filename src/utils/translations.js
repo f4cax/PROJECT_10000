@@ -604,8 +604,6 @@ export const translations = {
     conservativeInstrument2: 'ОФЗ',
     conservativeInstrument3: 'Стабильные дивиденды',
     conservativeInstrument4: 'ИИС',
-    conservativeReturn: '5-8% годовых',
-    conservativeRisk: 'Низкий',
 
     moderateStrategyTitle: 'Умеренная стратегия',
     moderateStrategyDesc: 'У вас хорошие базовые знания',
@@ -618,8 +616,6 @@ export const translations = {
     moderateInstrument2: 'ETF',
     moderateInstrument3: 'Корпоративные облигации',
     moderateInstrument4: 'Акции голубых фишек',
-    moderateReturn: '8-12% годовых',
-    moderateRisk: 'Средний',
 
     aggressiveStrategyTitle: 'Агрессивная стратегия',
     aggressiveStrategyDesc: 'Вы готовы к высоким рискам ради высокой доходности',
@@ -632,8 +628,6 @@ export const translations = {
     aggressiveInstrument2: 'Венчурные фонды',
     aggressiveInstrument3: 'Международные ETF',
     aggressiveInstrument4: 'Сырьевые активы',
-    aggressiveReturn: '12-25% годовых',
-    aggressiveRisk: 'Высокий',
     searchButtonAdmin: 'Поиск',
     resetButtonAdmin: 'Сбросить',
     adminRole: 'Админ',
@@ -1543,8 +1537,6 @@ export const translations = {
     conservativeInstrument2: 'Government bonds',
     conservativeInstrument3: 'Stable dividends',
     conservativeInstrument4: 'Tax-advantaged accounts',
-    conservativeReturn: '5-8% annually',
-    conservativeRisk: 'Low',
 
     moderateStrategyTitle: 'Moderate Strategy',
     moderateStrategyDesc: 'You have good basic knowledge',
@@ -1557,8 +1549,6 @@ export const translations = {
     moderateInstrument2: 'ETFs',
     moderateInstrument3: 'Corporate bonds',
     moderateInstrument4: 'Blue chip stocks',
-    moderateReturn: '8-12% annually',
-    moderateRisk: 'Medium',
 
     aggressiveStrategyTitle: 'Aggressive Strategy',
     aggressiveStrategyDesc: 'You are ready for high risks for high returns',
@@ -1571,8 +1561,6 @@ export const translations = {
     aggressiveInstrument2: 'Venture funds',
     aggressiveInstrument3: 'International ETFs',
     aggressiveInstrument4: 'Commodity assets',
-    aggressiveReturn: '12-25% annually',
-    aggressiveRisk: 'High',
 
   }
   };
