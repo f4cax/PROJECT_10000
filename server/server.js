@@ -22,7 +22,9 @@ const corsOptions = {
   origin: [
     'http://localhost:3000',
     'https://*.vercel.app',
-    /\.vercel\.app$/
+    /\.vercel\.app$/,
+    'https://myfinancialcompass.website',
+    'https://www.myfinancialcompass.website'
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
